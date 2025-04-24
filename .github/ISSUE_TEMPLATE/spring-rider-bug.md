@@ -2,7 +2,7 @@
 name: Spring-Rider-bug
 about: 레전드 버그 발생
 title: "[Bug]"
-labels: Bug
+labels: bug
 assignees: ''
 
 ---

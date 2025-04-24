@@ -1,8 +1,8 @@
 ---
-name: Spring-Rider-repactoring
+name: Spring-Rider-refactoring
 about: 레전드 수정사항 발생
-title: "[Repactoring]"
-labels: Refactoring
+title: "[Refactoring]"
+labels: refactoring
 assignees: ''
 
 ---
