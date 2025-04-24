@@ -4,7 +4,6 @@ import static com.example.springrider.domain.common.exception.ExceptionCode.STOR
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_INVALID_STATUS_CHANGE;
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_INVALID_TIME;
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_LIMIT_EXCEEDED;
-import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_NOT_FOUND;
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_USER_MISMATCH;
 import static com.example.springrider.domain.common.exception.ExceptionCode.USER_NOT_FOUND;
 
@@ -131,8 +130,7 @@ public class StoreService {
 
     public StoreDetailResponseDto getStoreDetail(Long storeId) {
 
-        Store store = storeRepository.findById(storeId)
-            .orElseThrow(() -> new InvalidRequestException(STORE_NOT_FOUND));
+        Store store = storeRepository.findByIdOrElseThrow(storeId);
 
         if (store.getStatus() == StoreStatus.CLOSED) {
             throw new InvalidRequestException(STORE_ALREADY_CLOSED);
