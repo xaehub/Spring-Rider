@@ -4,6 +4,7 @@ import com.example.springrider.domain.common.response.ApiResponse;
 import com.example.springrider.domain.menu.dto.MenuRequestDto;
 import com.example.springrider.domain.menu.dto.MenuResponseDto;
 import com.example.springrider.domain.menu.service.MenuService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +30,7 @@ public class MenuController {
     @PostMapping("/{storeId}/menus")
     public ApiResponse<MenuResponseDto> save(
         @PathVariable Long storeId,
-        @RequestBody MenuRequestDto requestDto,
+        @Valid @RequestBody MenuRequestDto requestDto,
         @SessionAttribute(name = "userId") Long userId
     ) {
         return ApiResponse.created(menuService.save(userId, storeId, requestDto));
@@ -39,10 +40,10 @@ public class MenuController {
     @PatchMapping("/{storeId}/menus/{menuId}")
     public ApiResponse<MenuResponseDto> update(
         @PathVariable Long storeId, @PathVariable Long menuId,
-        @RequestBody MenuRequestDto requestDto,
+        @Valid @RequestBody MenuRequestDto requestDto,
         @SessionAttribute Long userId
     ) {
-        return ApiResponse.ok(menuService.update(storeId, menuId, requestDto));
+        return ApiResponse.ok(menuService.update(storeId, menuId, userId, requestDto));
     }
 
 
