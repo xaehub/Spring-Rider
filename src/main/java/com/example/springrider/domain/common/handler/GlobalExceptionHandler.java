@@ -1,6 +1,7 @@
 package com.example.springrider.domain.common.handler;
 
 import com.example.springrider.domain.common.exception.BaseException;
+import com.example.springrider.domain.common.response.ApiResponse;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,8 +14,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(BaseException.class)
-    public ResponseEntity<Map<String, Object>> handleException(BaseException ex) {
-        return getErrorResponse(ex.getStatus(), ex.getMessage());
+    public ApiResponse<?> handleException(BaseException ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("message", ex.getMessage());
+        return ApiResponse.fail(ex, errorMap);
     }
 
     public ResponseEntity<Map<String, Object>> getErrorResponse(HttpStatus status, String message) {

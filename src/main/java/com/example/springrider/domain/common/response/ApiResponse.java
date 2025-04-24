@@ -1,12 +1,11 @@
 package com.example.springrider.domain.common.response;
 
 import com.example.springrider.domain.common.exception.BaseException;
-import com.example.springrider.domain.common.exception.ExceptionCode;
 import java.time.LocalDateTime;
+import java.util.Map;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.ErrorResponse;
 
 @Getter
 @RequiredArgsConstructor
@@ -15,17 +14,18 @@ public class ApiResponse<T> {
     private final LocalDateTime timestamp;
     private final int statusCode;
     private final T data;
+    private final Map<String, String> error;
 
     public static <T> ApiResponse<T> ok(final T data) {
-        return new ApiResponse<>(LocalDateTime.now(), HttpStatus.OK.value(), data);
+        return new ApiResponse<>(LocalDateTime.now(), HttpStatus.OK.value(), data, null);
     }
 
     public static <T> ApiResponse<T> created(final T data) {
-        return new ApiResponse<>(LocalDateTime.now(), HttpStatus.CREATED.value(), data);
+        return new ApiResponse<>(LocalDateTime.now(), HttpStatus.CREATED.value(), data, null);
     }
 
-    public static <T> ApiResponse<T> fail(final BaseException e) {
-        return new ApiResponse<>(LocalDateTime.now(), e.getStatus().value(), null);
+    public static ApiResponse<Object> fail(final BaseException ex, Map<String, String> errorMap) {
+        return new ApiResponse<>(LocalDateTime.now(), ex.getStatus().value(), null, errorMap);
     }
 
 }
