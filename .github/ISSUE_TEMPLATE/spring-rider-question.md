@@ -2,7 +2,7 @@
 name: Spring-Rider-question
 about: 레전드 질문 발생
 title: "[Question]"
-labels: Question
+labels: question
 assignees: ''
 
 ---
