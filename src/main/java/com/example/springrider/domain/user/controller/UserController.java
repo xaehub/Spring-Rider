@@ -1,5 +1,6 @@
 package com.example.springrider.domain.user.controller;
 
+import com.example.springrider.domain.common.response.ApiResponse;
 import com.example.springrider.domain.user.dto.LoginRequestDto;
 import com.example.springrider.domain.user.dto.SignupRequestDto;
 import com.example.springrider.domain.user.service.UserService;
@@ -18,14 +19,14 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup") // 회원가입
-    public ResponseEntity<Void> signup(@Valid @RequestBody SignupRequestDto requestDto) {
+    public ApiResponse<Void> signup(@Valid @RequestBody SignupRequestDto requestDto) {
         userService.signup(requestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).build(); // 201 created
+        return ApiResponse.created(null);
     }
 
     @PostMapping("/login") // 로그인
-    public ResponseEntity<Void> login(@RequestBody LoginRequestDto requestDto, HttpSession session) {
+    public ApiResponse<Void> login(@RequestBody LoginRequestDto requestDto, HttpSession session) {
         userService.login(requestDto, session);
-        return ResponseEntity.ok().build(); // 200 ok
+        return ApiResponse.ok(null);
     }
 }

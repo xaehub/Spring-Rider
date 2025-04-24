@@ -9,9 +9,12 @@ public enum ExceptionCode {
 
     // 인증/인가
     AUTH_EXCEPTION("인증인가 예외 메세지"),
+    PASSWORD_NOT_MATCH("비밀번호가 일치하지 않습니다."),
 
     // 회원
     USER_EXCEPTION("회원 예외 메세지"),
+    EMAIL_ALREADY_USED("이미 사용 중인 이메일입니다."),
+    EMAIL_NOT_FOUND("이메일이 존재하지 않습니다."),
 
     // 가게
     STORE_NOT_FOUND("존재하지 않는 가게입니다."), // 존재하지 않는 가게 조회 시

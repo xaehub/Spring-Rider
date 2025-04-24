@@ -1,5 +1,6 @@
 package com.example.springrider.domain.store.controller;
 
+import com.example.springrider.domain.common.response.ApiResponse;
 import com.example.springrider.domain.store.dto.StoreRequestDto;
 import com.example.springrider.domain.store.dto.StoreResponseDto;
 import com.example.springrider.domain.store.service.StoreService;
@@ -20,8 +21,9 @@ public class StoreController {
     private final StoreService storeService;
 
     @PostMapping("/owners/stores")
-    @ResponseStatus(HttpStatus.CREATED)
-    public StoreResponseDto createStore(@Valid @RequestBody StoreRequestDto storeRequestDto) {
-        return storeService.createStore(storeRequestDto);
+    public ApiResponse<StoreResponseDto> createStore(
+        @Valid @RequestBody StoreRequestDto storeRequestDto
+    ) {
+        return ApiResponse.created(storeService.createStore(storeRequestDto));
     }
 }
