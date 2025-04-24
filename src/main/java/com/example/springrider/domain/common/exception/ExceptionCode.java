@@ -29,7 +29,7 @@ public enum ExceptionCode {
     STORE_INVALID_STATUS_CHANGE("현재 가게 상태에서는 요청한 상태로 변경할 수 없습니다."),
 
     // 메뉴
-    MENU_EXCEPTION("메뉴 예외 메세지"),
+    MENU_NOT_FOUND("존재하지 않는 메뉴입니다."),
 
     // 주문
     ORDER_EXCEPTION("주문 예외 메세지"),

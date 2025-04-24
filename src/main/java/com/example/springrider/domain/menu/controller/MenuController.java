@@ -1,15 +1,17 @@
 package com.example.springrider.domain.menu.controller;
 
 import com.example.springrider.domain.common.response.ApiResponse;
-import com.example.springrider.domain.menu.dto.MenuSaveRequestDto;
+import com.example.springrider.domain.menu.dto.MenuRequestDto;
+import com.example.springrider.domain.menu.dto.MenuResponseDto;
 import com.example.springrider.domain.menu.service.MenuService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,16 +23,27 @@ public class MenuController {
     /**
      * 메뉴 등록 컨트롤러
      *
-     * @param storeId 등록할 메뉴의 가게 아이디
-     * @return 등록된 메뉴 정보
+     * @param storeId 메뉴를 등록할 가게
+     * @return {@link ApiResponse} nothing to return
      */
     @PostMapping("/{storeId}/menus")
-    public ApiResponse<Void> save(
+    public ApiResponse<MenuResponseDto> save(
         @PathVariable Long storeId,
-        @RequestBody MenuSaveRequestDto requestDto
+        @RequestBody MenuRequestDto requestDto,
+        @SessionAttribute(name = "userId") Long userId
     ) {
-        menuService.save(storeId, requestDto);
-        return ApiResponse.ok(null);
+        return ApiResponse.created(menuService.save(userId, storeId, requestDto));
     }
+
+
+    @PatchMapping("/{storeId}/menus/{menuId}")
+    public ApiResponse<MenuResponseDto> update(
+        @PathVariable Long storeId, @PathVariable Long menuId,
+        @RequestBody MenuRequestDto requestDto,
+        @SessionAttribute Long userId
+    ) {
+        return ApiResponse.ok(menuService.update(storeId, menuId, requestDto));
+    }
+
 
 }
