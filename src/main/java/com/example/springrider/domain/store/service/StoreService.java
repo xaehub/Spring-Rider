@@ -86,8 +86,7 @@ public class StoreService {
             .orElseThrow(() -> new InvalidRequestException(USER_NOT_FOUND));
 
         // 가게가 존재하는지 확인하는 코드
-        Store store = storeRepository.findById(storeId)
-            .orElseThrow(() -> new InvalidRequestException(STORE_NOT_FOUND));
+        Store store = storeRepository.findByIdOrElseThrow(storeId);
 
         // 지금 로그인한 유저가 사장이 맞는지 확인
         if (!store.getUser().getId().equals(currentUser.getId())) {
