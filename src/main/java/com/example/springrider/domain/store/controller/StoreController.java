@@ -1,6 +1,7 @@
 package com.example.springrider.domain.store.controller;
 
 import com.example.springrider.domain.common.response.ApiResponse;
+import com.example.springrider.domain.store.dto.StoreDetailResponseDto;
 import com.example.springrider.domain.store.dto.StoreRequestDto;
 import com.example.springrider.domain.store.dto.StoreResponseDto;
 import com.example.springrider.domain.store.dto.StoreSimpleResponseDto;
@@ -55,5 +56,11 @@ public class StoreController {
 
         return ApiResponse.ok(response);
 
+    }
+
+    @GetMapping("/customers/stores/{storeId}")
+    public ApiResponse<StoreDetailResponseDto> getStoreDetail(@PathVariable Long storeId) {
+        StoreDetailResponseDto response = storeService.getStoreDetail(storeId);
+        return ApiResponse.ok(response);
     }
 }

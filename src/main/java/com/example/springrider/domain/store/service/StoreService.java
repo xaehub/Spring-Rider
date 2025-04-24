@@ -1,5 +1,6 @@
 package com.example.springrider.domain.store.service;
 
+import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_ALREADY_CLOSED;
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_INVALID_STATUS_CHANGE;
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_INVALID_TIME;
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_LIMIT_EXCEEDED;
@@ -8,6 +9,7 @@ import static com.example.springrider.domain.common.exception.ExceptionCode.USER
 
 import com.example.springrider.domain.common.exception.ExceptionCode;
 import com.example.springrider.domain.common.exception.InvalidRequestException;
+import com.example.springrider.domain.store.dto.StoreDetailResponseDto;
 import com.example.springrider.domain.store.dto.StoreRequestDto;
 import com.example.springrider.domain.store.dto.StoreResponseDto;
 import com.example.springrider.domain.store.dto.StoreSimpleResponseDto;
@@ -125,4 +127,16 @@ public class StoreService {
             .map(StoreSimpleResponseDto::new)
             .toList();
     }
+
+    public StoreDetailResponseDto getStoreDetail(Long storeId) {
+
+        Store store = storeRepository.findByIdOrElseThrow(storeId);
+
+        if (store.getStatus() == StoreStatus.CLOSED) {
+            throw new InvalidRequestException(STORE_ALREADY_CLOSED);
+        }
+
+        return StoreDetailResponseDto.from(store);
+    }
+
 }
