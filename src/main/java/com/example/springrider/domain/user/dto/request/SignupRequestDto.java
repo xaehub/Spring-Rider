@@ -1,4 +1,4 @@
-package com.example.springrider.domain.user.dto;
+package com.example.springrider.domain.user.dto.request;
 
 import com.example.springrider.domain.user.enums.UserRole;
 import jakarta.validation.constraints.Email;
