@@ -34,6 +34,9 @@ public enum ExceptionCode {
     // 주문
     ORDER_EXCEPTION("주문 예외 메세지"),
 
+    // 장바구니
+    CART_EXCEPTION("장바구니 예외 메세지"),
+
     // 리뷰
     REVIEW_EXCEPTION("리뷰 예외 메세지");
 

@@ -41,7 +41,8 @@ public class UserService {
             0
         );
 
-        return new SignupResponseDto(user);
+        User savedUser = userRepository.save(user);
+        return new SignupResponseDto(savedUser);
     }
 
 
