@@ -3,12 +3,14 @@ package com.example.springrider.domain.user.service;
 import com.example.springrider.config.PasswordEncoder;
 import com.example.springrider.domain.user.dto.LoginRequestDto;
 import com.example.springrider.domain.user.dto.SignupRequestDto;
+import com.example.springrider.domain.user.dto.UserResponseDto;
 import com.example.springrider.domain.user.entity.User;
 import com.example.springrider.domain.user.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -18,12 +20,13 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     // 회원가입
-    public void signup(SignupRequestDto requestDto) {
-        if (userRepository.existsByEmail(requestDto.getEmail())) { // 이메일 중복체크
-            throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
+    public UserResponseDto signup(SignupRequestDto requestDto) {
+        if (userRepository.existsByEmail(requestDto.getEmail())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 사용 중인 이메일입니다.");
         }
 
-        String encodedPassword = passwordEncoder.encode(requestDto.getPassword()); // 비밀번호 암호화 후 저장
+        String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
+
         User user = new User(
             requestDto.getEmail(),
             encodedPassword,
@@ -31,22 +34,44 @@ public class UserService {
             requestDto.getNickname(),
             requestDto.getPhone(),
             requestDto.getRole(),
-            false,  // isWithdraw
-            0       // store_count 초기값
+            false,
+            0
         );
 
         userRepository.save(user);
+
+        return toDto(user);
     }
 
-    // 로그인 처리
-    public void login(LoginRequestDto requestDto, HttpSession session) {
+    // 로그인
+    public UserResponseDto login(LoginRequestDto requestDto, HttpSession session) {
         User user = userRepository.findByEmail(requestDto.getEmail())
-            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이메일입니다."));
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 이메일입니다."));
 
         if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
         }
 
         session.setAttribute("userId", user.getId());
+        return toDto(user);
+    }
+
+    // 로그아웃
+    public void logout(HttpSession session) {
+        session.invalidate();
+    }
+
+    // Entity → DTO 변환
+    private UserResponseDto toDto(User user) {
+        return new UserResponseDto(
+            user.getId(),
+            user.getEmail(),
+            user.getName(),
+            user.getNickname(),
+            user.getPhone(),
+            user.getRole(),
+            user.getCreatedAt(),
+            user.getModifiedAt()
+        );
     }
 }
