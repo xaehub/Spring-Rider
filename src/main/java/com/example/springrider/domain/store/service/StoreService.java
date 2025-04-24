@@ -4,7 +4,6 @@ import static com.example.springrider.domain.common.exception.ExceptionCode.STOR
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_INVALID_STATUS_CHANGE;
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_INVALID_TIME;
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_LIMIT_EXCEEDED;
-import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_NOT_FOUND;
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_USER_MISMATCH;
 import static com.example.springrider.domain.common.exception.ExceptionCode.USER_NOT_FOUND;
 
@@ -36,9 +35,7 @@ public class StoreService {
     @Transactional
     public StoreResponseDto createStore(StoreRequestDto storeRequestDto) {
 
-        User user = userRepository.findById(storeRequestDto.getUserId())
-            .orElseThrow(
-                () -> new InvalidRequestException(STORE_NOT_FOUND)); // ← 유저 없을 때
+        User user = userRepository.findByIdOrElseThrow(storeRequestDto.getUserId());
 
         if (user.getRole() != UserRole.OWNER) {
             throw new InvalidRequestException(ExceptionCode.STORE_OWNER_ONLY); // ← 사장님 권한 없을 때
@@ -84,12 +81,10 @@ public class StoreService {
         }
 
         // 해당 유저가 있는지 확인하는 코드
-        User currentUser = userRepository.findById(userId)
-            .orElseThrow(() -> new InvalidRequestException(USER_NOT_FOUND));
+        User currentUser = userRepository.findByIdOrElseThrow(userId);
 
         // 가게가 존재하는지 확인하는 코드
-        Store store = storeRepository.findById(storeId)
-            .orElseThrow(() -> new InvalidRequestException(STORE_NOT_FOUND));
+        Store store = storeRepository.findByIdOrElseThrow(storeId);
 
         // 지금 로그인한 유저가 사장이 맞는지 확인
         if (!store.getUser().getId().equals(currentUser.getId())) {
