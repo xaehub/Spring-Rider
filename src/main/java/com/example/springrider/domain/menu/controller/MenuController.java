@@ -30,7 +30,7 @@ public class MenuController {
     public ApiResponse<MenuResponseDto> save(
         @PathVariable Long storeId,
         @RequestBody MenuRequestDto requestDto,
-        @SessionAttribute Long userId
+        @SessionAttribute(name = "userId") Long userId
     ) {
         return ApiResponse.created(menuService.save(userId, storeId, requestDto));
     }
@@ -39,7 +39,8 @@ public class MenuController {
     @PatchMapping("/{storeId}/menus/{menuId}")
     public ApiResponse<MenuResponseDto> update(
         @PathVariable Long storeId, @PathVariable Long menuId,
-        @RequestBody MenuRequestDto requestDto
+        @RequestBody MenuRequestDto requestDto,
+        @SessionAttribute Long userId
     ) {
         return ApiResponse.ok(menuService.update(storeId, menuId, requestDto));
     }

@@ -31,7 +31,7 @@ public class MenuService {
         Store findStore = storeRepository.findById(storeId)
             .orElseThrow(() -> new InvalidRequestException(ExceptionCode.STORE_NOT_FOUND));
 
-        if (Objects.equals(findStore.getUser().getId(), userId)) {
+        if (!Objects.equals(findStore.getUser().getId(), userId)) {
             throw new AuthException(ExceptionCode.STORE_ACCESS_DENIED);
         }
 
