@@ -1,10 +1,9 @@
-package com.example.springrider.domain.user.dto;
+package com.example.springrider.domain.user.dto.response;
 
 import com.example.springrider.domain.user.enums.UserRole;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Getter
