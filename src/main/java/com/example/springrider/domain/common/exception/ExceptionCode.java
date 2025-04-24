@@ -15,6 +15,7 @@ public enum ExceptionCode {
     USER_EXCEPTION("회원 예외 메세지"),
     EMAIL_ALREADY_USED("이미 사용 중인 이메일입니다."),
     EMAIL_NOT_FOUND("이메일이 존재하지 않습니다."),
+    USER_NOT_FOUND("임시로 만든 유저낫빠운드~"),
 
     // 가게
     STORE_NOT_FOUND("존재하지 않는 가게입니다."), // 존재하지 않는 가게 조회 시
@@ -25,6 +26,7 @@ public enum ExceptionCode {
     STORE_NOT_ACTIVE("현재 영업 중이 아닌 가게입니다."), // 폐업 상태인 가게를 조회할 때
     STORE_ACCESS_DENIED("해당 가게에 대한 접근 권한이 없습니다."), // 현재 로그인 된 유저가 사장님 권한이 없는 유저일 때
     STORE_USER_MISMATCH("해당 가게의 소유주가 아닙니다."), // 사장님 권한이 있는 유저지만 타인의 가게를 수정 시도할 때
+    STORE_INVALID_STATUS_CHANGE("현재 가게 상태에서는 요청한 상태로 변경할 수 없습니다."),
 
     // 메뉴
     MENU_NOT_FOUND("존재하지 않는 메뉴입니다."),
