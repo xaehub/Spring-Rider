@@ -5,6 +5,7 @@ import com.example.springrider.domain.menu.dto.MenuSaveRequestDto;
 import com.example.springrider.domain.menu.service.MenuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,8 +22,8 @@ public class MenuController {
     /**
      * 메뉴 등록 컨트롤러
      *
-     * @param storeId 등록할 메뉴의 가게 아이디
-     * @return 등록된 메뉴 정보
+     * @param storeId 메뉴를 등록할 가게
+     * @return {@link ApiResponse} nothing to return
      */
     @PostMapping("/{storeId}/menus")
     public ApiResponse<Void> save(
