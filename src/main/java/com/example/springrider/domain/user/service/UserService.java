@@ -1,6 +1,9 @@
 package com.example.springrider.domain.user.service;
 
 import com.example.springrider.config.PasswordEncoder;
+import com.example.springrider.domain.common.exception.AuthException;
+import com.example.springrider.domain.common.exception.ExceptionCode;
+import com.example.springrider.domain.common.exception.InvalidRequestException;
 import com.example.springrider.domain.user.dto.LoginRequestDto;
 import com.example.springrider.domain.user.dto.SignupRequestDto;
 import com.example.springrider.domain.user.entity.User;
@@ -20,7 +23,7 @@ public class UserService {
     // 회원가입
     public void signup(SignupRequestDto requestDto) {
         if (userRepository.existsByEmail(requestDto.getEmail())) { // 이메일 중복체크
-            throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
+            throw new InvalidRequestException(ExceptionCode.EMAIL_ALREADY_USED);
         }
 
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword()); // 비밀번호 암호화 후 저장
@@ -41,10 +44,10 @@ public class UserService {
     // 로그인 처리
     public void login(LoginRequestDto requestDto, HttpSession session) {
         User user = userRepository.findByEmail(requestDto.getEmail())
-            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이메일입니다."));
+            .orElseThrow(() -> new InvalidRequestException(ExceptionCode.EMAIL_NOT_FOUND));
 
         if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new AuthException(ExceptionCode.PASSWORD_NOT_MATCH);
         }
 
         session.setAttribute("userId", user.getId());
