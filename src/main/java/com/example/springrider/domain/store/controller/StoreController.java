@@ -59,8 +59,8 @@ public class StoreController {
     }
 
     @GetMapping("/customers/stores/{storeId}")
-    public ResponseEntity<StoreDetailResponseDto> getStoreDetail(@PathVariable Long storeId) {
+    public ApiResponse<StoreDetailResponseDto> getStoreDetail(@PathVariable Long storeId) {
         StoreDetailResponseDto response = storeService.getStoreDetail(storeId);
-        return ResponseEntity.ok(response);
+        return ApiResponse.ok(response);
     }
 }
