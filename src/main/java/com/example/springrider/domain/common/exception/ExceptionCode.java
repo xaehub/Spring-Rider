@@ -27,7 +27,7 @@ public enum ExceptionCode {
     STORE_USER_MISMATCH("해당 가게의 소유주가 아닙니다."), // 사장님 권한이 있는 유저지만 타인의 가게를 수정 시도할 때
 
     // 메뉴
-    MENU_EXCEPTION("메뉴 예외 메세지"),
+    MENU_NOT_FOUND("존재하지 않는 메뉴입니다."),
 
     // 주문
     ORDER_EXCEPTION("주문 예외 메세지"),

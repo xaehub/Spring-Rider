@@ -8,6 +8,7 @@ import com.example.springrider.domain.menu.entity.Menu;
 import com.example.springrider.domain.menu.repository.MenuRepository;
 import com.example.springrider.domain.store.entity.Store;
 import com.example.springrider.domain.store.repository.StoreRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,9 +25,8 @@ public class MenuService {
      * @param storeId    메뉴를 등록할 가게
      * @param requestDto 메뉴 정보가 담긴 {@link MenuRequestDto}
      */
-    public MenuResponseDto save(Long storeId, MenuRequestDto requestDto) {
-        Store findStore = storeRepository.findById(storeId)
-            .orElseThrow(() -> new InvalidRequestException(ExceptionCode.STORE_NOT_FOUND));
+    public MenuResponseDto save(Long userId, Long storeId, MenuRequestDto requestDto) {
+        Store findStore = findStore(storeId);
         Menu menu = new Menu(requestDto);
         menu.setStore(findStore);
 
@@ -34,6 +34,24 @@ public class MenuService {
         menuRepository.save(menu);
 
         return MenuResponseDto.toDto(menu);
+    }
+
+    @Transactional
+    public MenuResponseDto update(Long storeId, Long menuId, MenuRequestDto requestDto) {
+        Menu findMenu = findMenu(menuId);
+        findMenu.updateMenu(requestDto);
+
+        return MenuResponseDto.toDto(findMenu);
+    }
+
+    private Store findStore(Long storeId) {
+        return storeRepository.findById(storeId)
+            .orElseThrow(() -> new InvalidRequestException(ExceptionCode.STORE_NOT_FOUND));
+    }
+
+    private Menu findMenu(Long menuId) {
+        return menuRepository.findById(menuId)
+            .orElseThrow(() -> new InvalidRequestException(ExceptionCode.MENU_NOT_FOUND));
     }
 
 }

@@ -5,11 +5,13 @@ import com.example.springrider.domain.menu.dto.MenuRequestDto;
 import com.example.springrider.domain.menu.dto.MenuResponseDto;
 import com.example.springrider.domain.menu.service.MenuService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,9 +29,20 @@ public class MenuController {
     @PostMapping("/{storeId}/menus")
     public ApiResponse<MenuResponseDto> save(
         @PathVariable Long storeId,
+        @RequestBody MenuRequestDto requestDto,
+        @SessionAttribute Long userId
+    ) {
+        return ApiResponse.created(menuService.save(userId, storeId, requestDto));
+    }
+
+
+    @PatchMapping("/{storeId}/menus/{menuId}")
+    public ApiResponse<MenuResponseDto> update(
+        @PathVariable Long storeId, @PathVariable Long menuId,
         @RequestBody MenuRequestDto requestDto
     ) {
-        return ApiResponse.created(menuService.save(storeId, requestDto));
+        return ApiResponse.ok(menuService.update(storeId, menuId, requestDto));
     }
+
 
 }
