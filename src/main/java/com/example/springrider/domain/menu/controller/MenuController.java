@@ -2,6 +2,7 @@ package com.example.springrider.domain.menu.controller;
 
 import com.example.springrider.domain.common.response.ApiResponse;
 import com.example.springrider.domain.menu.dto.MenuSaveRequestDto;
+import com.example.springrider.domain.menu.dto.MenuSaveResponseDto;
 import com.example.springrider.domain.menu.service.MenuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +27,11 @@ public class MenuController {
      * @return {@link ApiResponse} nothing to return
      */
     @PostMapping("/{storeId}/menus")
-    public ApiResponse<Void> save(
+    public ApiResponse<MenuSaveResponseDto> save(
         @PathVariable Long storeId,
         @RequestBody MenuSaveRequestDto requestDto
     ) {
-        menuService.save(storeId, requestDto);
-        return ApiResponse.ok(null);
+        return ApiResponse.ok(menuService.save(storeId, requestDto));
     }
 
 }
