@@ -1,6 +1,5 @@
 package com.example.springrider.domain.store.service;
 
-import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_ALREADY_CLOSED;
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_INVALID_STATUS_CHANGE;
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_INVALID_TIME;
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_LIMIT_EXCEEDED;
@@ -12,6 +11,7 @@ import com.example.springrider.domain.common.exception.ExceptionCode;
 import com.example.springrider.domain.common.exception.InvalidRequestException;
 import com.example.springrider.domain.store.dto.StoreRequestDto;
 import com.example.springrider.domain.store.dto.StoreResponseDto;
+import com.example.springrider.domain.store.dto.StoreSimpleResponseDto;
 import com.example.springrider.domain.store.dto.StoreUpdateRequestDto;
 import com.example.springrider.domain.store.entity.Store;
 import com.example.springrider.domain.store.enums.StoreStatus;
@@ -19,10 +19,10 @@ import com.example.springrider.domain.store.repository.StoreRepository;
 import com.example.springrider.domain.user.entity.User;
 import com.example.springrider.domain.user.enums.UserRole;
 import com.example.springrider.domain.user.repository.UserRepository;
-import jakarta.servlet.http.HttpSession;
-import jakarta.transaction.Transactional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -68,9 +68,10 @@ public class StoreService {
 
     /**
      * 가게 정보 수정
-     * @param storeId 가게 고유 식별자
+     *
+     * @param storeId    가게 고유 식별자
      * @param requestDto 수정할 가게 정보가 담긴 dto
-     * @param userId 유저의 세션 정보
+     * @param userId     유저의 세션 정보
      */
     @Transactional
     public void updateStore(Long storeId, StoreUpdateRequestDto requestDto, Long userId) {
@@ -99,7 +100,8 @@ public class StoreService {
         if (store.getStatus() != newStatus) {
             if (newStatus == StoreStatus.ACTIVE) {
                 // 사장님이 가지고 있는 ACTIVE 상태의 가게 수가 3개가 넘으면 예외처리
-                long activeStoreCount = storeRepository.countByUserAndStatus(currentUser, StoreStatus.ACTIVE);
+                long activeStoreCount = storeRepository.countByUserAndStatus(currentUser,
+                    StoreStatus.ACTIVE);
                 if (activeStoreCount >= 3) {
                     throw new InvalidRequestException(STORE_LIMIT_EXCEEDED);
                 }
@@ -119,5 +121,13 @@ public class StoreService {
 
         // 가게 정보 수정
         store.update(requestDto);
+    }
+
+    @Transactional(readOnly = true)
+    public List<StoreSimpleResponseDto> getAllStores() {
+        List<Store> stores = storeRepository.findAllByStatusNot(StoreStatus.CLOSED);
+        return stores.stream()
+            .map(StoreSimpleResponseDto::new)
+            .toList();
     }
 }
