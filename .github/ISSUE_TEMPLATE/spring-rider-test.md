@@ -2,7 +2,7 @@
 name: Spring-Rider-Test
 about: 레전드 테스트할 것 발생
 title: "[Test]"
-labels: Test
+labels: test
 assignees: ''
 
 ---
