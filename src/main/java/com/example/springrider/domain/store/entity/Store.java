@@ -1,7 +1,12 @@
 package com.example.springrider.domain.store.entity;
 
+import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_ALREADY_CLOSED;
+import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_INVALID_STATUS_CHANGE;
+
 import com.example.springrider.domain.common.entity.BaseEntity;
+import com.example.springrider.domain.common.exception.InvalidRequestException;
 import com.example.springrider.domain.menu.entity.Menu;
+import com.example.springrider.domain.store.dto.StoreUpdateRequestDto;
 import com.example.springrider.domain.store.enums.StoreStatus;
 import com.example.springrider.domain.user.entity.User;
 import jakarta.persistence.CascadeType;
@@ -56,6 +61,34 @@ public class Store extends BaseEntity {
         this.user = user;
         this.menus = new ArrayList<>();
     }
+
+    public void update(StoreUpdateRequestDto dto) {
+        this.name = dto.getName();
+        this.address = dto.getAddress();
+        this.category = dto.getCategory();
+        this.openTime = dto.getOpenTime();
+        this.closeTime = dto.getCloseTime();
+        this.minOrderPrice = dto.getMinOrderPrice();
+    }
+
+    public void changeStatus(StoreStatus newStatus) {
+        // 상태가 동일한 경우 변경하지 않음
+        if (this.status == newStatus) {
+            return;  // 상태가 이미 동일하면 아무 작업도 하지 않음
+        }
+
+        // 상태가 ACTIVE일 때만 변경 가능
+        if (this.status == StoreStatus.CLOSED && newStatus == StoreStatus.ACTIVE) {
+            this.status = newStatus;  // 폐업 상태에서만 재오픈 가능
+        } else if (this.status != StoreStatus.CLOSED && newStatus == StoreStatus.CLOSED) {
+            this.status = newStatus;  // 다른 상태에서만 폐업 상태로 변경
+        }
+        // 상태 변경 불가능한 경우는 예외 처리
+        else {
+            throw new InvalidRequestException(STORE_INVALID_STATUS_CHANGE);
+        }
+    }
+
 
 
 }
