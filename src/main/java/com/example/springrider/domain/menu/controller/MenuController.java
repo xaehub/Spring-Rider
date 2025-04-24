@@ -1,5 +1,6 @@
 package com.example.springrider.domain.menu.controller;
 
+import com.example.springrider.domain.common.response.ApiResponse;
 import com.example.springrider.domain.menu.dto.MenuSaveRequestDto;
 import com.example.springrider.domain.menu.service.MenuService;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +25,12 @@ public class MenuController {
      * @return 등록된 메뉴 정보
      */
     @PostMapping("/{storeId}/menus")
-    public ResponseEntity<Object> save(
+    public ApiResponse<Void> save(
         @PathVariable Long storeId,
         @RequestBody MenuSaveRequestDto requestDto
     ) {
         menuService.save(storeId, requestDto);
-        return ResponseEntity.ok().build();
+        return ApiResponse.ok(null);
     }
 
 }
