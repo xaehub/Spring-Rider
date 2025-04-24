@@ -1,5 +1,6 @@
 package com.example.springrider.domain.menu.service;
 
+import com.example.springrider.domain.common.exception.AuthException;
 import com.example.springrider.domain.common.exception.ExceptionCode;
 import com.example.springrider.domain.common.exception.InvalidRequestException;
 import com.example.springrider.domain.menu.dto.MenuRequestDto;
@@ -9,6 +10,7 @@ import com.example.springrider.domain.menu.repository.MenuRepository;
 import com.example.springrider.domain.store.entity.Store;
 import com.example.springrider.domain.store.repository.StoreRepository;
 import jakarta.transaction.Transactional;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +28,13 @@ public class MenuService {
      * @param requestDto 메뉴 정보가 담긴 {@link MenuRequestDto}
      */
     public MenuResponseDto save(Long userId, Long storeId, MenuRequestDto requestDto) {
-        Store findStore = findStore(storeId);
+        Store findStore = storeRepository.findById(storeId)
+            .orElseThrow(() -> new InvalidRequestException(ExceptionCode.STORE_NOT_FOUND));
+
+        if (Objects.equals(findStore.getUser().getId(), userId)) {
+            throw new AuthException(ExceptionCode.STORE_ACCESS_DENIED);
+        }
+
         Menu menu = new Menu(requestDto);
         menu.setStore(findStore);
 
@@ -38,20 +46,10 @@ public class MenuService {
 
     @Transactional
     public MenuResponseDto update(Long storeId, Long menuId, MenuRequestDto requestDto) {
-        Menu findMenu = findMenu(menuId);
+        Menu findMenu = menuRepository.findByIdOrElseThrow(menuId);
         findMenu.updateMenu(requestDto);
 
         return MenuResponseDto.toDto(findMenu);
-    }
-
-    private Store findStore(Long storeId) {
-        return storeRepository.findById(storeId)
-            .orElseThrow(() -> new InvalidRequestException(ExceptionCode.STORE_NOT_FOUND));
-    }
-
-    private Menu findMenu(Long menuId) {
-        return menuRepository.findById(menuId)
-            .orElseThrow(() -> new InvalidRequestException(ExceptionCode.MENU_NOT_FOUND));
     }
 
 }
