@@ -7,7 +7,6 @@ import com.example.springrider.domain.user.dto.request.SignupRequestDto;
 import com.example.springrider.domain.user.dto.response.LoginResponseDto;
 import com.example.springrider.domain.user.dto.response.SignupResponseDto;
 import com.example.springrider.domain.user.dto.response.WithdrawResponseDto;
-import com.example.springrider.domain.user.entity.User;
 import com.example.springrider.domain.user.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -27,8 +26,7 @@ public class UserController {
 
     @PostMapping("/signup")
     public ApiResponse<SignupResponseDto> signup(@Valid @RequestBody SignupRequestDto requestDto) {
-        User savedUser = userService.signup(requestDto);
-        return ApiResponse.created(new SignupResponseDto(savedUser));
+        return ApiResponse.created(userService.signup(requestDto));
     }
 
     @PostMapping("/login")

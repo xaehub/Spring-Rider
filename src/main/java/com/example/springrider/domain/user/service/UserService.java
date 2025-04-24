@@ -8,6 +8,7 @@ import com.example.springrider.domain.user.dto.request.DeleteUserRequestDto;
 import com.example.springrider.domain.user.dto.request.LoginRequestDto;
 import com.example.springrider.domain.user.dto.request.SignupRequestDto;
 import com.example.springrider.domain.user.dto.response.LoginResponseDto;
+import com.example.springrider.domain.user.dto.response.SignupResponseDto;
 import com.example.springrider.domain.user.entity.User;
 import com.example.springrider.domain.user.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
@@ -22,7 +23,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     // 회원가입
-    public User signup(SignupRequestDto requestDto) {
+    public SignupResponseDto signup(SignupRequestDto requestDto) {
         if (userRepository.existsByEmail(requestDto.getEmail())) {
             throw new InvalidRequestException(ExceptionCode.EMAIL_ALREADY_USED);
         }
@@ -37,10 +38,10 @@ public class UserService {
             requestDto.getPhone(),
             requestDto.getRole(),
             false,
-            0 // store 초기값
+            0
         );
 
-        return userRepository.save(user);
+        return new SignupResponseDto(user);
     }
 
 
