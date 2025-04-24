@@ -4,6 +4,7 @@ import static com.example.springrider.domain.common.exception.ExceptionCode.STOR
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_INVALID_STATUS_CHANGE;
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_INVALID_TIME;
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_LIMIT_EXCEEDED;
+import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_NOT_FOUND;
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_USER_MISMATCH;
 import static com.example.springrider.domain.common.exception.ExceptionCode.USER_NOT_FOUND;
 
