@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class MenuSaveResponseDto {
+public class MenuResponseDto {
 
     private final Long id;
     private final String name;
@@ -17,8 +17,8 @@ public class MenuSaveResponseDto {
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
 
-    public static MenuSaveResponseDto toDto(Menu menu){
-        return new MenuSaveResponseDto(
+    public static MenuResponseDto toDto(Menu menu){
+        return new MenuResponseDto(
             menu.getId(),
             menu.getName(),
             menu.getPrice(),

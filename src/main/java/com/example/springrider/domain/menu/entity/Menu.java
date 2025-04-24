@@ -1,7 +1,7 @@
 package com.example.springrider.domain.menu.entity;
 
 import com.example.springrider.domain.common.entity.BaseEntity;
-import com.example.springrider.domain.menu.dto.MenuSaveRequestDto;
+import com.example.springrider.domain.menu.dto.MenuRequestDto;
 import com.example.springrider.domain.store.entity.Store;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -32,7 +32,7 @@ public class Menu extends BaseEntity {
     private Store store;
 
     // 메뉴 이름, 가격, 설명 생성자
-    public Menu(MenuSaveRequestDto requestDto) {
+    public Menu(MenuRequestDto requestDto) {
         this.name = requestDto.getName();
         this.price = requestDto.getPrice();
         this.contents = requestDto.getContents();
