@@ -66,6 +66,28 @@ public class MenuService {
         return MenuResponseDto.toDto(findMenu);
     }
 
+    // todo can not delete
+
+    /**
+     * 메뉴 삭제 서비스
+     *
+     * @param storeId 가게 식별자
+     * @param menuId  메뉴 식별자
+     * @param userId  유저 식별자
+     */
+    @Transactional
+    public MenuResponseDto delete(Long storeId, Long menuId, Long userId) {
+        if (!isStoreOwner(userId, storeId)) {
+            throw new AuthException(ExceptionCode.STORE_ACCESS_DENIED);
+        }
+        Menu findMenu = menuRepository.findByIdOrElseThrow(menuId);
+        findMenu.setIsDeleted(true);
+
+        menuRepository.save(findMenu);
+
+        return MenuResponseDto.toDto(findMenu);
+    }
+
     /**
      * 가게의 주인인지 확인하는 메소드
      *

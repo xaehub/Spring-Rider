@@ -6,6 +6,7 @@ import com.example.springrider.domain.menu.dto.MenuResponseDto;
 import com.example.springrider.domain.menu.service.MenuService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,15 +37,30 @@ public class MenuController {
         return ApiResponse.created(menuService.save(userId, storeId, requestDto));
     }
 
-
+    /**
+     * 메뉴 수정 컨트롤러
+     *
+     * @param storeId    가게 식별자
+     * @param menuId     메뉴 식별자
+     * @param requestDto 수정할 메뉴 정보가 담긴 {@link MenuRequestDto}
+     * @param userId     세션에 있는 유저 식별자
+     * @return 수정된 메뉴 정보가 담긴 {@link MenuResponseDto}
+     */
     @PatchMapping("/{storeId}/menus/{menuId}")
     public ApiResponse<MenuResponseDto> update(
         @PathVariable Long storeId, @PathVariable Long menuId,
         @Valid @RequestBody MenuRequestDto requestDto,
-        @SessionAttribute Long userId
+        @SessionAttribute(name = "userId") Long userId
     ) {
         return ApiResponse.ok(menuService.update(storeId, menuId, userId, requestDto));
     }
 
+    @DeleteMapping("/{storeId}/menus/{menuId}")
+    public ApiResponse<MenuResponseDto> delete(
+        @PathVariable Long storeId, @PathVariable Long menuId,
+        @SessionAttribute(name = "userId") Long userId
+    ) {
+        return ApiResponse.ok(menuService.delete(storeId, menuId, userId));
+    }
 
 }
