@@ -5,29 +5,21 @@ import com.example.springrider.domain.common.response.ApiResponse;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    // 커스텀 예외 핸들러
     @ExceptionHandler(BaseException.class)
-    public ApiResponse<?> handleException(BaseException ex) {
-        Map<String, String> errorMap = new HashMap<>();
-        errorMap.put("message", ex.getMessage());
-        return ApiResponse.fail(ex, errorMap);
-    }
-
-    public ResponseEntity<Map<String, Object>> getErrorResponse(HttpStatus status, String message) {
-        Map<String, Object> errorResponse = new HashMap<>();
-
-        errorResponse.put("timestamp", LocalDateTime.now());
-        errorResponse.put("code", status.value());
-        errorResponse.put("error", message);
-
-        return new ResponseEntity<>(errorResponse, status);
+    public ApiResponse<?> handleBaseException(BaseException ex) {
+        log.error("Catch Business Exception : {}", ex.getMessage());
+        return ApiResponse.fail(ex);
     }
 
 }
