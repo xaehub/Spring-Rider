@@ -33,7 +33,7 @@ public class Menu extends BaseEntity {
     @Column(nullable = false)
     private String category;
 
-    @Setter
+    @Column(nullable = false)
     private Boolean isDeleted;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -47,6 +47,7 @@ public class Menu extends BaseEntity {
         this.price = requestDto.getPrice();
         this.contents = requestDto.getContents();
         this.category = requestDto.getCategory();
+        this.isDeleted = false;
     }
 
     public void updateMenu(MenuRequestDto requestDto) {
@@ -54,6 +55,10 @@ public class Menu extends BaseEntity {
         this.price = requestDto.getPrice();
         this.contents = requestDto.getContents();
         this.category = requestDto.getCategory();
+    }
+
+    public void deleteMenu() {
+        this.isDeleted = true;
     }
 
 }

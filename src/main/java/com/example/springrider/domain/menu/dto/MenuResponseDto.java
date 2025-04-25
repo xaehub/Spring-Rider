@@ -14,16 +14,18 @@ public class MenuResponseDto {
     private final Integer price;
     private final String contents;
     private final String category;
+    private final Boolean isDeleted;
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
 
-    public static MenuResponseDto toDto(Menu menu){
+    public static MenuResponseDto toDto(Menu menu) {
         return new MenuResponseDto(
             menu.getId(),
             menu.getName(),
             menu.getPrice(),
             menu.getContents(),
             menu.getCategory(),
+            menu.getIsDeleted(),
             menu.getCreatedAt(),
             menu.getModifiedAt()
         );

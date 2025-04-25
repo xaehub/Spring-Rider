@@ -81,7 +81,7 @@ public class MenuService {
             throw new AuthException(ExceptionCode.STORE_ACCESS_DENIED);
         }
         Menu findMenu = menuRepository.findByIdOrElseThrow(menuId);
-        findMenu.setIsDeleted(true);
+        findMenu.deleteMenu();
 
         menuRepository.save(findMenu);
 
