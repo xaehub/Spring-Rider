@@ -9,12 +9,11 @@ import com.example.springrider.domain.user.dto.request.PasswordModifyRequestDto;
 import com.example.springrider.domain.user.dto.request.SignupRequestDto;
 import com.example.springrider.domain.user.dto.response.LoginResponseDto;
 import com.example.springrider.domain.user.dto.response.SignupResponseDto;
-import com.example.springrider.domain.user.dto.response.WithdrawResponseDto;
 import com.example.springrider.domain.user.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,24 +41,37 @@ public class UserController {
     }
 
 
-    @PatchMapping("/withdraw") // 회원탈퇴
-    public ApiResponse<WithdrawResponseDto> withdraw(
-        @Valid @RequestBody DeleteUserRequestDto requestDto) {
-        userService.deleteUser(requestDto);
-        return ApiResponse.ok(new WithdrawResponseDto("회원 탈퇴가 완료되었습니다."));
+    @DeleteMapping("/withdraw") // 회원탈퇴
+    public ApiResponse<Void> withdrawUser(
+        @Valid @RequestBody DeleteUserRequestDto requestDto,
+        @SessionAttribute(name = "userId", required = false) Long userId,
+        HttpSession session
+    ) {
+        if (userId == null) {
+            throw new AuthException(ExceptionCode.AUTH_EXCEPTION);
+        }
+
+        userService.withdraw(requestDto, userId, session);
+        return ApiResponse.ok(null);
     }
 
-    @PutMapping("/password")
-    public ApiResponse<String> modifyPassword(
+    @PutMapping("/password") // 비밀번호 수정
+    public ApiResponse<Void> modifyPassword(
         @Valid @RequestBody PasswordModifyRequestDto requestDto,
         @SessionAttribute(name = "userId", required = false) Long userId
     ) {
-
         if (userId == null) {
-            throw new AuthException(ExceptionCode.AUTH_EXCEPTION); // "로그인이 필요합니다."
+            throw new AuthException(ExceptionCode.AUTH_EXCEPTION);
         }
 
         userService.modifyPassword(requestDto, userId);
-        return ApiResponse.ok("비밀번호가 성공적으로 변경되었습니다."); // 200 OK
+        return ApiResponse.ok(null);
     }
+
+    @DeleteMapping("/logout") // 로그아웃
+    public ApiResponse<Void> logout(HttpSession session) {
+        userService.logout(session);
+        return ApiResponse.ok(null);
+    }
+
 }

@@ -62,14 +62,20 @@ public class UserService {
 
 
     // 회원 탈퇴
-    public void deleteUser(DeleteUserRequestDto requestDto) {
-        User user = userRepository.findByEmailOrElseThrow(requestDto.getEmail());
+    public void withdraw(DeleteUserRequestDto requestDto, Long userId, HttpSession session) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new AuthException(ExceptionCode.USER_NOT_FOUND));
+
+        if (!user.getEmail().equals(requestDto.getEmail())) {
+            throw new AuthException(ExceptionCode.EMAIL_NOT_FOUND);
+        }
 
         if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new AuthException(ExceptionCode.PASSWORD_NOT_MATCH);
         }
 
-        userRepository.delete(user);
+        userRepository.delete(user); // 하드 딜리트 방식
+        session.invalidate();
     }
 
     // 비밀번호 수정
@@ -85,5 +91,11 @@ public class UserService {
         String newEncodedPassword = passwordEncoder.encode(requestDto.getNewPassword());
         user.updatePassword(newEncodedPassword);
     }
+
+    // 로그 아웃
+    public void logout(HttpSession session) {
+        session.invalidate(); // 현재 로그인 세션 제거
+    }
+
 }
 

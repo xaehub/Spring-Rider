@@ -1,6 +1,7 @@
 package com.example.springrider.config.filter;
 
-import com.example.springrider.domain.user.entity.User;
+import com.example.springrider.domain.common.exception.AuthException;
+import com.example.springrider.domain.common.exception.ExceptionCode;
 import com.example.springrider.domain.user.repository.UserRepository;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
@@ -37,20 +38,11 @@ public class SessionLoginCheckFilter implements Filter {
 
         // 로그인 상태 확인
         if (session == null || session.getAttribute("userId") == null) {
-            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            res.setContentType("application/json;charset=UTF-8");
-            res.getWriter().write("{\"message\":\"로그인이 필요합니다.\"}");
-            return;
+            throw new AuthException(ExceptionCode.STORE_ACCESS_DENIED);
         }
 
-        // 세션에서 사용자 정보 조회
-        Long userId = (Long) session.getAttribute("userId");
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
-
         // 요청에 사용자 정보 저장
-        req.setAttribute("userId", user.getId());
-        req.setAttribute("userRole", user.getRole().name());
+        req.setAttribute("userId", session.getAttribute("userId"));
 
         chain.doFilter(request, response);
     }
