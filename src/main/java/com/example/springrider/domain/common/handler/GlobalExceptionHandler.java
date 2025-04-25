@@ -2,6 +2,7 @@ package com.example.springrider.domain.common.handler;
 
 import com.example.springrider.domain.common.exception.BaseException;
 import com.example.springrider.domain.common.exception.ExceptionCode;
+import com.example.springrider.domain.common.exception.ServerException;
 import com.example.springrider.domain.common.response.ApiResponse;
 import com.example.springrider.domain.common.response.ErrorResponse;
 import com.example.springrider.domain.common.response.ErrorResponse.FieldErrorDetail;
@@ -15,9 +16,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    // validation 예외 핸들러
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiResponse<?> handleValidationException(MethodArgumentNotValidException ex) {
-        log.error("Validation Error: {}", ex.getMessage());
+        log.error("Catch Validation Exception: {}", ex.getMessage());
 
         List<FieldErrorDetail> fieldErrors = ex.getBindingResult().getFieldErrors().stream()
             .map(error -> ErrorResponse.FieldErrorDetail.of(
@@ -37,4 +39,11 @@ public class GlobalExceptionHandler {
         return ApiResponse.fail(ex);
     }
 
+    // 예상치 못한 예외 핸들러
+    @ExceptionHandler(Exception.class)
+    public ApiResponse<?> handleGeneralException(Exception e) {
+        log.error("Catch General Exception : {}", e.getMessage());
+        return ApiResponse.fail(new ServerException(ExceptionCode.INTERNAL_SERVER_ERROR));
+    }
+    
 }
