@@ -2,7 +2,6 @@ package com.example.springrider.config.filter;
 
 import com.example.springrider.domain.common.exception.AuthException;
 import com.example.springrider.domain.common.exception.ExceptionCode;
-import com.example.springrider.domain.user.repository.UserRepository;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class SessionLoginCheckFilter implements Filter {
 
-    private final UserRepository userRepository;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
