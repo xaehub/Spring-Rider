@@ -41,7 +41,10 @@ public enum ExceptionCode {
     CART_DUPLICATE_ITEM("메뉴를 중복하지 마시고 수량을 변경해주세요."),
 
     // 리뷰
-    REVIEW_EXCEPTION("리뷰 예외 메세지");
+    REVIEW_EXCEPTION("리뷰 예외 메세지"),
+
+    // 공통
+    NOT_VALID_EXCEPTION("validation 예외 발생");
 
     private final String message;
 }

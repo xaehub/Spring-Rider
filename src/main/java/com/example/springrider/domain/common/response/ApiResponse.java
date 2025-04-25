@@ -1,7 +1,10 @@
 package com.example.springrider.domain.common.response;
 
 import com.example.springrider.domain.common.exception.BaseException;
+import com.example.springrider.domain.common.exception.ExceptionCode;
+import com.example.springrider.domain.common.response.ErrorResponse.FieldErrorDetail;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,6 +29,11 @@ public class ApiResponse<T> {
     public static ApiResponse<Object> fail(final BaseException ex) {
         return new ApiResponse<>(LocalDateTime.now(), ex.getStatus().value(), null,
             ErrorResponse.of(ex.getExceptionCode()));
+    }
+
+    public static ApiResponse<Object> fail(ExceptionCode code, List<FieldErrorDetail> fieldErrors) {
+        return new ApiResponse<>(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), null,
+            ErrorResponse.of(code, fieldErrors));
     }
 
 }
