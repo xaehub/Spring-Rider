@@ -6,7 +6,7 @@ import com.example.springrider.domain.common.entity.BaseEntity;
 import com.example.springrider.domain.common.exception.InvalidRequestException;
 import com.example.springrider.domain.menu.entity.Menu;
 import com.example.springrider.domain.store.dto.StoreRequestDto;
-import com.example.springrider.domain.store.dto.StoreUpdateRequestDto;
+import com.example.springrider.domain.store.dto.UpdateStoreRequestDto;
 import com.example.springrider.domain.store.enums.StoreStatus;
 import com.example.springrider.domain.user.entity.User;
 import jakarta.persistence.CascadeType;
@@ -25,9 +25,11 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 @Table(name = "store")
 @AllArgsConstructor
 @NoArgsConstructor
@@ -86,7 +88,7 @@ public class Store extends BaseEntity {
         );
     }
 
-    public void update(StoreUpdateRequestDto dto) {
+    public void update(UpdateStoreRequestDto dto) {
         this.name = dto.getName();
         this.address = dto.getAddress();
         this.category = dto.getCategory();
