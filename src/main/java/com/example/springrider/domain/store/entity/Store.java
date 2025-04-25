@@ -10,6 +10,7 @@ import com.example.springrider.domain.store.dto.StoreUpdateRequestDto;
 import com.example.springrider.domain.store.enums.StoreStatus;
 import com.example.springrider.domain.user.entity.User;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -32,11 +33,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Store extends BaseEntity {
 
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
     private String address;
+
+    @Column(nullable = false)
     private String category;
+
+    @Column(nullable = false)
     private LocalTime openTime;
+
+    @Column(nullable = false)
     private LocalTime closeTime;
+
+    @Column(nullable = false)
     private Integer minOrderPrice;
 
     @Enumerated(EnumType.STRING)

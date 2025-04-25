@@ -23,33 +23,33 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    // 회원가입
+    /**
+     * 회원가입 요청 서비스
+     *
+     * @param requestDto 유저 정보가 담긴 {@link SignupRequestDto}
+     * @return 회원가입된 유저 정보가 담긴 {@link SignupResponseDto}
+     */
     public SignupResponseDto signup(SignupRequestDto requestDto) {
         if (userRepository.existsByEmail(requestDto.getEmail())) {
             throw new InvalidRequestException(ExceptionCode.EMAIL_ALREADY_USED);
         }
 
         String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
-
-        User user = new User(
-            requestDto.getEmail(),
-            encodedPassword,
-            requestDto.getName(),
-            requestDto.getNickname(),
-            requestDto.getPhone(),
-            requestDto.getRole(),
-            false,
-            0
-        );
+        User user = User.of(requestDto, encodedPassword, false, 0);
 
         User savedUser = userRepository.save(user);
-        return new SignupResponseDto(savedUser);
+
+        return SignupResponseDto.of(savedUser);
     }
 
-
-    // 로그인 처리
+    /**
+     * 로그인 요청 서비스
+     *
+     * @param requestDto 로그인 정보가 담긴 {@link LoginRequestDto}
+     * @param session    세션 정보
+     * @return 로그인 유저 정보가 담긴 {@link LoginResponseDto}
+     */
     public LoginResponseDto login(LoginRequestDto requestDto, HttpSession session) {
-
         if (session.getAttribute("userId") != null) {
             throw new AuthException(ExceptionCode.ALREADY_LOGGED_IN);
         }
@@ -66,19 +66,21 @@ public class UserService {
 
         session.setAttribute("userId", user.getId());
 
-        return new LoginResponseDto(user);
+        return LoginResponseDto.of(user);
     }
 
-
-    // 회원 탈퇴
+    /**
+     * 회원 탈퇴 요청 서비스
+     *
+     * @param requestDto 회원 정보가 담긴 {@link DeleteUserRequestDto}
+     * @param userId     유저 식별자
+     * @param session    세션 정보
+     */
     public void withdraw(DeleteUserRequestDto requestDto, Long userId, HttpSession session) {
-
         if (userId == null) {
             throw new AuthException(ExceptionCode.UNAUTHORIZED);
         }
-
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new AuthException(ExceptionCode.USER_NOT_FOUND));
+        User user = userRepository.findByIdOrElseThrow(userId);
 
         // 탈퇴 상태 체크
         if (user.getIsWithdraw()) {
@@ -102,15 +104,16 @@ public class UserService {
         session.invalidate();
     }
 
-    // 비밀번호 수정
+    /**
+     * 비밀번호 수정 요청 서비스
+     *
+     * @param requestDto 비밀번호 정보가 담긴 {@link PasswordModifyRequestDto}
+     * @param userId     유저 식별자
+     */
     public void modifyPassword(PasswordModifyRequestDto requestDto, Long userId,
         HttpSession session) {
-        if (userId == null) {
-            throw new AuthException(ExceptionCode.UNAUTHORIZED);
-        }
 
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new InvalidRequestException(ExceptionCode.USER_EXCEPTION));
+        User user = userRepository.findByIdOrElseThrow(userId);
 
         if (!passwordEncoder.matches(requestDto.getOldPassword(), user.getPassword())) {
             throw new AuthException(ExceptionCode.PASSWORD_NOT_MATCH); // 401
@@ -119,14 +122,19 @@ public class UserService {
         String newEncodedPassword = passwordEncoder.encode(requestDto.getNewPassword());
         user.updatePassword(newEncodedPassword);
         userRepository.save(user);
-        session.invalidate(); // 비밀번호 수정후 자동 로그아웃
+        session.invalidate(); // 자동 로그아웃
     }
 
-    // 로그 아웃
+    /**
+     * 로그아웃 요청 서비스
+     *
+     * @param session 세션 정보
+     */
     public void logout(HttpSession session) {
         if (session == null || session.getAttribute("userId") == null) {
-            throw new AuthException(ExceptionCode.UNAUTHORIZED); // 로그인 후 이용 필요
+            throw new AuthException(ExceptionCode.UNAUTHORIZED);
         }
+
         session.invalidate(); // 현재 로그인 세션 제거
     }
 
