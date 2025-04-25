@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,7 +68,7 @@ public class CartService {
     ) {
         try {
             Menu menu = menuRepository.findById(cartItemRequestDto.getMenuId())
-                .orElseThrow(() -> new InvalidRequestException(ExceptionCode.MENU_EXCEPTION));
+                .orElseThrow(() -> new InvalidRequestException(ExceptionCode.MENU_NOT_FOUND));
 
             if (!menu.getStore().getId().equals(requestStoreId)) {
                 throw new InvalidRequestException(ExceptionCode.MENU_STORE_MISMATCH);
@@ -81,18 +82,22 @@ public class CartService {
             if (existing != null) {
                 existing.updateQuantity(existing.getQuantity() + cartItemRequestDto.getQuantity());
                 successItems.add(
-                    new SuccessItemDto(existing.getId(), cartItemRequestDto.getMenuId()));
+                    new SuccessItemDto(existing.getId(), cartItemRequestDto.getMenuId(),
+                        existing.getQuantity()));
             } else {
                 CartItem newItem = new CartItem(user, menu, cartItemRequestDto.getQuantity());
                 CartItem saved = cartRepository.save(newItem);
                 successItems.add(
-                    new SuccessItemDto(saved.getId(), cartItemRequestDto.getMenuId()));
+                    new SuccessItemDto(saved.getId(), cartItemRequestDto.getMenuId(),
+                        cartItemRequestDto.getQuantity()));
             }
 
         } catch (InvalidRequestException e) {
             failedItems.add(
                 new FailedItemDto(cartItemRequestDto.getMenuId(), e.getExceptionCode().name(),
                     e.getMessage()));
+        } catch (DataIntegrityViolationException e) {
+            throw new InvalidRequestException(ExceptionCode.CART_DUPLICATE_ITEM);
         }
     }
 }
