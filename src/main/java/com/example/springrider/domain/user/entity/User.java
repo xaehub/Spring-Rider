@@ -1,6 +1,7 @@
 package com.example.springrider.domain.user.entity;
 
 import com.example.springrider.domain.common.entity.BaseEntity;
+import com.example.springrider.domain.user.dto.request.SignupRequestDto;
 import com.example.springrider.domain.user.enums.UserRole;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -43,9 +44,23 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private Integer storeCount;
 
+    public static User of(
+        SignupRequestDto dto, String password, boolean isWithdraw, int storeCount
+    ) {
+        return new User(
+            dto.getEmail(),
+            password,
+            dto.getName(),
+            dto.getNickname(),
+            dto.getPhone(),
+            dto.getRole(),
+            isWithdraw,
+            storeCount
+        );
+    }
+
     public void updatePassword(String newPassword) {
         this.password = newPassword;
     }
-
 
 }
