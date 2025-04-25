@@ -10,6 +10,7 @@ public enum ExceptionCode {
     // 인증/인가
     AUTH_EXCEPTION("인증인가 예외 메세지"),
     PASSWORD_NOT_MATCH("비밀번호가 일치하지 않습니다."),
+    ALREADY_LOGGED_IN("이미 로그인된 상태입니다."),
 
     // 회원
     USER_EXCEPTION("회원 예외 메세지"),
