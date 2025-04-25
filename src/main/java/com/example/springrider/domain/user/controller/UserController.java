@@ -28,19 +28,39 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/signup") // 회원가입
+    /**
+     * 회원가입 요청 컨트롤러
+     *
+     * @param requestDto 회원가입 정보가 담긴 {@link SignupRequestDto}
+     * @return 생성된 회원 정보가 담긴 {@link SignupResponseDto}
+     */
+    @PostMapping("/signup")
     public ApiResponse<SignupResponseDto> signup(@Valid @RequestBody SignupRequestDto requestDto) {
         return ApiResponse.created(userService.signup(requestDto));
     }
 
-    @PostMapping("/login") // 로그인
-    public ApiResponse<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto requestDto,
-        HttpSession session) {
-        LoginResponseDto dto = userService.login(requestDto, session);
-        return ApiResponse.ok(dto);
+    /**
+     * 로그인 요청 컨트롤러
+     *
+     * @param requestDto 회원가입 정보가 담긴 {@link LoginRequestDto}
+     * @param session    세션 정보
+     * @return 로그인 정보가 담긴 {@link LoginResponseDto}
+     */
+    @PostMapping("/login")
+    public ApiResponse<LoginResponseDto> login(
+        @Valid @RequestBody LoginRequestDto requestDto, HttpSession session
+    ) {
+        return ApiResponse.ok(userService.login(requestDto, session));
     }
 
-
+    /**
+     * 회원 탈퇴 요청 컨트롤러
+     *
+     * @param requestDto 회원 탈퇴 요청 정보가 담긴 {@link DeleteUserRequestDto}
+     * @param userId     세션에 담긴 유저 식별자
+     * @param session    세션 정보
+     * @return 200 ok
+     */
     @DeleteMapping("/withdraw") // 회원탈퇴
     public ApiResponse<Void> withdrawUser(
         @Valid @RequestBody DeleteUserRequestDto requestDto,
@@ -50,11 +70,17 @@ public class UserController {
         if (userId == null) {
             throw new AuthException(ExceptionCode.AUTH_EXCEPTION);
         }
-
         userService.withdraw(requestDto, userId, session);
         return ApiResponse.ok(null);
     }
 
+    /**
+     * 비밀번호 수정 요청 컨트롤러
+     *
+     * @param requestDto 수정할 비밀번호 정보가 담긴 {@link PasswordModifyRequestDto}
+     * @param userId     유저 식별자
+     * @return 200 ok
+     */
     @PutMapping("/password") // 비밀번호 수정
     public ApiResponse<Void> modifyPassword(
         @Valid @RequestBody PasswordModifyRequestDto requestDto,
@@ -63,11 +89,16 @@ public class UserController {
         if (userId == null) {
             throw new AuthException(ExceptionCode.AUTH_EXCEPTION);
         }
-
         userService.modifyPassword(requestDto, userId);
         return ApiResponse.ok(null);
     }
 
+    /**
+     * 로그아웃 요청 컨트롤러
+     *
+     * @param session 세션 정보
+     * @return 200 ok
+     */
     @DeleteMapping("/logout") // 로그아웃
     public ApiResponse<Void> logout(HttpSession session) {
         userService.logout(session);
