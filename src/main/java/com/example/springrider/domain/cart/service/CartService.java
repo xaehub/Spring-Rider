@@ -5,6 +5,8 @@ import com.example.springrider.domain.cart.dto.CartItemBulkResponseDto;
 import com.example.springrider.domain.cart.dto.CartItemRequestDto;
 import com.example.springrider.domain.cart.dto.CartItemSearchBulkResponseDto;
 import com.example.springrider.domain.cart.dto.CartItemSearchResponseDto;
+import com.example.springrider.domain.cart.dto.CartItemUpdateRequestDto;
+import com.example.springrider.domain.cart.dto.CartItemUpdateResponseDto;
 import com.example.springrider.domain.cart.dto.FailedItemDto;
 import com.example.springrider.domain.cart.dto.SuccessItemDto;
 import com.example.springrider.domain.cart.entity.CartItem;
@@ -106,7 +108,8 @@ public class CartService {
     @Transactional(readOnly = true)
     public CartItemSearchBulkResponseDto searchCartItems(Long userId) {
         LocalDateTime limit = LocalDateTime.now().minusDays(1);
-        List<CartItem> cartItems = cartRepository.findAllbyUserIdAndModifiedAtAfter(userId, limit);
+        List<CartItem> cartItems = cartRepository.findAllbyUserIdAndModifiedAtAfterWithMenu(userId,
+            limit);
 
         if (cartItems.isEmpty()) {
             throw new InvalidRequestException(ExceptionCode.CART_NOT_FOUND_ALL);
@@ -116,5 +119,27 @@ public class CartService {
             .map(CartItemSearchResponseDto::new).toList();
 
         return new CartItemSearchBulkResponseDto(responseDtos, cartItems.get(0).getStoreId());
+    }
+
+    @Transactional
+    public CartItemUpdateResponseDto updateCartItem(
+        Long cartItemId, CartItemUpdateRequestDto requestDto, Long userId) {
+        CartItem cartItem = cartRepository.findByIdWithUser(cartItemId)
+            .orElseThrow(() -> new InvalidRequestException(
+                ExceptionCode.CART_NOT_FOUND));
+        if (!cartItem.getUser().getId().equals(userId)) {
+            throw new InvalidRequestException(ExceptionCode.AUTH_EXCEPTION);
+        }
+        if (requestDto.isValidQuantity() && !requestDto.hasStatus()) {
+            cartItem.updateQuantity(requestDto.getQuantity());
+        }
+        if (!requestDto.isValidQuantity() && requestDto.hasStatus()) {
+            cartItem.changeStatus(requestDto.getStatus());
+        }
+        if (requestDto.isValidQuantity() && requestDto.hasStatus()) {
+            cartItem.updateQuantity(requestDto.getQuantity());
+            cartItem.changeStatus(requestDto.getStatus());
+        }
+        return CartItemUpdateResponseDto.toDto(cartItem);
     }
 }
