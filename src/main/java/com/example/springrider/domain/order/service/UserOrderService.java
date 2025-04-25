@@ -11,7 +11,6 @@ import com.example.springrider.domain.order.entity.OrderItem;
 import com.example.springrider.domain.order.enums.OrderStatus;
 import com.example.springrider.domain.order.repository.OrderRepository;
 import com.example.springrider.domain.store.entity.Store;
-import com.example.springrider.domain.store.repository.StoreRepository;
 import com.example.springrider.domain.user.entity.User;
 import com.example.springrider.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -28,7 +27,6 @@ public class UserOrderService {
     private final OrderRepository orderRepository;
     private final CartRepository cartRepository;
     private final UserRepository userRepository;
-    private final StoreRepository storeRepository;
 
     /**
      * 주문 요청 서비스
@@ -48,8 +46,7 @@ public class UserOrderService {
 
         // 2. 사용자와 가게 정보 조회
         User user = userRepository.findByIdOrElseThrow(userId);
-        Long storeId = cartItems.get(0).getStoreId();
-        Store store = storeRepository.findByIdOrElseThrow(storeId);
+        Store store = cartItems.get(0).getMenu().getStore();
 
         // 3. 주문 생성
         Order order = new Order();
