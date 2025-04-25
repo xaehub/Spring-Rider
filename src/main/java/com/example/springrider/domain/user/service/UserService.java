@@ -103,7 +103,11 @@ public class UserService {
     }
 
     // 비밀번호 수정
-    public void modifyPassword(PasswordModifyRequestDto requestDto, Long userId) {
+    public void modifyPassword(PasswordModifyRequestDto requestDto, Long userId,
+        HttpSession session) {
+        if (userId == null) {
+            throw new AuthException(ExceptionCode.UNAUTHORIZED);
+        }
 
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new InvalidRequestException(ExceptionCode.USER_EXCEPTION));
@@ -114,10 +118,15 @@ public class UserService {
 
         String newEncodedPassword = passwordEncoder.encode(requestDto.getNewPassword());
         user.updatePassword(newEncodedPassword);
+        userRepository.save(user);
+        session.invalidate(); // 비밀번호 수정후 자동 로그아웃
     }
 
     // 로그 아웃
     public void logout(HttpSession session) {
+        if (session == null || session.getAttribute("userId") == null) {
+            throw new AuthException(ExceptionCode.UNAUTHORIZED); // 로그인 후 이용 필요
+        }
         session.invalidate(); // 현재 로그인 세션 제거
     }
 

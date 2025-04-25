@@ -28,7 +28,8 @@ public class SessionLoginCheckFilter implements Filter {
         if (uri.startsWith("/api/users/login") ||
             uri.startsWith("/api/users/signup") ||
             uri.startsWith("/api/users/logout") ||
-            uri.startsWith("/api/users/withdraw")) {
+            uri.startsWith("/api/users/withdraw") ||
+            uri.startsWith("/api/users/password")) {
             chain.doFilter(request, response);
             return;
         }
