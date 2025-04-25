@@ -16,4 +16,3 @@ public class CreationCartItemRequestDto {
     @Min(1)
     private final Integer quantity;
 }
-
