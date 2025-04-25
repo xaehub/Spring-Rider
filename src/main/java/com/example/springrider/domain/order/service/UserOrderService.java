@@ -28,6 +28,13 @@ public class UserOrderService {
     private final CartRepository cartRepository;
     private final UserRepository userRepository;
 
+    /**
+     * 주문 요청 서비스
+     *
+     * @param requestDto 배달 주소 정보가 담긴 {@link CreateOrderRequestDto}
+     * @param userId     유저 식별자
+     * @return 생성된 주문 정보가 담긴 {@link CreateOrderResponseDto}
+     */
     public CreateOrderResponseDto create(CreateOrderRequestDto requestDto, Long userId) {
         // 1. 장바구니 메뉴 조회
         List<CartItem> cartItems = cartRepository.findAllbyUserIdAndModifiedAtAfter(userId,
