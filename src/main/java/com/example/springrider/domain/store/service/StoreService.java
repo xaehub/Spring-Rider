@@ -5,7 +5,6 @@ import static com.example.springrider.domain.common.exception.ExceptionCode.STOR
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_INVALID_TIME;
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_LIMIT_EXCEEDED;
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_USER_MISMATCH;
-import static com.example.springrider.domain.common.exception.ExceptionCode.USER_NOT_FOUND;
 
 import com.example.springrider.domain.common.exception.ExceptionCode;
 import com.example.springrider.domain.common.exception.InvalidRequestException;
@@ -66,38 +65,34 @@ public class StoreService {
     }
 
     /**
-     * 가게 정보 수정
+     * 가게 수정
      *
      * @param storeId    가게 고유 식별자
-     * @param requestDto 수정할 가게 정보가 담긴 dto
-     * @param userId     유저의 세션 정보
+     * @param requestDto 가게 수정 요청 dto
+     * @param userId     유저 고유 식별자
      */
     @Transactional
-    public void updateStore(Long storeId, StoreUpdateRequestDto requestDto, Long userId) {
+    public StoreResponseDto updateStore(Long storeId, StoreUpdateRequestDto requestDto,
+        Long userId) {
 
-        // userID가 null이면 USER_NOT_FOUND
-        if (userId == null) {
-            throw new InvalidRequestException(USER_NOT_FOUND);
-        }
-
-        // 해당 유저가 있는지 확인하는 코드
-        User currentUser = userRepository.findByIdOrElseThrow(userId);
+        User user = userRepository.findByIdOrElseThrow(userId);
 
         // 가게가 존재하는지 확인하는 코드
         Store store = storeRepository.findByIdOrElseThrow(storeId);
 
         // 지금 로그인한 유저가 사장이 맞는지 확인
-        if (!store.getUser().getId().equals(currentUser.getId())) {
+        if (!store.getUser().getId().equals(user.getId())) {
             throw new InvalidRequestException(STORE_USER_MISMATCH);
         }
 
         // 상태 변경 로직
         StoreStatus newStatus = requestDto.getStatus();
 
+        // 현재 가게 상태와 입력받은 상태가 다를 때
         if (store.getStatus() != newStatus) {
             if (newStatus == StoreStatus.ACTIVE) {
                 // 사장님이 가지고 있는 ACTIVE 상태의 가게 수가 3개가 넘으면 예외처리
-                long activeStoreCount = storeRepository.countByUserAndStatus(currentUser,
+                long activeStoreCount = storeRepository.countByUserAndStatus(user,
                     StoreStatus.ACTIVE);
                 if (activeStoreCount >= 3) {
                     throw new InvalidRequestException(STORE_LIMIT_EXCEEDED);
@@ -118,6 +113,8 @@ public class StoreService {
 
         // 가게 정보 수정
         store.update(requestDto);
+
+        return StoreResponseDto.fromEntity(store);
     }
 
     @Transactional(readOnly = true)
