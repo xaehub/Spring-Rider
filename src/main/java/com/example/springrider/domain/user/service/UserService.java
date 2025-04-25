@@ -140,8 +140,7 @@ public class UserService {
     }
 
     public void modifyProfile(ProfileModifyRequestDto requestDto, Long userId) {
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new AuthException(ExceptionCode.USER_NOT_FOUND));
+        User user = userRepository.findByIdOrElseThrow(userId);
 
         // 비밀번호 검증
         if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
