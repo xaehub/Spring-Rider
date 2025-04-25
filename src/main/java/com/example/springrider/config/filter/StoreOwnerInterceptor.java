@@ -35,8 +35,6 @@ public class StoreOwnerInterceptor implements HandlerInterceptor {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new AuthException(ExceptionCode.USER_NOT_FOUND));
 
-        request.setAttribute("user", user); // 필요 시 다른 곳에서 사용할 수 있게 저장
-
         // 사장 권한 확인
         if (user.getRole() != UserRole.OWNER) {
             throw new AuthException(ExceptionCode.STORE_OWNER_ONLY);
@@ -50,7 +48,7 @@ public class StoreOwnerInterceptor implements HandlerInterceptor {
 
                 Store store = storeRepository.findById(storeId)
                     .orElseThrow(
-                        () -> new RuntimeException(ExceptionCode.STORE_NOT_FOUND.getMessage()));
+                        () -> new AuthException(ExceptionCode.STORE_NOT_FOUND));
 
                 if (!store.getUser().getId().equals(user.getId())) {
                     throw new AuthException(ExceptionCode.STORE_USER_MISMATCH);
