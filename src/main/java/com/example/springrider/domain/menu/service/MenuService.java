@@ -25,7 +25,7 @@ public class MenuService {
      * @param requestDto 메뉴 정보가 담긴 {@link MenuRequestDto}
      */
     @StoreOwnerCheck(userIdParam = "userId", storeIdParam = "storeId")
-    public MenuResponseDto save(Long userId, Long storeId, MenuRequestDto requestDto) {
+    public MenuResponseDto create(Long userId, Long storeId, MenuRequestDto requestDto) {
         Store findStore = storeRepository.findByIdOrElseThrow(storeId);
         Menu menu = new Menu(requestDto);
         menu.setStore(findStore);
