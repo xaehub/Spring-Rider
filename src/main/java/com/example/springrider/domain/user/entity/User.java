@@ -67,5 +67,10 @@ public class User extends BaseEntity {
         this.isWithdraw = true;
     }
 
-  
+    public void modifyProfile(String nickname, String phone) {
+        this.nickname = nickname;
+        this.phone = phone;
+    }
+
+
 }

@@ -6,7 +6,6 @@ import static com.example.springrider.domain.common.exception.ExceptionCode.STOR
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_LIMIT_EXCEEDED;
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_USER_MISMATCH;
 
-import com.example.springrider.domain.common.exception.ExceptionCode;
 import com.example.springrider.domain.common.exception.InvalidRequestException;
 import com.example.springrider.domain.store.dto.StoreDetailResponseDto;
 import com.example.springrider.domain.store.dto.StoreRequestDto;
@@ -17,7 +16,6 @@ import com.example.springrider.domain.store.entity.Store;
 import com.example.springrider.domain.store.enums.StoreStatus;
 import com.example.springrider.domain.store.repository.StoreRepository;
 import com.example.springrider.domain.user.entity.User;
-import com.example.springrider.domain.user.enums.UserRole;
 import com.example.springrider.domain.user.repository.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -44,9 +42,9 @@ public class StoreService {
         User user = userRepository.findByIdOrElseThrow(userId);
 
         // 로그인한 유저의 롤이 오너가 아니면 예외 처리
-        if (user.getRole() != UserRole.OWNER) {
-            throw new InvalidRequestException(ExceptionCode.STORE_OWNER_ONLY);
-        }
+//        if (user.getRole() != UserRole.OWNER) {
+//            throw new InvalidRequestException(ExceptionCode.STORE_OWNER_ONLY);
+//        }
 
         // 가게 수가 3개가 넘으면 예외 처리
         long storeCount = storeRepository.countByUser(user);

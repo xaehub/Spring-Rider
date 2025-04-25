@@ -19,6 +19,7 @@ public enum ExceptionCode {
     EMAIL_NOT_FOUND("이메일이 존재하지 않습니다."),
     USER_NOT_FOUND("임시로 만든 유저낫빠운드~"),
     ALREADY_DELETED_USER("이미 탈퇴한 회원입니다."),
+    NICKNAME_ALREADY_USED("이미 사용 중인 닉네임입니다."),
 
     // 가게
     STORE_NOT_FOUND("존재하지 않는 가게입니다."), // 존재하지 않는 가게 조회 시
