@@ -6,16 +6,16 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class CartItemSearchBulkResponseDto {
+public class FindCartItemBulkResponseDto {
 
-    private final List<CartItemSearchResponseDto> responseDtos;
+    private final List<FindCartItemResponseDto> responseDtos;
 
     private final Long storeId;
 
     private final int totalPrice;
 
-    public CartItemSearchBulkResponseDto(
-        List<CartItemSearchResponseDto> responseDtos,
+    public FindCartItemBulkResponseDto(
+        List<FindCartItemResponseDto> responseDtos,
         Long storeId) {
 
         this.responseDtos = responseDtos;
@@ -23,7 +23,7 @@ public class CartItemSearchBulkResponseDto {
         this.totalPrice = sumTotalprice(responseDtos);
     }
 
-    public int sumTotalprice(List<CartItemSearchResponseDto> responseDtos) {
+    public int sumTotalprice(List<FindCartItemResponseDto> responseDtos) {
         int sum = responseDtos.stream().mapToInt(d -> d.getPrice() * d.getQuantity()
         ).sum();
         return sum;

@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @NotAllNull
 @RequiredArgsConstructor
-public class CartItemUpdateRequestDto {
+public class UpdateCartItemRequestDto {
 
     private final String status;
 

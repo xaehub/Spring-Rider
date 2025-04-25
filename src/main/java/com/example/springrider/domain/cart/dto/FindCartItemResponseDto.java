@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class CartItemSearchResponseDto {
+public class FindCartItemResponseDto {
 
     private final Long cartItemId;
 
@@ -16,7 +16,7 @@ public class CartItemSearchResponseDto {
 
     private final Integer quantity;
 
-    public CartItemSearchResponseDto(CartItem cartItem) {
+    public FindCartItemResponseDto(CartItem cartItem) {
         this.cartItemId = cartItem.getId();
         this.MenuName = cartItem.getMenu().getName();
         this.price = cartItem.getMenu().getPrice();

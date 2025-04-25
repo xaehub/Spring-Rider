@@ -6,14 +6,14 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class CartItemUpdateResponseDto {
+public class UpdateCartItemResponseDto {
 
     private final String Status;
 
     private final Integer quantity;
 
-    public static CartItemUpdateResponseDto toDto(CartItem cartItem) {
-        return new CartItemUpdateResponseDto(
+    public static UpdateCartItemResponseDto toDto(CartItem cartItem) {
+        return new UpdateCartItemResponseDto(
             cartItem.getStatus().toString(),
             cartItem.getQuantity()
         );
