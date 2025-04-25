@@ -27,7 +27,8 @@ public class SessionLoginCheckFilter implements Filter {
         // 로그인 없이 접근 가능한 경로
         if (uri.startsWith("/api/users/login") ||
             uri.startsWith("/api/users/signup") ||
-            uri.startsWith("/api/users/logout")) {
+            uri.startsWith("/api/users/logout") ||
+            uri.startsWith("/api/users/withdraw")) {
             chain.doFilter(request, response);
             return;
         }

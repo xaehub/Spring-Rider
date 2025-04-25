@@ -47,5 +47,8 @@ public class User extends BaseEntity {
         this.password = newPassword;
     }
 
+    public void withdraw() {
+        this.isWithdraw = true;
+    }
 
 }
