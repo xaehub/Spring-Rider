@@ -43,6 +43,7 @@ public enum ExceptionCode {
     MENU_STORE_MISMATCH("해당 가게의 메뉴가 아닙니다."),
     CART_DUPLICATE_ITEM("메뉴를 중복하지 마시고 수량을 변경해주세요."),
     CART_NOT_FOUND_ALL("장바구니가 존재하지 않습니다."),
+    CART_NOT_FOUND("해당 장바구니 품목이 존재하지 않습니다."),
 
     // 리뷰
     REVIEW_EXCEPTION("리뷰 예외 메세지"),
