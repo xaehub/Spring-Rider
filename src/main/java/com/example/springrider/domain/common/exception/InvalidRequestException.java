@@ -20,4 +20,8 @@ public class InvalidRequestException extends BaseException {
         return HttpStatus.BAD_REQUEST;
     }
 
+    @Override
+    public ExceptionCode getExceptionCode() {
+        return this.exceptionCode;
+    }
 }
