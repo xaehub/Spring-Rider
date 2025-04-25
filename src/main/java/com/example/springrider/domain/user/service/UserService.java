@@ -41,14 +41,14 @@ public class UserService {
             0
         );
 
-        return new SignupResponseDto(user);
+        User savedUser = userRepository.save(user);
+        return new SignupResponseDto(savedUser);
     }
 
 
     // 로그인 처리
     public LoginResponseDto login(LoginRequestDto requestDto, HttpSession session) {
-        User user = userRepository.findByEmail(requestDto.getEmail())
-            .orElseThrow(() -> new InvalidRequestException(ExceptionCode.EMAIL_NOT_FOUND));
+        User user = userRepository.findByEmailOrElseThrow(requestDto.getEmail());
 
         if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new AuthException(ExceptionCode.PASSWORD_NOT_MATCH);
@@ -62,8 +62,7 @@ public class UserService {
 
     // 회원 탈퇴
     public void deleteUser(DeleteUserRequestDto requestDto) {
-        User user = userRepository.findByEmail(requestDto.getEmail())
-            .orElseThrow(() -> new AuthException(ExceptionCode.EMAIL_NOT_FOUND));
+        User user = userRepository.findByEmailOrElseThrow(requestDto.getEmail());
 
         if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new AuthException(ExceptionCode.PASSWORD_NOT_MATCH);

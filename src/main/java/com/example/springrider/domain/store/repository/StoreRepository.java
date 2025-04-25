@@ -1,5 +1,7 @@
 package com.example.springrider.domain.store.repository;
 
+import com.example.springrider.domain.common.exception.ExceptionCode;
+import com.example.springrider.domain.common.exception.InvalidRequestException;
 import com.example.springrider.domain.store.entity.Store;
 import com.example.springrider.domain.store.enums.StoreStatus;
 import com.example.springrider.domain.user.entity.User;
@@ -14,4 +16,8 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     List<Store> findAllByStatusNot(StoreStatus status);
 
+    default Store findByIdOrElseThrow(Long storeId) {
+        return findById(storeId)
+            .orElseThrow(() -> new InvalidRequestException(ExceptionCode.STORE_NOT_FOUND));
+    }
 }
