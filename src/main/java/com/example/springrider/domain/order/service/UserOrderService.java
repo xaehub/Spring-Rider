@@ -13,7 +13,6 @@ import com.example.springrider.domain.order.repository.OrderRepository;
 import com.example.springrider.domain.store.entity.Store;
 import com.example.springrider.domain.user.entity.User;
 import com.example.springrider.domain.user.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class UserOrderService {
 
     private final OrderRepository orderRepository;
