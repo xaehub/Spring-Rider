@@ -68,7 +68,7 @@ public class UserController {
         HttpSession session
     ) {
         if (userId == null) {
-            throw new AuthException(ExceptionCode.AUTH_EXCEPTION);
+            throw new AuthException(ExceptionCode.UNAUTHORIZED);
         }
         userService.withdraw(requestDto, userId, session);
         return ApiResponse.ok(null);
@@ -87,7 +87,7 @@ public class UserController {
         @SessionAttribute(name = "userId", required = false) Long userId
     ) {
         if (userId == null) {
-            throw new AuthException(ExceptionCode.AUTH_EXCEPTION);
+            throw new AuthException(ExceptionCode.UNAUTHORIZED);
         }
         userService.modifyPassword(requestDto, userId);
         return ApiResponse.ok(null);

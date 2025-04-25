@@ -55,6 +55,11 @@ public class UserService {
         }
 
         User user = userRepository.findByEmailOrElseThrow(requestDto.getEmail());
+
+        if (user.getIsWithdraw()) {
+            throw new AuthException(ExceptionCode.ALREADY_DELETED_USER);
+        }
+
         if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new AuthException(ExceptionCode.PASSWORD_NOT_MATCH);
         }
@@ -72,17 +77,30 @@ public class UserService {
      * @param session    세션 정보
      */
     public void withdraw(DeleteUserRequestDto requestDto, Long userId, HttpSession session) {
+        if (userId == null) {
+            throw new AuthException(ExceptionCode.UNAUTHORIZED);
+        }
         User user = userRepository.findByIdOrElseThrow(userId);
 
+        // 탈퇴 상태 체크
+        if (user.getIsWithdraw()) {
+            throw new AuthException(ExceptionCode.ALREADY_DELETED_USER);
+        }
+
+        // 이메일 일치 체크
         if (!user.getEmail().equals(requestDto.getEmail())) {
             throw new AuthException(ExceptionCode.EMAIL_NOT_FOUND);
         }
 
+        // 비밀번호 일치 체크
         if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new AuthException(ExceptionCode.PASSWORD_NOT_MATCH);
         }
 
-        userRepository.delete(user); // 하드 딜리트 방식
+        user.withdraw(); // 소프트 딜리트
+
+        userRepository.save(user);
+
         session.invalidate();
     }
 
