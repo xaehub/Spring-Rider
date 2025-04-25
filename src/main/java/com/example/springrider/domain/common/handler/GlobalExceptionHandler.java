@@ -45,5 +45,5 @@ public class GlobalExceptionHandler {
         log.error("Catch General Exception : {}", e.getMessage());
         return ApiResponse.fail(new ServerException(ExceptionCode.INTERNAL_SERVER_ERROR));
     }
-    
+
 }
