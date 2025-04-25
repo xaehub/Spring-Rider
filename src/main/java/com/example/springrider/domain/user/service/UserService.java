@@ -49,8 +49,12 @@ public class UserService {
 
     // 로그인 처리
     public LoginResponseDto login(LoginRequestDto requestDto, HttpSession session) {
-        User user = userRepository.findByEmailOrElseThrow(requestDto.getEmail());
 
+        if (session.getAttribute("userId") != null) {
+            throw new AuthException(ExceptionCode.ALREADY_LOGGED_IN);
+        }
+
+        User user = userRepository.findByEmailOrElseThrow(requestDto.getEmail());
         if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new AuthException(ExceptionCode.PASSWORD_NOT_MATCH);
         }
