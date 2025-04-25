@@ -38,7 +38,10 @@ public enum ExceptionCode {
     CART_EXCEPTION("장바구니 예외 메세지"),
 
     // 리뷰
-    REVIEW_EXCEPTION("리뷰 예외 메세지");
+    REVIEW_EXCEPTION("리뷰 예외 메세지"),
+
+    // 공통
+    NOT_VALID_EXCEPTION("validation 예외 발생");
 
     private final String message;
 

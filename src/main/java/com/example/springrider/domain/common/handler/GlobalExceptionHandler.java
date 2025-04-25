@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
             ))
             .toList();
 
-        return ApiResponse.fail(ExceptionCode.NOT_VALID_ERROR, fieldErrors);
+        return ApiResponse.fail(ExceptionCode.NOT_VALID_EXCEPTION, fieldErrors);
     }
 
     // 커스텀 예외 핸들러
