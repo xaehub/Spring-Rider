@@ -73,8 +73,9 @@ public class StoreService {
      * @return 수정된 가게 정보
      */
     @Transactional
-    public StoreResponseDto updateStore(Long storeId, StoreUpdateRequestDto requestDto,
-        Long userId) {
+    public StoreResponseDto updateStore(
+        Long storeId, StoreUpdateRequestDto requestDto, Long userId
+    ) {
 
         User user = userRepository.findByIdOrElseThrow(userId);
 
