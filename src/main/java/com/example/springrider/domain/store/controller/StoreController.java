@@ -53,8 +53,8 @@ public class StoreController {
      */
     @PutMapping("/owners/stores/{storeId}")
     public ApiResponse<StoreResponseDto> updateStore(
+        @Valid @RequestBody StoreUpdateRequestDto requestDto,
         @PathVariable Long storeId,
-        @RequestBody StoreUpdateRequestDto requestDto,
         @SessionAttribute(name = "userId", required = false) Long userId
     ) {
         StoreResponseDto responseDto = storeService.updateStore(storeId, requestDto, userId);
@@ -69,13 +69,11 @@ public class StoreController {
     @GetMapping("/customers/stores")
     public ApiResponse<Map<String, List<StoreSimpleResponseDto>>> getAllOpenStores() {
         List<StoreSimpleResponseDto> stores = storeService.getAllStores();
-
         // HTTP 응답 포맷
         Map<String, List<StoreSimpleResponseDto>> response = new HashMap<>();
         response.put("store", stores);
 
         return ApiResponse.ok(response);
-
     }
 
     /**
