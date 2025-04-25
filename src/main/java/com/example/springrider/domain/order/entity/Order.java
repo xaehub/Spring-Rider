@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -27,20 +28,25 @@ import lombok.NoArgsConstructor;
 )
 public class Order extends BaseEntity {
 
+    @Setter
     private Integer totalPrice;
 
     @Column(nullable = false)
+    @Setter
     private String deliveryAddress;
 
     @Column(nullable = false)
+    @Setter
     private OrderStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "store_id", nullable = false)
+    @Setter
     private Store store;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
+    @Setter
     private User user;
 
     @OneToMany(mappedBy = "order")

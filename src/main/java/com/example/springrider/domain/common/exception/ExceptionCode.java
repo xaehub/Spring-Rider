@@ -36,7 +36,7 @@ public enum ExceptionCode {
     MENU_NOT_FOUND("존재하지 않는 메뉴입니다."),
 
     // 주문
-    ORDER_EXCEPTION("주문 예외 메세지"),
+    ORDER_NOT_FOUND("주문 정보가 없습니다."),
 
     // 장바구니
     CART_EXCEPTION("장바구니 예외 메세지"),
