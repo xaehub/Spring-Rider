@@ -10,4 +10,6 @@ public class SuccessItemDto {
     private final Long cartItemId;
 
     private final Long menuId;
+
+    private final Integer quantity;
 }
