@@ -44,7 +44,8 @@ public enum ExceptionCode {
     REVIEW_EXCEPTION("리뷰 예외 메세지"),
 
     // 공통
-    NOT_VALID_EXCEPTION("validation 예외 발생");
+    NOT_VALID_EXCEPTION("validation 예외 발생"),
+    INTERNAL_SERVER_ERROR("서버 에러 발생");
 
     private final String message;
 }
