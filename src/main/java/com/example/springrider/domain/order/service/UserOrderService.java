@@ -75,8 +75,10 @@ public class UserOrderService {
 
         // 5. 주문 저장
         Order savedOrder = orderRepository.save(order);
+        Order orderWithItems = orderRepository.findByIdWithOrderItemsAndMenu(savedOrder.getId())
+            .orElseThrow(() -> new InvalidRequestException(ExceptionCode.ORDER_NOT_FOUND));
 
-        return CreateOrderResponseDto.of(savedOrder);
+        return CreateOrderResponseDto.of(orderWithItems);
 
     }
 
