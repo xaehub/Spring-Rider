@@ -6,6 +6,7 @@ import com.example.springrider.domain.common.exception.ExceptionCode;
 import com.example.springrider.domain.common.exception.InvalidRequestException;
 import com.example.springrider.domain.user.dto.request.DeleteUserRequestDto;
 import com.example.springrider.domain.user.dto.request.LoginRequestDto;
+import com.example.springrider.domain.user.dto.request.PasswordModifyRequestDto;
 import com.example.springrider.domain.user.dto.request.SignupRequestDto;
 import com.example.springrider.domain.user.dto.response.LoginResponseDto;
 import com.example.springrider.domain.user.dto.response.SignupResponseDto;
@@ -61,14 +62,39 @@ public class UserService {
 
 
     // 회원 탈퇴
-    public void deleteUser(DeleteUserRequestDto requestDto) {
-        User user = userRepository.findByEmailOrElseThrow(requestDto.getEmail());
+    public void withdraw(DeleteUserRequestDto requestDto, Long userId, HttpSession session) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new AuthException(ExceptionCode.USER_NOT_FOUND));
+
+        if (!user.getEmail().equals(requestDto.getEmail())) {
+            throw new AuthException(ExceptionCode.EMAIL_NOT_FOUND);
+        }
 
         if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new AuthException(ExceptionCode.PASSWORD_NOT_MATCH);
         }
 
-        userRepository.delete(user);
+        userRepository.delete(user); // 하드 딜리트 방식
+        session.invalidate();
+    }
+
+    // 비밀번호 수정
+    public void modifyPassword(PasswordModifyRequestDto requestDto, Long userId) {
+
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new InvalidRequestException(ExceptionCode.USER_EXCEPTION));
+
+        if (!passwordEncoder.matches(requestDto.getOldPassword(), user.getPassword())) {
+            throw new AuthException(ExceptionCode.PASSWORD_NOT_MATCH); // 401
+        }
+
+        String newEncodedPassword = passwordEncoder.encode(requestDto.getNewPassword());
+        user.updatePassword(newEncodedPassword);
+    }
+
+    // 로그 아웃
+    public void logout(HttpSession session) {
+        session.invalidate(); // 현재 로그인 세션 제거
     }
 
 }
