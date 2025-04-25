@@ -110,7 +110,8 @@ public class UserService {
      * @param requestDto 비밀번호 정보가 담긴 {@link PasswordModifyRequestDto}
      * @param userId     유저 식별자
      */
-    public void modifyPassword(PasswordModifyRequestDto requestDto, Long userId) {
+    public void modifyPassword(
+        PasswordModifyRequestDto requestDto, Long userId, HttpSession session) {
 
         User user = userRepository.findByIdOrElseThrow(userId);
 
@@ -120,6 +121,8 @@ public class UserService {
 
         String newEncodedPassword = passwordEncoder.encode(requestDto.getNewPassword());
         user.updatePassword(newEncodedPassword);
+        userRepository.save(user);
+        session.invalidate(); // 자동 로그아웃
     }
 
     /**
@@ -128,6 +131,10 @@ public class UserService {
      * @param session 세션 정보
      */
     public void logout(HttpSession session) {
+        if (session == null || session.getAttribute("userId") == null) {
+            throw new AuthException(ExceptionCode.UNAUTHORIZED);
+        }
+
         session.invalidate(); // 현재 로그인 세션 제거
     }
 

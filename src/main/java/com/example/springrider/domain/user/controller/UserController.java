@@ -84,12 +84,13 @@ public class UserController {
     @PutMapping("/password") // 비밀번호 수정
     public ApiResponse<Void> modifyPassword(
         @Valid @RequestBody PasswordModifyRequestDto requestDto,
-        @SessionAttribute(name = "userId", required = false) Long userId
+        @SessionAttribute(name = "userId", required = false) Long userId,
+        HttpSession session
     ) {
         if (userId == null) {
             throw new AuthException(ExceptionCode.UNAUTHORIZED);
         }
-        userService.modifyPassword(requestDto, userId);
+        userService.modifyPassword(requestDto, userId, session);
         return ApiResponse.ok(null);
     }
 
