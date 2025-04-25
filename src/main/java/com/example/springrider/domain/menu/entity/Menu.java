@@ -5,14 +5,10 @@ import com.example.springrider.domain.menu.dto.MenuRequestDto;
 import com.example.springrider.domain.store.entity.Store;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,6 +33,7 @@ public class Menu extends BaseEntity {
     @Column(nullable = false)
     private String category;
 
+    @Column(nullable = false)
     private Boolean isDeleted;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -50,6 +47,7 @@ public class Menu extends BaseEntity {
         this.price = requestDto.getPrice();
         this.contents = requestDto.getContents();
         this.category = requestDto.getCategory();
+        this.isDeleted = false;
     }
 
     public void updateMenu(MenuRequestDto requestDto) {
@@ -57,6 +55,10 @@ public class Menu extends BaseEntity {
         this.price = requestDto.getPrice();
         this.contents = requestDto.getContents();
         this.category = requestDto.getCategory();
+    }
+
+    public void deleteMenu() {
+        this.isDeleted = true;
     }
 
 }
