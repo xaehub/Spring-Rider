@@ -70,6 +70,7 @@ public class StoreService {
      * @param storeId    가게 고유 식별자
      * @param requestDto 가게 수정 요청 dto
      * @param userId     유저 고유 식별자
+     * @return 수정된 가게 정보
      */
     @Transactional
     public StoreResponseDto updateStore(Long storeId, StoreUpdateRequestDto requestDto,
@@ -117,23 +118,37 @@ public class StoreService {
         return StoreResponseDto.fromEntity(store);
     }
 
+    /**
+     * 전체 가게 목록 조회 ACTIVE 상태인 가게만 노출
+     *
+     * @return 간단한 가게 정보 리스트
+     */
     @Transactional(readOnly = true)
     public List<StoreSimpleResponseDto> getAllStores() {
+        // 영업 중인 가게만 조회 (상태가 CLOSED가 아닌 가게만 조회)
         List<Store> stores = storeRepository.findAllByStatusNot(StoreStatus.CLOSED);
+
+        // 리스트에 담은 stores를 리스트에 담긴 store simple response dto형태로 변환
         return stores.stream()
             .map(StoreSimpleResponseDto::new)
             .toList();
     }
 
+    /**
+     * 가게 상세 조회
+     *
+     * @param storeId 가게 고유 식별자
+     * @return 가게 상세 정보를 담은 dto
+     */
     public StoreDetailResponseDto getStoreDetail(Long storeId) {
 
         Store store = storeRepository.findByIdOrElseThrow(storeId);
-
+        // CLOSED된 가게인 경우 예외 처리
         if (store.getStatus() == StoreStatus.CLOSED) {
             throw new InvalidRequestException(STORE_ALREADY_CLOSED);
         }
 
+        // 가게의 정보와 메뉴도 보이게 가게 상세 dto 형태 반환
         return StoreDetailResponseDto.from(store);
     }
-
 }
