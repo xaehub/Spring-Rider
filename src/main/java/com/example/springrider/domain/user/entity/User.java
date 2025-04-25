@@ -43,4 +43,9 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private Integer storeCount;
 
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
+    }
+
+
 }

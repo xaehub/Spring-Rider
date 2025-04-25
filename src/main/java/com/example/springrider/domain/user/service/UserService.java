@@ -6,6 +6,7 @@ import com.example.springrider.domain.common.exception.ExceptionCode;
 import com.example.springrider.domain.common.exception.InvalidRequestException;
 import com.example.springrider.domain.user.dto.request.DeleteUserRequestDto;
 import com.example.springrider.domain.user.dto.request.LoginRequestDto;
+import com.example.springrider.domain.user.dto.request.PasswordModifyRequestDto;
 import com.example.springrider.domain.user.dto.request.SignupRequestDto;
 import com.example.springrider.domain.user.dto.response.LoginResponseDto;
 import com.example.springrider.domain.user.dto.response.SignupResponseDto;
@@ -71,5 +72,18 @@ public class UserService {
         userRepository.delete(user);
     }
 
+    // 비밀번호 수정
+    public void modifyPassword(PasswordModifyRequestDto requestDto, Long userId) {
+
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new InvalidRequestException(ExceptionCode.USER_EXCEPTION));
+
+        if (!passwordEncoder.matches(requestDto.getOldPassword(), user.getPassword())) {
+            throw new AuthException(ExceptionCode.PASSWORD_NOT_MATCH); // 401
+        }
+
+        String newEncodedPassword = passwordEncoder.encode(requestDto.getNewPassword());
+        user.updatePassword(newEncodedPassword);
+    }
 }
 

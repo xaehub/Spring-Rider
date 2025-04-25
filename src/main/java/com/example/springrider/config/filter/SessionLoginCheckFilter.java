@@ -1,5 +1,7 @@
 package com.example.springrider.config.filter;
 
+import com.example.springrider.domain.user.entity.User;
+import com.example.springrider.domain.user.repository.UserRepository;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -9,51 +11,47 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class SessionLoginCheckFilter implements Filter {
 
-    // 로그인 없이 접근 허용할 경로들
-    private static final String[] WHITE_LIST = {
-        "/api/users/signup",
-        "/api/users/login"
-    };
+    private final UserRepository userRepository;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
         throws IOException, ServletException {
 
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-        HttpServletResponse httpResponse = (HttpServletResponse) response;
-        HttpSession session = httpRequest.getSession(false);
-        String path = httpRequest.getRequestURI();
+        HttpServletRequest req = (HttpServletRequest) request;
+        HttpServletResponse res = (HttpServletResponse) response;
+        HttpSession session = req.getSession(false);
+        String uri = req.getRequestURI();
 
-        if (isWhiteList(path)) {
-            chain.doFilter(request, response); // 로그인 없이 허용
+        // 로그인 없이 접근 가능한 경로
+        if (uri.startsWith("/api/users/login") || uri.startsWith("/api/users/signup")) {
+            chain.doFilter(request, response);
             return;
         }
 
-        // 세션이 없거나 userId가 없으면 401 UNAUTHORIZED 반환
+        // 로그인 상태 확인
         if (session == null || session.getAttribute("userId") == null) {
-            httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            httpResponse.setContentType("application/json;charset=UTF-8");
-            httpResponse.getWriter().write("{\"message\":\"로그인이 필요합니다.\"}");
+            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            res.setContentType("application/json;charset=UTF-8");
+            res.getWriter().write("{\"message\":\"로그인이 필요합니다.\"}");
             return;
         }
 
-        chain.doFilter(request, response); // 통과
-    }
+        // 세션에서 사용자 정보 조회
+        Long userId = (Long) session.getAttribute("userId");
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("사용자 정보를 찾을 수 없습니다."));
 
+        // 요청에 사용자 정보 저장
+        req.setAttribute("userId", user.getId());
+        req.setAttribute("userRole", user.getRole().name());
 
-
-
-    private boolean isWhiteList(String path) {
-        for (String white : WHITE_LIST) {
-            if (path.startsWith(white)) {
-                return true;
-            }
-        }
-        return false;
+        chain.doFilter(request, response);
     }
 }
