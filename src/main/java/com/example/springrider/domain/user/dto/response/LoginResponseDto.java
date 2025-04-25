@@ -1,12 +1,13 @@
 package com.example.springrider.domain.user.dto.response;
 
 import com.example.springrider.domain.user.entity.User;
+import com.example.springrider.domain.user.enums.UserRole;
 import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
 @Getter
+@RequiredArgsConstructor
 public class LoginResponseDto {
 
     private final Long userId;
@@ -15,18 +16,21 @@ public class LoginResponseDto {
     private final String nickname;
     private final String phone;
     private final LocalDateTime createdAt;
-    private final LocalDateTime updatedAt;
-    private final String role;
+    private final LocalDateTime modifiedAt;
+    private final UserRole role;
 
-    public LoginResponseDto(User user) {
-        this.userId = user.getId();
-        this.email = user.getEmail();
-        this.username = user.getName();
-        this.nickname = user.getNickname();
-        this.phone = user.getPhone();
-        this.createdAt = user.getCreatedAt();
-        this.updatedAt = user.getModifiedAt();
-        this.role = user.getRole().name();
+    public static LoginResponseDto of(User user) {
+        return new LoginResponseDto(
+            user.getId(),
+            user.getEmail(),
+            user.getName(),
+            user.getNickname(),
+            user.getPhone(),
+            user.getCreatedAt(),
+            user.getModifiedAt(),
+            user.getRole()
+        );
     }
+
 }
 

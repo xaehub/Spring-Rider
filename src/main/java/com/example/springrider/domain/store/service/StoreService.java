@@ -73,8 +73,9 @@ public class StoreService {
      * @return 수정된 가게 정보
      */
     @Transactional
-    public StoreResponseDto updateStore(Long storeId, StoreUpdateRequestDto requestDto,
-        Long userId) {
+    public StoreResponseDto updateStore(
+        Long storeId, StoreUpdateRequestDto requestDto, Long userId
+    ) {
 
         User user = userRepository.findByIdOrElseThrow(userId);
 
@@ -91,19 +92,19 @@ public class StoreService {
 
         // 현재 가게 상태와 입력받은 상태가 다를 때
         if (store.getStatus() != newStatus) {
-            if (newStatus == StoreStatus.ACTIVE) {
-                // 사장님이 가지고 있는 ACTIVE 상태의 가게 수가 3개가 넘으면 예외처리
-                long activeStoreCount = storeRepository.countByUserAndStatus(user,
-                    StoreStatus.ACTIVE);
-                if (activeStoreCount >= 3) {
-                    throw new InvalidRequestException(STORE_LIMIT_EXCEEDED);
+            switch (newStatus) {
+                case ACTIVE -> {
+                    long activeStoreCount = storeRepository.countByUserAndStatus(user,
+                        StoreStatus.ACTIVE);
+                    // 사장님이 가지고 있는 ACTIVE 상태의 가게 수가 3개가 넘으면 예외처리
+                    if (activeStoreCount >= 3) {
+                        throw new InvalidRequestException(STORE_LIMIT_EXCEEDED);
+                    }
+                    store.changeStatus(StoreStatus.ACTIVE);
                 }
-                store.changeStatus(StoreStatus.ACTIVE);
-            } else if (newStatus == StoreStatus.CLOSED) {
                 // CLOSED 상태에서 또 CLOSED로 변경해도 괜찮음 (수정할 때 store status를 받아야 함)
-                store.changeStatus(StoreStatus.CLOSED);
-            } else {
-                throw new InvalidRequestException(STORE_INVALID_STATUS_CHANGE);
+                case CLOSED -> store.changeStatus(StoreStatus.CLOSED);
+                default -> throw new InvalidRequestException(STORE_INVALID_STATUS_CHANGE);
             }
         }
 
