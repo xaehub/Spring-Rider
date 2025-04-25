@@ -6,6 +6,7 @@ import com.example.springrider.domain.common.response.ApiResponse;
 import com.example.springrider.domain.user.dto.request.DeleteUserRequestDto;
 import com.example.springrider.domain.user.dto.request.LoginRequestDto;
 import com.example.springrider.domain.user.dto.request.PasswordModifyRequestDto;
+import com.example.springrider.domain.user.dto.request.ProfileModifyRequestDto;
 import com.example.springrider.domain.user.dto.request.SignupRequestDto;
 import com.example.springrider.domain.user.dto.response.LoginResponseDto;
 import com.example.springrider.domain.user.dto.response.SignupResponseDto;
@@ -14,6 +15,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -106,4 +108,19 @@ public class UserController {
         return ApiResponse.ok(null);
     }
 
+    @PatchMapping("/profile")
+    public ApiResponse<Void> modifyProfile(
+        @Valid @RequestBody ProfileModifyRequestDto requestDto,
+        @SessionAttribute(name = "userId", required = false) Long userId
+    ) {
+        // 로그인 여부 확인
+        if (userId == null) {
+            throw new AuthException(ExceptionCode.UNAUTHORIZED);
+        }
+
+        userService.modifyProfile(requestDto, userId);
+
+        return ApiResponse.ok(null);
+
+    }
 }
