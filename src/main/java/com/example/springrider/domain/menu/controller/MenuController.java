@@ -55,6 +55,14 @@ public class MenuController {
         return ApiResponse.ok(menuService.update(storeId, menuId, userId, requestDto));
     }
 
+    /**
+     * 메뉴 삭제 컨트롤러
+     *
+     * @param storeId 가게 식별자
+     * @param menuId  메뉴 식별자
+     * @param userId  세션에 있는 유저 식별자
+     * @return 삭제된 메뉴 정보가 담긴 {@link MenuResponseDto}
+     */
     @DeleteMapping("/{storeId}/menus/{menuId}")
     public ApiResponse<MenuResponseDto> delete(
         @PathVariable Long storeId, @PathVariable Long menuId,

@@ -66,8 +66,6 @@ public class MenuService {
         return MenuResponseDto.toDto(findMenu);
     }
 
-    // todo can not delete
-
     /**
      * 메뉴 삭제 서비스
      *
