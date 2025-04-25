@@ -3,6 +3,8 @@ package com.example.springrider.domain.cart.service;
 import com.example.springrider.domain.cart.dto.CartItemBulkRequestDto;
 import com.example.springrider.domain.cart.dto.CartItemBulkResponseDto;
 import com.example.springrider.domain.cart.dto.CartItemRequestDto;
+import com.example.springrider.domain.cart.dto.CartItemSearchBulkResponseDto;
+import com.example.springrider.domain.cart.dto.CartItemSearchResponseDto;
 import com.example.springrider.domain.cart.dto.FailedItemDto;
 import com.example.springrider.domain.cart.dto.SuccessItemDto;
 import com.example.springrider.domain.cart.entity.CartItem;
@@ -99,5 +101,20 @@ public class CartService {
         } catch (DataIntegrityViolationException e) {
             throw new InvalidRequestException(ExceptionCode.CART_DUPLICATE_ITEM);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public CartItemSearchBulkResponseDto searchCartItems(Long userId) {
+        LocalDateTime limit = LocalDateTime.now().minusDays(1);
+        List<CartItem> cartItems = cartRepository.findAllbyUserIdAndModifiedAtAfter(userId, limit);
+
+        if (cartItems.isEmpty()) {
+            throw new InvalidRequestException(ExceptionCode.CART_NOT_FOUND_ALL);
+        }
+
+        List<CartItemSearchResponseDto> responseDtos = cartItems.stream()
+            .map(CartItemSearchResponseDto::new).toList();
+
+        return new CartItemSearchBulkResponseDto(responseDtos, cartItems.get(0).getStoreId());
     }
 }
