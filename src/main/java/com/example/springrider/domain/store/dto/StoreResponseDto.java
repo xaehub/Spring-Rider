@@ -20,6 +20,7 @@ public class StoreResponseDto {
     private LocalTime closeTime;
     private Integer minOrderPrice;
     private StoreStatus status;
+    private String ownerName;
 
     public static StoreResponseDto fromEntity(Store store) {
         return new StoreResponseDto(
@@ -30,7 +31,8 @@ public class StoreResponseDto {
             store.getOpenTime(),
             store.getCloseTime(),
             store.getMinOrderPrice(),
-            store.getStatus()
+            store.getStatus(),
+            store.getUser().getName()  // 여기서 바로 유저 이름 꺼내옴
         );
     }
 }

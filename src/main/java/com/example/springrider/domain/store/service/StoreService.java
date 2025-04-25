@@ -32,13 +32,21 @@ public class StoreService {
     private final StoreRepository storeRepository;
     private final UserRepository userRepository;
 
+    /**
+     * 가게 생성
+     *
+     * @param storeRequestDto 가게 생성 요청 dto
+     * @param userId          로그인한 유저의 고유 식별자
+     * @return 가게 정보 + 유저 이름을 savedStore에 저장
+     */
     @Transactional
-    public StoreResponseDto createStore(StoreRequestDto storeRequestDto) {
+    public StoreResponseDto createStore(StoreRequestDto storeRequestDto, Long userId) {
 
-        User user = userRepository.findByIdOrElseThrow(storeRequestDto.getUserId());
+        User user = userRepository.findByIdOrElseThrow(userId);
 
+        // 로그인한 유저의 롤이 오너가 아니면 예외 처리
         if (user.getRole() != UserRole.OWNER) {
-            throw new InvalidRequestException(ExceptionCode.STORE_OWNER_ONLY); // ← 사장님 권한 없을 때
+            throw new InvalidRequestException(ExceptionCode.STORE_OWNER_ONLY);
         }
 
         // 가게 수가 3개가 넘으면 예외 처리
@@ -47,17 +55,9 @@ public class StoreService {
             throw new InvalidRequestException(STORE_LIMIT_EXCEEDED);
         }
 
-        // 생성한 가게 정보를 가진 객체 생성
-        Store store = new Store(
-            storeRequestDto.getName(),
-            storeRequestDto.getAddress(),
-            storeRequestDto.getCategory(),
-            storeRequestDto.getOpenTime(),
-            storeRequestDto.getCloseTime(),
-            storeRequestDto.getMinOrderPrice(),
-            StoreStatus.ACTIVE,
-            user
-        );
+        // store에 있는 스태틱 메소드 StoreInfo에 가게정보와 유저의정보(유저이름)을 담고
+        // 객체 store 생성
+        Store store = Store.StoreInfo(storeRequestDto, user);
 
         // 저장
         Store savedStore = storeRepository.save(store);
