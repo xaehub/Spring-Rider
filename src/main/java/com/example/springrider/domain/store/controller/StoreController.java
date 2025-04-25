@@ -29,11 +29,19 @@ public class StoreController {
 
     private final StoreService storeService;
 
+    /**
+     * 가게 생성
+     *
+     * @param storeRequestDto 가게 정보 요청 dto
+     * @param userId          로그인 상태인 유저의 세션 정보
+     * @return 가게 정보 + 유저 이름
+     */
     @PostMapping("/owners/stores")
     public ApiResponse<StoreResponseDto> createStore(
-        @Valid @RequestBody StoreRequestDto storeRequestDto
+        @Valid @RequestBody StoreRequestDto storeRequestDto,
+        @SessionAttribute(name = "userId") Long userId
     ) {
-        return ApiResponse.created(storeService.createStore(storeRequestDto));
+        return ApiResponse.created(storeService.createStore(storeRequestDto, userId));
     }
 
     @PutMapping("/owners/stores/{storeId}")
