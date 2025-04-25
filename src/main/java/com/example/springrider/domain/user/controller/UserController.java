@@ -50,8 +50,7 @@ public class UserController {
     public ApiResponse<LoginResponseDto> login(
         @Valid @RequestBody LoginRequestDto requestDto, HttpSession session
     ) {
-        LoginResponseDto dto = userService.login(requestDto, session);
-        return ApiResponse.ok(dto);
+        return ApiResponse.ok(userService.login(requestDto, session));
     }
 
     /**

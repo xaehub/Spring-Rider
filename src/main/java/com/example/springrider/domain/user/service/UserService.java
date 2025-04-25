@@ -110,8 +110,8 @@ public class UserService {
      * @param requestDto 비밀번호 정보가 담긴 {@link PasswordModifyRequestDto}
      * @param userId     유저 식별자
      */
-    public void modifyPassword(PasswordModifyRequestDto requestDto, Long userId,
-        HttpSession session) {
+    public void modifyPassword(
+        PasswordModifyRequestDto requestDto, Long userId, HttpSession session) {
 
         User user = userRepository.findByIdOrElseThrow(userId);
 
