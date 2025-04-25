@@ -1,11 +1,11 @@
 package com.example.springrider.domain.store.entity;
 
-import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_ALREADY_CLOSED;
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_INVALID_STATUS_CHANGE;
 
 import com.example.springrider.domain.common.entity.BaseEntity;
 import com.example.springrider.domain.common.exception.InvalidRequestException;
 import com.example.springrider.domain.menu.entity.Menu;
+import com.example.springrider.domain.store.dto.StoreRequestDto;
 import com.example.springrider.domain.store.dto.StoreUpdateRequestDto;
 import com.example.springrider.domain.store.enums.StoreStatus;
 import com.example.springrider.domain.user.entity.User;
@@ -59,7 +59,19 @@ public class Store extends BaseEntity {
         this.minOrderPrice = minOrderPrice;
         this.status = status;
         this.user = user;
-        this.menus = new ArrayList<>();
+    }
+
+    public static Store StoreInfo(StoreRequestDto storeRequestDto, User user) {
+        return new Store(
+            storeRequestDto.getName(),
+            storeRequestDto.getAddress(),
+            storeRequestDto.getCategory(),
+            storeRequestDto.getOpenTime(),
+            storeRequestDto.getCloseTime(),
+            storeRequestDto.getMinOrderPrice(),
+            StoreStatus.ACTIVE,
+            user
+        );
     }
 
     public void update(StoreUpdateRequestDto dto) {
@@ -88,7 +100,4 @@ public class Store extends BaseEntity {
             throw new InvalidRequestException(STORE_INVALID_STATUS_CHANGE);
         }
     }
-
-
-
 }
