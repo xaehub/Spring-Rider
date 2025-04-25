@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,13 +44,13 @@ public class StoreController {
     }
 
     @PutMapping("/owners/stores/{storeId}")
-    public ResponseEntity<String> updateStore(
+    public ApiResponse<StoreResponseDto> updateStore(
         @PathVariable Long storeId,
         @RequestBody StoreUpdateRequestDto requestDto,
         @SessionAttribute(name = "userId", required = false) Long userId
     ) {
-        storeService.updateStore(storeId, requestDto, userId);
-        return ResponseEntity.ok("가게 정보가 수정되었습니다."); // <- Response는 수정 예정맞죠??
+        StoreResponseDto responseDto = storeService.updateStore(storeId, requestDto, userId);
+        return ApiResponse.ok(responseDto);
     }
 
     @GetMapping("/customers/stores")
