@@ -35,8 +35,9 @@ public class UserOrderService {
      */
     public CreateOrderResponseDto create(CreateOrderRequestDto requestDto, Long userId) {
         // 1. 장바구니 메뉴 조회
-        List<CartItem> cartItems = cartRepository.findAllbyUserIdAndModifiedAtAfter(userId,
-            LocalDateTime.now().minusDays(1));
+        List<CartItem> cartItems = cartRepository.findAllByUserIdAndModifiedAtAfterWithMenuAndStore(
+            userId, LocalDateTime.now().minusDays(1)
+        );
 
         if (cartItems.isEmpty()) {
             throw new InvalidRequestException(ExceptionCode.CART_NOT_FOUND_ALL);
@@ -54,7 +55,6 @@ public class UserOrderService {
         order.setStatus(OrderStatus.PENDING);
 
         // 4. 장바구니 아이템을 주문 아이템으로 변환
-        int totalPrice = 0;
         for (CartItem cartItem : cartItems) {
             if (!cartItem.isActive()) {
                 continue;
@@ -66,10 +66,9 @@ public class UserOrderService {
             orderItem.setQuantity(cartItem.getQuantity());
 
             order.add(orderItem);
-            totalPrice += cartItem.getMenu().getPrice() * cartItem.getQuantity();
         }
 
-        order.setTotalPrice(totalPrice);
+        order.calculateTotalPrice();
 
         // 5. 주문 저장
         Order savedOrder = orderRepository.save(order);

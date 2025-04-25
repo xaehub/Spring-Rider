@@ -31,7 +31,7 @@ public class User extends BaseEntity {
     @Column(nullable = false, length = 35)
     private String nickname;
 
-    @Column(nullable = false, length = 11)
+    @Column(nullable = false, length = 15)
     private String phone;
 
     @Enumerated(EnumType.STRING)

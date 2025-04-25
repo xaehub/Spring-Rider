@@ -4,6 +4,7 @@ import com.example.springrider.domain.common.entity.BaseEntity;
 import com.example.springrider.domain.order.enums.OrderStatus;
 import com.example.springrider.domain.store.entity.Store;
 import com.example.springrider.domain.user.entity.User;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -28,7 +29,6 @@ import lombok.Setter;
 )
 public class Order extends BaseEntity {
 
-    @Setter
     private Integer totalPrice;
 
     @Column(nullable = false, length = 100)
@@ -49,10 +49,18 @@ public class Order extends BaseEntity {
     @Setter
     private User user;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
     public void add(OrderItem orderItem) {
         this.orderItems.add(orderItem);
+    }
+
+    public void calculateTotalPrice() {
+        int total = 0;
+        for (OrderItem item : this.orderItems) {
+            total += item.getMenu().getPrice() * item.getQuantity();
+        }
+        this.totalPrice = total;
     }
 }
