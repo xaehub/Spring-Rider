@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class CreationCartItemRequestDto {
+public class CreateCartItemRequestDto {
 
 
     @NotNull(message = "메뉴Id는 필수 값입니다.")

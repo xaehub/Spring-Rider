@@ -1,7 +1,7 @@
 package com.example.springrider.domain.cart.controller;
 
-import com.example.springrider.domain.cart.dto.CreationCartItemBulkRequestDto;
-import com.example.springrider.domain.cart.dto.CreationCartItemBulkResponseDto;
+import com.example.springrider.domain.cart.dto.CreateCartItemBulkRequestDto;
+import com.example.springrider.domain.cart.dto.CreateCartItemBulkResponseDto;
 import com.example.springrider.domain.cart.dto.FindCartItemBulkResponseDto;
 import com.example.springrider.domain.cart.dto.UpdateCartItemRequestDto;
 import com.example.springrider.domain.cart.dto.UpdateCartItemResponseDto;
@@ -27,8 +27,8 @@ public class CartController {
 
     @Valid
     @PostMapping("/cart-items")
-    public ApiResponse<CreationCartItemBulkResponseDto> create(
-        @RequestBody CreationCartItemBulkRequestDto requestDto,
+    public ApiResponse<CreateCartItemBulkResponseDto> create(
+        @RequestBody CreateCartItemBulkRequestDto requestDto,
         @SessionAttribute(name = "userId", required = false) Long userId) {
         return ApiResponse.ok(cartService.create(userId,
             requestDto));
