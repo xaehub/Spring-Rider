@@ -8,11 +8,11 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class CartItemBulkRequestDto {
+public class CreateCartItemBulkRequestDto {
 
     @NotNull
     private final Long storeId;
 
     @NotEmpty
-    private final List<CartItemRequestDto> cartItems;
+    private final List<CreateCartItemRequestDto> cartItems;
 }

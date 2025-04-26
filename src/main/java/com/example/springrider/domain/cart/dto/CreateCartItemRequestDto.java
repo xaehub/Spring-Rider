@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class CartItemRequestDto {
+public class CreateCartItemRequestDto {
 
 
     @NotNull
@@ -16,4 +16,3 @@ public class CartItemRequestDto {
     @Min(1)
     private final Integer quantity;
 }
-

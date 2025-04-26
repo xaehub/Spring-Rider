@@ -3,6 +3,7 @@ package com.example.springrider.domain.cart.repository;
 import com.example.springrider.domain.cart.entity.CartItem;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -26,7 +27,13 @@ public interface CartRepository extends JpaRepository<CartItem, Long> {
     @Query("SELECT ci FROM CartItem ci " +
         "JOIN FETCH ci.menu " +
         "WHERE ci.user.id = :userId AND ci.modifiedAt > :limit")
-    List<CartItem> findAllbyUserIdAndModifiedAtAfter(
+    List<CartItem> findAllbyUserIdAndModifiedAtAfterWithMenu(
         @Param("userId") Long userId,
         @Param("limit") LocalDateTime limit);
+
+    @Query("SELECT ci FROM CartItem ci " +
+        "JOIN FETCH ci.user " +
+        "WHERE ci.id = :id")
+    Optional<CartItem> findByIdWithUser(
+        @Param("id") Long cartItemId);
 }
