@@ -5,11 +5,11 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class FailedItemDto {
+public class CreateSuccessDto {
+
+    private final Long cartItemId;
 
     private final Long menuId;
 
-    private final String errorName;
-
-    private final String message;
+    private final Integer quantity;
 }

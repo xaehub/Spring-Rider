@@ -1,7 +1,7 @@
 package com.example.springrider.domain.cart.service;
 
-import com.example.springrider.domain.cart.dto.CartItemBulkResponseDto;
 import com.example.springrider.domain.cart.dto.CreateCartItemBulkRequestDto;
+import com.example.springrider.domain.cart.dto.CreateCartItemBulkResponseDto;
 import com.example.springrider.domain.cart.dto.CreateCartItemRequestDto;
 import com.example.springrider.domain.cart.dto.CreateFailedDto;
 import com.example.springrider.domain.cart.dto.CreateSuccessDto;
@@ -37,7 +37,7 @@ public class CartService {
     private final UserRepository userRepository;
 
     @Transactional
-    public CartItemBulkResponseDto create(Long userId,
+    public CreateCartItemBulkResponseDto create(Long userId,
         CreateCartItemBulkRequestDto requestDto) {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new InvalidRequestException(ExceptionCode.USER_NOT_FOUND));
@@ -56,7 +56,7 @@ public class CartService {
                 successItems,
                 failedItems);
         }
-        return new CartItemBulkResponseDto(successItems, failedItems);
+        return new CreateCartItemBulkResponseDto(successItems, failedItems);
     }
 
     private void validateExistingCart(List<CartItem> existingCartItems, Long storeId) {
