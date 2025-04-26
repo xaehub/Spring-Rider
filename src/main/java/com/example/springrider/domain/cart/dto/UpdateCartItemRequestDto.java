@@ -12,12 +12,4 @@ public class UpdateCartItemRequestDto {
     private final String status;
 
     private final Integer quantity;
-
-    public boolean isValidQuantity() {
-        return quantity != null && quantity > 0;
-    }
-
-    public boolean hasStatus() {
-        return status != null;
-    }
 }
