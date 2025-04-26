@@ -1,9 +1,7 @@
 package com.example.springrider.aop;
 
-import com.example.springrider.domain.common.exception.ExceptionCode;
-import com.example.springrider.domain.common.exception.InvalidRequestException;
 import com.example.springrider.domain.order.dto.CreateOrderResponseDto;
-import com.example.springrider.domain.order.repository.OrderRepository;
+import com.example.springrider.domain.order.service.UserOrderService;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +16,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class OrderEventLogAspect {
 
-    private final OrderRepository orderRepository;
+    private final UserOrderService userOrderService;
 
     @Around("@annotation(OrderEventLog)")
     public Object logOrderCreate(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -28,9 +26,7 @@ public class OrderEventLogAspect {
 
         if (result instanceof CreateOrderResponseDto responseDto) {
             Long orderId = responseDto.getOrderId();
-            Long storeId = orderRepository.findById(orderId)
-                .map(order -> order.getStore().getId())
-                .orElseThrow(() -> new InvalidRequestException(ExceptionCode.STORE_NOT_FOUND));
+            Long storeId = userOrderService.findStoreIdFromOrder(orderId);
 
             log.info("[주문 생성] 시간={}, 가게번호={}, 주문번호={}", requestTime, storeId, orderId);
         }

@@ -1,5 +1,7 @@
 package com.example.springrider.domain.order.repository;
 
+import com.example.springrider.domain.common.exception.ExceptionCode;
+import com.example.springrider.domain.common.exception.InvalidRequestException;
 import com.example.springrider.domain.order.entity.Order;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,5 +17,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         WHERE o.id = :orderId
         """)
     Optional<Order> findByIdWithOrderItemsAndMenu(@Param("orderId") Long orderId);
+
+    default Order findByIdOrElseThrow(Long orderId) {
+        return findById(orderId)
+            .orElseThrow(() -> new InvalidRequestException(ExceptionCode.ORDER_NOT_FOUND));
+    }
 
 }

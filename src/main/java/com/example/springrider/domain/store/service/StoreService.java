@@ -145,4 +145,15 @@ public class StoreService {
         // 가게의 정보와 메뉴도 보이게 가게 상세 dto 형태 반환
         return FindStoreResponseDto.from(store);
     }
+
+    /**
+     * {@link Store} 엔티티 반환 메소드
+     *
+     * @param storeId 가게 식별자
+     * @return {@link Store}
+     */
+    public Store findEntity(Long storeId) {
+        return storeRepository.findByIdOrElseThrow(storeId);
+    }
+
 }

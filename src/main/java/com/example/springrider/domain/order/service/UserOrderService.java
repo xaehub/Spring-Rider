@@ -81,4 +81,10 @@ public class UserOrderService {
 
     }
 
+    public Long findStoreIdFromOrder(Long orderId) {
+        return orderRepository.findById(orderId)
+            .map(order -> order.getStore().getId())
+            .orElseThrow(() -> new InvalidRequestException(ExceptionCode.STORE_NOT_FOUND));
+    }
+
 }
