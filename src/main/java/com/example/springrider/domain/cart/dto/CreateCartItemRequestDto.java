@@ -10,9 +10,9 @@ import lombok.RequiredArgsConstructor;
 public class CreateCartItemRequestDto {
 
 
-    @NotNull
+    @NotNull(message = "메뉴Id는 필수 값입니다.")
     private final Long menuId;
 
-    @Min(1)
+    @Min(value = 1, message = "수량은 1개 이상이어야 합니다.")
     private final Integer quantity;
 }
