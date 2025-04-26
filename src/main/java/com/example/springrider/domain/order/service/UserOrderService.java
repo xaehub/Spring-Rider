@@ -87,9 +87,11 @@ public class UserOrderService {
      * @param userId 유저 식별자
      * @return 주문 목록 정보가 담긴 {@link OrderResponseDto}
      */
-    public OrderResponseDto findAll(Long userId) {
-        return OrderResponseDto.of(orderRepository.findByUserIdWithOrderItemsAndMenu(userId)
-            .orElseThrow(() -> new InvalidRequestException(ExceptionCode.ORDER_NOT_FOUND)));
+    public List<OrderResponseDto> findAll(Long userId) {
+        List<Order> orders = orderRepository.findAllByUserIdWithOrderItemsAndMenuAndStore(userId);
+        return orders.stream()
+            .map(OrderResponseDto::of)
+            .toList();
     }
 
     public Long findStoreIdFromOrder(Long orderId) {
