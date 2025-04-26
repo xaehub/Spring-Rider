@@ -1,5 +1,6 @@
 package com.example.springrider.domain.store.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -11,6 +12,7 @@ import static org.mockito.Mockito.when;
 import com.example.springrider.domain.common.exception.InvalidRequestException;
 import com.example.springrider.domain.store.dto.StoreRequestDto;
 import com.example.springrider.domain.store.dto.StoreResponseDto;
+import com.example.springrider.domain.store.dto.UpdateStoreRequestDto;
 import com.example.springrider.domain.store.entity.Store;
 import com.example.springrider.domain.store.enums.StoreStatus;
 import com.example.springrider.domain.store.repository.StoreRepository;
@@ -115,5 +117,27 @@ class StoreServiceTest {
         assertThrows(InvalidRequestException.class, () -> {
             storeService.create(requestDto, 1L);
         });
+    }
+
+    @Test
+    void update_store_가게가_정상적으로_수정된다() {
+        UpdateStoreRequestDto dto = new UpdateStoreRequestDto(
+            "레전드 맛집", "서울", "양식",
+            LocalTime.of(9, 0), LocalTime.of(21, 0),
+            15000, StoreStatus.CLOSED
+        );
+
+        Store store = Store.StoreInfo(new StoreRequestDto(
+            "지리는 맛집", "서울", "한식",
+            LocalTime.of(10, 0), LocalTime.of(20, 0),
+            10000, StoreStatus.ACTIVE, 1L
+        ), mockUser);
+
+        when(userRepository.findByIdOrElseThrow(anyLong())).thenReturn(mockUser);
+        when(storeRepository.findByIdOrElseThrow(anyLong())).thenReturn(store);
+
+        StoreResponseDto result = storeService.update(1L, dto, 1L);
+
+        assertEquals("레전드 맛집", result.getName());
     }
 }
