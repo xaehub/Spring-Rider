@@ -19,19 +19,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class User extends BaseEntity {
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 100)
     private String email;
 
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 35)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 35)
     private String nickname;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 15)
     private String phone;
 
     @Enumerated(EnumType.STRING)

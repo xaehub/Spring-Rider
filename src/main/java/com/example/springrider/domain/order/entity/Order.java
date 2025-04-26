@@ -31,7 +31,7 @@ public class Order extends BaseEntity {
     @Setter
     private Integer totalPrice;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     @Setter
     private String deliveryAddress;
 

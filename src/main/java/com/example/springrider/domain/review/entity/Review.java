@@ -3,6 +3,7 @@ package com.example.springrider.domain.review.entity;
 import com.example.springrider.domain.common.entity.BaseEntity;
 import com.example.springrider.domain.order.entity.Order;
 import com.example.springrider.domain.user.entity.User;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -20,8 +21,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Review extends BaseEntity {
 
+    @Column(nullable = false)
     private String contents;
-    private String rate;
+
+    @Column(nullable = false)
+    private Integer rate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

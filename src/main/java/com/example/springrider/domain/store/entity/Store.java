@@ -35,13 +35,13 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Store extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String address;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 35)
     private String category;
 
     @Column(nullable = false)
