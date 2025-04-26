@@ -140,4 +140,37 @@ class StoreServiceTest {
 
         assertEquals("레전드 맛집", result.getName());
     }
+
+    @Test
+    void update_store_다른_유저가_가게_정보_수정을_시도할_때_예외_처리() {
+        User anotherUser = new User("asd@email.com", "1111", "김태군", "김태정아님", "01000000000",
+            UserRole.OWNER, false, 0);
+        Field idField;
+        try {
+            idField = anotherUser.getClass().getSuperclass().getDeclaredField("id");
+            idField.setAccessible(true);
+            idField.set(anotherUser, 2L);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        Store store = Store.StoreInfo(new StoreRequestDto(
+            "레전드 맛집", "서울", "한식",
+            LocalTime.of(10, 0), LocalTime.of(20, 0),
+            10000, StoreStatus.ACTIVE, 1L
+        ), mockUser);
+
+        when(userRepository.findByIdOrElseThrow(2L)).thenReturn(anotherUser);
+        when(storeRepository.findByIdOrElseThrow(1L)).thenReturn(store);
+
+        UpdateStoreRequestDto dto = new UpdateStoreRequestDto(
+            "전설적인 집", "서울", "한식",
+            LocalTime.of(10, 0), LocalTime.of(22, 0),
+            11000, StoreStatus.CLOSED
+        );
+
+        assertThrows(InvalidRequestException.class, () -> {
+            storeService.update(1L, dto, 2L);
+        });
+    }
 }
