@@ -42,7 +42,7 @@ public class UserOrderService {
         );
 
         if (cartItems.isEmpty()) {
-            throw new InvalidRequestException(ExceptionCode.CART_NOT_FOUND_ALL);
+            throw new InvalidRequestException(ExceptionCode.EMPTY_CART);
         }
 
         // 2. 사용자와 가게 정보 조회
