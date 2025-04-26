@@ -64,7 +64,7 @@ public class UserController {
      * @return 200 ok
      */
     @DeleteMapping("/withdraw") // 회원탈퇴
-    public ApiResponse<Void> withdrawUser(
+    public ApiResponse<Void> delete(
         @Valid @RequestBody DeleteUserRequestDto requestDto,
         @SessionAttribute(name = "userId", required = false) Long userId,
         HttpSession session
@@ -72,7 +72,7 @@ public class UserController {
         if (userId == null) {
             throw new AuthException(ExceptionCode.UNAUTHORIZED);
         }
-        userService.withdraw(requestDto, userId, session);
+        userService.delete(requestDto, userId, session);
         return ApiResponse.ok(null);
     }
 
@@ -109,7 +109,7 @@ public class UserController {
     }
 
     @PatchMapping("/profile")
-    public ApiResponse<Void> modifyProfile(
+    public ApiResponse<Void> updateProfile(
         @Valid @RequestBody ProfileModifyRequestDto requestDto,
         @SessionAttribute(name = "userId", required = false) Long userId
     ) {
@@ -118,7 +118,7 @@ public class UserController {
             throw new AuthException(ExceptionCode.UNAUTHORIZED);
         }
 
-        userService.modifyProfile(requestDto, userId);
+        userService.updateProfile(requestDto, userId);
 
         return ApiResponse.ok(null);
 
