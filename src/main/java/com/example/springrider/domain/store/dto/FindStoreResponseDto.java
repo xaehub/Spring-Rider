@@ -10,7 +10,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class StoreDetailResponseDto {
+public class FindStoreResponseDto {
 
     private Long id;
     private String name;
@@ -21,12 +21,12 @@ public class StoreDetailResponseDto {
     private Integer minOrderPrice;
     private List<MenuResponseDto> menus;
 
-    public static StoreDetailResponseDto from(Store store) {
+    public static FindStoreResponseDto from(Store store) {
         List<MenuResponseDto> menuDtos = store.getMenus().stream()
             .map(MenuResponseDto::toDto)
             .collect(Collectors.toList());
 
-        return new StoreDetailResponseDto(
+        return new FindStoreResponseDto(
             store.getId(),
             store.getName(),
             store.getAddress(),

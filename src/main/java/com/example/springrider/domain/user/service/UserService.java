@@ -7,6 +7,7 @@ import com.example.springrider.domain.common.exception.InvalidRequestException;
 import com.example.springrider.domain.user.dto.request.DeleteUserRequestDto;
 import com.example.springrider.domain.user.dto.request.LoginRequestDto;
 import com.example.springrider.domain.user.dto.request.PasswordModifyRequestDto;
+import com.example.springrider.domain.user.dto.request.ProfileModifyRequestDto;
 import com.example.springrider.domain.user.dto.request.SignupRequestDto;
 import com.example.springrider.domain.user.dto.response.LoginResponseDto;
 import com.example.springrider.domain.user.dto.response.SignupResponseDto;
@@ -138,5 +139,24 @@ public class UserService {
         session.invalidate(); // 현재 로그인 세션 제거
     }
 
-}
+    public void modifyProfile(ProfileModifyRequestDto requestDto, Long userId) {
+        User user = userRepository.findByIdOrElseThrow(userId);
 
+        // 비밀번호 검증
+        if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
+            throw new AuthException(ExceptionCode.PASSWORD_NOT_MATCH);
+        }
+
+        //  닉네임 중복 확인
+        if (userRepository.existsByNicknameAndIdNot(requestDto.getNickname(), userId)) {
+            throw new InvalidRequestException(ExceptionCode.NICKNAME_ALREADY_USED);
+        }
+
+        // 수정
+        user.modifyProfile(requestDto.getNickname(), requestDto.getPhone());
+
+        // 저장
+        userRepository.save(user);
+    }
+
+}

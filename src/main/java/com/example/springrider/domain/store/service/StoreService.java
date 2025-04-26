@@ -6,18 +6,16 @@ import static com.example.springrider.domain.common.exception.ExceptionCode.STOR
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_LIMIT_EXCEEDED;
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_USER_MISMATCH;
 
-import com.example.springrider.domain.common.exception.ExceptionCode;
 import com.example.springrider.domain.common.exception.InvalidRequestException;
-import com.example.springrider.domain.store.dto.StoreDetailResponseDto;
+import com.example.springrider.domain.store.dto.FindStoreResponseDto;
+import com.example.springrider.domain.store.dto.FindStoresResponseDto;
 import com.example.springrider.domain.store.dto.StoreRequestDto;
 import com.example.springrider.domain.store.dto.StoreResponseDto;
-import com.example.springrider.domain.store.dto.StoreSimpleResponseDto;
-import com.example.springrider.domain.store.dto.StoreUpdateRequestDto;
+import com.example.springrider.domain.store.dto.UpdateStoreRequestDto;
 import com.example.springrider.domain.store.entity.Store;
 import com.example.springrider.domain.store.enums.StoreStatus;
 import com.example.springrider.domain.store.repository.StoreRepository;
 import com.example.springrider.domain.user.entity.User;
-import com.example.springrider.domain.user.enums.UserRole;
 import com.example.springrider.domain.user.repository.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -39,14 +37,9 @@ public class StoreService {
      * @return 가게 정보 + 유저 이름을 savedStore에 저장
      */
     @Transactional
-    public StoreResponseDto createStore(StoreRequestDto storeRequestDto, Long userId) {
+    public StoreResponseDto create(StoreRequestDto storeRequestDto, Long userId) {
 
         User user = userRepository.findByIdOrElseThrow(userId);
-
-        // 로그인한 유저의 롤이 오너가 아니면 예외 처리
-        if (user.getRole() != UserRole.OWNER) {
-            throw new InvalidRequestException(ExceptionCode.STORE_OWNER_ONLY);
-        }
 
         // 가게 수가 3개가 넘으면 예외 처리
         long storeCount = storeRepository.countByUser(user);
@@ -73,8 +66,8 @@ public class StoreService {
      * @return 수정된 가게 정보
      */
     @Transactional
-    public StoreResponseDto updateStore(
-        Long storeId, StoreUpdateRequestDto requestDto, Long userId
+    public StoreResponseDto update(
+        Long storeId, UpdateStoreRequestDto requestDto, Long userId
     ) {
 
         User user = userRepository.findByIdOrElseThrow(userId);
@@ -125,13 +118,13 @@ public class StoreService {
      * @return 간단한 가게 정보 리스트
      */
     @Transactional(readOnly = true)
-    public List<StoreSimpleResponseDto> getAllStores() {
+    public List<FindStoresResponseDto> finds() {
         // 영업 중인 가게만 조회 (상태가 CLOSED가 아닌 가게만 조회)
         List<Store> stores = storeRepository.findAllByStatusNot(StoreStatus.CLOSED);
 
         // 리스트에 담은 stores를 리스트에 담긴 store simple response dto형태로 변환
         return stores.stream()
-            .map(StoreSimpleResponseDto::new)
+            .map(FindStoresResponseDto::new)
             .toList();
     }
 
@@ -141,7 +134,7 @@ public class StoreService {
      * @param storeId 가게 고유 식별자
      * @return 가게 상세 정보를 담은 dto
      */
-    public StoreDetailResponseDto getStoreDetail(Long storeId) {
+    public FindStoreResponseDto find(Long storeId) {
 
         Store store = storeRepository.findByIdOrElseThrow(storeId);
         // CLOSED된 가게인 경우 예외 처리
@@ -150,6 +143,6 @@ public class StoreService {
         }
 
         // 가게의 정보와 메뉴도 보이게 가게 상세 dto 형태 반환
-        return StoreDetailResponseDto.from(store);
+        return FindStoreResponseDto.from(store);
     }
 }

@@ -29,12 +29,12 @@ public class MenuController {
      * @return {@link ApiResponse} nothing to return
      */
     @PostMapping("/{storeId}/menus")
-    public ApiResponse<MenuResponseDto> save(
+    public ApiResponse<MenuResponseDto> create(
         @PathVariable Long storeId,
         @Valid @RequestBody MenuRequestDto requestDto,
         @SessionAttribute(name = "userId") Long userId
     ) {
-        return ApiResponse.created(menuService.save(userId, storeId, requestDto));
+        return ApiResponse.created(menuService.create(userId, storeId, requestDto));
     }
 
     /**
