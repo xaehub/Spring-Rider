@@ -102,6 +102,8 @@ class StoreServiceTest {
 
     @Test
     void create_store_가게_생성_시_3개가_초과하면_예외_처리() {
+
+        // given 유저가 가게 3개를 가지고 있음
         when(userRepository.findByIdOrElseThrow(anyLong())).thenReturn(mockUser);
         when(storeRepository.countByUser(mockUser)).thenReturn(3L);
 
@@ -114,6 +116,7 @@ class StoreServiceTest {
             1L
         );
 
+        //  when(storeService.create을 실행헀을 때) then*( 에러가 발생)
         assertThrows(InvalidRequestException.class, () -> {
             storeService.create(requestDto, 1L);
         });
@@ -121,6 +124,8 @@ class StoreServiceTest {
 
     @Test
     void update_store_가게가_정상적으로_수정된다() {
+
+        // given 수정할 때 보내는 dto와 수정할 가게 준비
         UpdateStoreRequestDto dto = new UpdateStoreRequestDto(
             "레전드 맛집", "서울", "양식",
             LocalTime.of(9, 0), LocalTime.of(21, 0),
@@ -136,8 +141,45 @@ class StoreServiceTest {
         when(userRepository.findByIdOrElseThrow(anyLong())).thenReturn(mockUser);
         when(storeRepository.findByIdOrElseThrow(anyLong())).thenReturn(store);
 
+        // when
         StoreResponseDto result = storeService.update(1L, dto, 1L);
 
+        // then
         assertEquals("레전드 맛집", result.getName());
+    }
+
+    @Test
+    void update_store_다른_유저가_가게_정보_수정을_시도할_때_예외_처리() {
+        // given 권한이 없는 다른 사용자와 가게 준비
+        User anotherUser = new User("asd@email.com", "1111", "김태군", "김태정아님", "01000000000",
+            UserRole.OWNER, false, 0);
+        Field idField;
+        try {
+            idField = anotherUser.getClass().getSuperclass().getDeclaredField("id");
+            idField.setAccessible(true);
+            idField.set(anotherUser, 2L);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        Store store = Store.StoreInfo(new StoreRequestDto(
+            "레전드 맛집", "서울", "한식",
+            LocalTime.of(10, 0), LocalTime.of(20, 0),
+            10000, StoreStatus.ACTIVE, 1L
+        ), mockUser);
+
+        when(userRepository.findByIdOrElseThrow(2L)).thenReturn(anotherUser);
+        when(storeRepository.findByIdOrElseThrow(1L)).thenReturn(store);
+
+        UpdateStoreRequestDto dto = new UpdateStoreRequestDto(
+            "전설적인 집", "서울", "한식",
+            LocalTime.of(10, 0), LocalTime.of(22, 0),
+            11000, StoreStatus.CLOSED
+        );
+
+        // when(storeService.update를 실행할 때) then(예외 처리)
+        assertThrows(InvalidRequestException.class, () -> {
+            storeService.update(1L, dto, 2L);
+        });
     }
 }

@@ -77,7 +77,7 @@ public class UserService {
      * @param userId     유저 식별자
      * @param session    세션 정보
      */
-    public void withdraw(DeleteUserRequestDto requestDto, Long userId, HttpSession session) {
+    public void delete(DeleteUserRequestDto requestDto, Long userId, HttpSession session) {
         if (userId == null) {
             throw new AuthException(ExceptionCode.UNAUTHORIZED);
         }
@@ -139,7 +139,7 @@ public class UserService {
         session.invalidate(); // 현재 로그인 세션 제거
     }
 
-    public void modifyProfile(ProfileModifyRequestDto requestDto, Long userId) {
+    public void updateProfile(ProfileModifyRequestDto requestDto, Long userId) {
         User user = userRepository.findByIdOrElseThrow(userId);
 
         // 비밀번호 검증
