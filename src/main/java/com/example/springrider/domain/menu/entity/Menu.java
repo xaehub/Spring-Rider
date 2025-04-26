@@ -21,16 +21,16 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Menu extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String name;
 
     @Column(nullable = false)
     private Integer price;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private String contents;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 35)
     private String category;
 
     @Column(nullable = false)

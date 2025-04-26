@@ -19,6 +19,7 @@ public enum ExceptionCode {
     EMAIL_NOT_FOUND("이메일이 존재하지 않습니다."),
     USER_NOT_FOUND("임시로 만든 유저낫빠운드~"),
     ALREADY_DELETED_USER("이미 탈퇴한 회원입니다."),
+    NICKNAME_ALREADY_USED("이미 사용 중인 닉네임입니다."),
 
     // 가게
     STORE_NOT_FOUND("존재하지 않는 가게입니다."), // 존재하지 않는 가게 조회 시
@@ -35,7 +36,7 @@ public enum ExceptionCode {
     MENU_NOT_FOUND("존재하지 않는 메뉴입니다."),
 
     // 주문
-    ORDER_EXCEPTION("주문 예외 메세지"),
+    ORDER_NOT_FOUND("주문 정보가 없습니다."),
 
     // 장바구니
     CART_EXCEPTION("장바구니 예외 메세지"),
@@ -44,6 +45,7 @@ public enum ExceptionCode {
     CART_DUPLICATE_ITEM("메뉴를 중복하지 마시고 수량을 변경해주세요."),
     CART_NOT_FOUND_ALL("장바구니가 존재하지 않습니다."),
     CART_NOT_FOUND("해당 장바구니 품목이 존재하지 않습니다."),
+    INVALID_CARTITEM_STATUS("올바른 장바구니 상태 코드가 아닙니다."),
 
     // 리뷰
     REVIEW_EXCEPTION("리뷰 예외 메세지"),

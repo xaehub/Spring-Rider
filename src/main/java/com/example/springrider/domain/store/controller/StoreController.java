@@ -1,11 +1,11 @@
 package com.example.springrider.domain.store.controller;
 
 import com.example.springrider.domain.common.response.ApiResponse;
-import com.example.springrider.domain.store.dto.StoreDetailResponseDto;
+import com.example.springrider.domain.store.dto.FindStoreResponseDto;
+import com.example.springrider.domain.store.dto.FindStoresResponseDto;
 import com.example.springrider.domain.store.dto.StoreRequestDto;
 import com.example.springrider.domain.store.dto.StoreResponseDto;
-import com.example.springrider.domain.store.dto.StoreSimpleResponseDto;
-import com.example.springrider.domain.store.dto.StoreUpdateRequestDto;
+import com.example.springrider.domain.store.dto.UpdateStoreRequestDto;
 import com.example.springrider.domain.store.service.StoreService;
 import jakarta.validation.Valid;
 import java.util.HashMap;
@@ -36,11 +36,11 @@ public class StoreController {
      * @return 가게 정보 + 유저 이름
      */
     @PostMapping("/owners/stores")
-    public ApiResponse<StoreResponseDto> createStore(
+    public ApiResponse<StoreResponseDto> create(
         @Valid @RequestBody StoreRequestDto storeRequestDto,
         @SessionAttribute(name = "userId") Long userId
     ) {
-        return ApiResponse.created(storeService.createStore(storeRequestDto, userId));
+        return ApiResponse.created(storeService.create(storeRequestDto, userId));
     }
 
     /**
@@ -52,12 +52,12 @@ public class StoreController {
      * @return 수정된 가게 정보 + 유저 정보
      */
     @PutMapping("/owners/stores/{storeId}")
-    public ApiResponse<StoreResponseDto> updateStore(
-        @Valid @RequestBody StoreUpdateRequestDto requestDto,
+    public ApiResponse<StoreResponseDto> update(
+        @Valid @RequestBody UpdateStoreRequestDto requestDto,
         @PathVariable Long storeId,
         @SessionAttribute(name = "userId", required = false) Long userId
     ) {
-        StoreResponseDto responseDto = storeService.updateStore(storeId, requestDto, userId);
+        StoreResponseDto responseDto = storeService.update(storeId, requestDto, userId);
         return ApiResponse.ok(responseDto);
     }
 
@@ -67,10 +67,10 @@ public class StoreController {
      * @return 오픈 상태의 가게를 리스트형태로 store에 담아 Map 형태로 반환함
      */
     @GetMapping("/customers/stores")
-    public ApiResponse<Map<String, List<StoreSimpleResponseDto>>> getAllOpenStores() {
-        List<StoreSimpleResponseDto> stores = storeService.getAllStores();
+    public ApiResponse<Map<String, List<FindStoresResponseDto>>> finds() {
+        List<FindStoresResponseDto> stores = storeService.finds();
         // HTTP 응답 포맷
-        Map<String, List<StoreSimpleResponseDto>> response = new HashMap<>();
+        Map<String, List<FindStoresResponseDto>> response = new HashMap<>();
         response.put("store", stores);
 
         return ApiResponse.ok(response);
@@ -83,8 +83,8 @@ public class StoreController {
      * @return 가게의 상세 정보
      */
     @GetMapping("/customers/stores/{storeId}")
-    public ApiResponse<StoreDetailResponseDto> getStoreDetail(@PathVariable Long storeId) {
-        StoreDetailResponseDto response = storeService.getStoreDetail(storeId);
+    public ApiResponse<FindStoreResponseDto> find(@PathVariable Long storeId) {
+        FindStoreResponseDto response = storeService.find(storeId);
         return ApiResponse.ok(response);
     }
 }
