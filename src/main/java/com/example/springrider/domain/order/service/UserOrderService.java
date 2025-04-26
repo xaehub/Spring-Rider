@@ -1,5 +1,6 @@
 package com.example.springrider.domain.order.service;
 
+import com.example.springrider.aop.OrderEventLog;
 import com.example.springrider.domain.cart.entity.CartItem;
 import com.example.springrider.domain.cart.repository.CartRepository;
 import com.example.springrider.domain.common.exception.ExceptionCode;
@@ -33,6 +34,7 @@ public class UserOrderService {
      * @param userId     유저 식별자
      * @return 생성된 주문 정보가 담긴 {@link CreateOrderResponseDto}
      */
+    @OrderEventLog
     public CreateOrderResponseDto create(CreateOrderRequestDto requestDto, Long userId) {
         // 1. 장바구니 메뉴 조회
         List<CartItem> cartItems = cartRepository.findAllByUserIdAndModifiedAtAfterWithMenuAndStore(
