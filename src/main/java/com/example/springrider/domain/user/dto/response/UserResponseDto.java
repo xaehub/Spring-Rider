@@ -4,8 +4,10 @@ import com.example.springrider.domain.user.enums.UserRole;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 public class UserResponseDto {
 
