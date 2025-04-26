@@ -1,12 +1,14 @@
 package com.example.springrider.domain.store.service;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.example.springrider.domain.common.exception.InvalidRequestException;
 import com.example.springrider.domain.store.dto.StoreRequestDto;
 import com.example.springrider.domain.store.dto.StoreResponseDto;
 import com.example.springrider.domain.store.entity.Store;
@@ -94,5 +96,24 @@ class StoreServiceTest {
         // then
         assertNotNull(responseDto);
         verify(storeRepository, times(1)).save(any(Store.class));
+    }
+
+    @Test
+    void create_store_가게_생성_시_3개가_초과하면_예외_처리() {
+        when(userRepository.findByIdOrElseThrow(anyLong())).thenReturn(mockUser);
+        when(storeRepository.countByUser(mockUser)).thenReturn(3L);
+
+        StoreRequestDto requestDto = new StoreRequestDto(
+            "맛집", "서울", "한식",
+            LocalTime.of(10, 0),
+            LocalTime.of(20, 0),
+            10000,
+            StoreStatus.ACTIVE,
+            1L
+        );
+
+        assertThrows(InvalidRequestException.class, () -> {
+            storeService.create(requestDto, 1L);
+        });
     }
 }
