@@ -9,6 +9,7 @@ import com.example.springrider.domain.cart.service.CartService;
 import com.example.springrider.domain.common.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,5 +48,12 @@ public class CartController {
         @RequestBody UpdateCartItemRequestDto requestDto,
         @SessionAttribute(name = "userId", required = false) Long userId) {
         return ApiResponse.ok(cartService.update(cartItemId, requestDto, userId));
+    }
+
+    @DeleteMapping("/cart-items")
+    public ApiResponse<Void> delete(
+        @SessionAttribute(name = "userId", required = false) Long userId) {
+        cartService.delete(userId);
+        return ApiResponse.ok(null);
     }
 }

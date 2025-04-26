@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class CreateCartItemBulkResponseDto {
 
-    private final List<SuccessItemDto> successItemDtos;
+    private final List<CreateSuccessDto> createSuccessDtos;
 
-    private final List<FailedItemDto> failedItemDtos;
+    private final List<CreateFailedDto> createFailedDtos;
 }

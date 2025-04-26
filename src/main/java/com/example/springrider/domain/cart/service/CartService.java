@@ -3,10 +3,10 @@ package com.example.springrider.domain.cart.service;
 import com.example.springrider.domain.cart.dto.CreateCartItemBulkRequestDto;
 import com.example.springrider.domain.cart.dto.CreateCartItemBulkResponseDto;
 import com.example.springrider.domain.cart.dto.CreateCartItemRequestDto;
-import com.example.springrider.domain.cart.dto.FailedItemDto;
+import com.example.springrider.domain.cart.dto.CreateFailedDto;
+import com.example.springrider.domain.cart.dto.CreateSuccessDto;
 import com.example.springrider.domain.cart.dto.FindCartItemBulkResponseDto;
 import com.example.springrider.domain.cart.dto.FindCartItemResponseDto;
-import com.example.springrider.domain.cart.dto.SuccessItemDto;
 import com.example.springrider.domain.cart.dto.UpdateCartItemRequestDto;
 import com.example.springrider.domain.cart.dto.UpdateCartItemResponseDto;
 import com.example.springrider.domain.cart.entity.CartItem;
@@ -18,13 +18,16 @@ import com.example.springrider.domain.menu.repository.MenuRepository;
 import com.example.springrider.domain.user.entity.User;
 import com.example.springrider.domain.user.repository.UserRepository;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CartService {
@@ -45,8 +48,8 @@ public class CartService {
             userId, limit);
         validateExistingCart(existingCartItems, requestStoreId);
 
-        List<SuccessItemDto> successItems = new ArrayList<>();
-        List<FailedItemDto> failedItems = new ArrayList<>();
+        List<CreateSuccessDto> successItems = new ArrayList<>();
+        List<CreateFailedDto> failedItems = new ArrayList<>();
 
         for (CreateCartItemRequestDto createCartItemRequestDto : requestDto.getCartItems()) {
             processCreation(user, requestStoreId, existingCartItems, createCartItemRequestDto,
@@ -68,8 +71,8 @@ public class CartService {
         Long requestStoreId,
         List<CartItem> existingCartItems,
         CreateCartItemRequestDto createCartItemRequestDto,
-        List<SuccessItemDto> successItems,
-        List<FailedItemDto> failedItems
+        List<CreateSuccessDto> successItems,
+        List<CreateFailedDto> failedItems
     ) {
         try {
             Menu menu = menuRepository.findById(createCartItemRequestDto.getMenuId())
@@ -88,20 +91,20 @@ public class CartService {
                 existing.updateQuantity(
                     existing.getQuantity() + createCartItemRequestDto.getQuantity());
                 successItems.add(
-                    new SuccessItemDto(existing.getId(), createCartItemRequestDto.getMenuId(),
+                    new CreateSuccessDto(existing.getId(), createCartItemRequestDto.getMenuId(),
                         existing.getQuantity()));
             } else {
                 CartItem newItem = new CartItem(user, menu,
                     createCartItemRequestDto.getQuantity());
                 CartItem saved = cartRepository.save(newItem);
                 successItems.add(
-                    new SuccessItemDto(saved.getId(), createCartItemRequestDto.getMenuId(),
+                    new CreateSuccessDto(saved.getId(), createCartItemRequestDto.getMenuId(),
                         createCartItemRequestDto.getQuantity()));
             }
 
         } catch (InvalidRequestException e) {
             failedItems.add(
-                new FailedItemDto(createCartItemRequestDto.getMenuId(),
+                new CreateFailedDto(createCartItemRequestDto.getMenuId(),
                     e.getExceptionCode().name(),
                     e.getMessage()));
         } catch (DataIntegrityViolationException e) {
@@ -116,7 +119,7 @@ public class CartService {
             limit);
 
         if (cartItems.isEmpty()) {
-            throw new InvalidRequestException(ExceptionCode.CART_NOT_FOUND_ALL);
+            throw new InvalidRequestException(ExceptionCode.EMPTY_CART);
         }
 
         List<FindCartItemResponseDto> responseDtos = cartItems.stream()
@@ -138,7 +141,7 @@ public class CartService {
         Long cartItemId, UpdateCartItemRequestDto requestDto, Long userId) {
         CartItem cartItem = cartRepository.findByIdWithUser(cartItemId)
             .orElseThrow(() -> new InvalidRequestException(
-                ExceptionCode.CART_NOT_FOUND));
+                ExceptionCode.CARTITEM_NOT_FOUND));
         if (!cartItem.getUser().getId().equals(userId)) {
             throw new InvalidRequestException(ExceptionCode.AUTH_EXCEPTION);
         }
@@ -162,5 +165,30 @@ public class CartService {
 
     public boolean hasStatus(UpdateCartItemRequestDto requestDto) {
         return requestDto.getStatus() != null;
+    }
+
+    @Transactional
+    public void delete(Long userId) {
+        LocalDateTime limit = LocalDateTime.now().minusDays(1);
+        List<CartItem> cartItems = cartRepository.findByUserIdAndModifiedAtAfterAndStatusSelect(
+            userId, limit);
+        if (cartItems.isEmpty()) {
+            throw new InvalidRequestException(ExceptionCode.EMPTY_CART);
+        }
+        int errorCount = 0;
+        for (CartItem item : cartItems) {
+            try {
+                cartRepository.delete(item);
+            } catch (Exception e) {
+                String timeStamp = LocalDateTime.now()
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                log.warn("[Fail] | userId : {} cartItemId : {} message : {} timestamp : {}", userId,
+                    item.getId(), e.getMessage(), timeStamp);
+                errorCount++;
+            }
+        }
+        if (errorCount > 0) {
+            throw new InvalidRequestException(ExceptionCode.CARTITEM_DELETE_FAIL);
+        }
     }
 }

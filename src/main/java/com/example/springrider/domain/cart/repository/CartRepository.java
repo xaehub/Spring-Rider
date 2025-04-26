@@ -14,7 +14,7 @@ public interface CartRepository extends JpaRepository<CartItem, Long> {
 
     // 기준 시간 이후에 수정되었으며 유저 아이디가 같은 장바구니를 조회한다.
     // menu 테이블과 menu 테이블 안의 store 테이블이 fetch Join이 되었다.
-    @Query("SELECT ci FROM CartItem ci " +
+    @Query("SELECT DISTINCT ci FROM CartItem ci " +
         "JOIN FETCH ci.menu m " +
         "JOIN FETCH m.store " +
         "WHERE ci.user.id = :userId AND ci.modifiedAt > :limit")
@@ -36,4 +36,15 @@ public interface CartRepository extends JpaRepository<CartItem, Long> {
         "WHERE ci.id = :id")
     Optional<CartItem> findByIdWithUser(
         @Param("id") Long cartItemId);
+
+    List<CartItem> findByUserIdAndModifiedAtAfterAndStatusSelect(
+        Long userId, LocalDateTime limit);
+
+    @Query("SELECT DISTINCT ci FROM CartItem ci " +
+        "JOIN FETCH ci.menu m " +
+        "JOIN FETCH m.store " +
+        "WHERE ci.user.id = :userId AND ci.modifiedAt > :limit AND ci.status = 'SELECT'")
+    List<CartItem> findSelectedCartItemsWithMenuAndStore(
+        @Param("userId") Long userId,
+        @Param("limit") LocalDateTime limit);
 }

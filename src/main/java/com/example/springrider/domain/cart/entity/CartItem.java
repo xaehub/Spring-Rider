@@ -24,8 +24,9 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @Table(name = "cart_items", indexes = {
 
-    //userId를 Index로 사용할 수 있게 설정
-    @Index(name = "idx_user_modified", columnList = "user_id, modified_at")},
+    //userId와 수정일, userId와 status Index로 사용할 수 있게 설정
+    @Index(name = "idx_user_modified", columnList = "user_id, modified_at"),
+    @Index(name = "idx_user_modified_status", columnList = "user_id, modified_at, status")},
 
     //로직 차원에서 중복 요청의 경우 수량의 변경으로 처리할 예정이지만 문제는 그것이 서버에서 완전히 동시 요청으로 처리될 경우,
     //애플리케이션 로직으로는 감지할 수 없는 경우가 발생 할 수 있으므로 DB차원에서 중복 값의 저장을 방지
