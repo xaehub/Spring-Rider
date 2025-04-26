@@ -14,18 +14,12 @@ public class FindCartItemBulkResponseDto {
 
     private final int totalPrice;
 
-    public FindCartItemBulkResponseDto(
+    public static FindCartItemBulkResponseDto toDto(
         List<FindCartItemResponseDto> responseDtos,
-        Long storeId) {
-
-        this.responseDtos = responseDtos;
-        this.storeId = storeId;
-        this.totalPrice = sumTotalprice(responseDtos);
-    }
-
-    public int sumTotalprice(List<FindCartItemResponseDto> responseDtos) {
-        int sum = responseDtos.stream().mapToInt(d -> d.getPrice() * d.getQuantity()
-        ).sum();
-        return sum;
+        Long storeId,
+        int sumTotalprice) {
+        return new FindCartItemBulkResponseDto(
+            responseDtos, storeId, sumTotalprice
+        );
     }
 }
