@@ -23,4 +23,11 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             .orElseThrow(() -> new InvalidRequestException(ExceptionCode.ORDER_NOT_FOUND));
     }
 
+    @Query("""
+        SELECT DISTINCT o FROM Order o
+        JOIN FETCH o.orderItems oi
+        WHERE o.id = :userId
+        """)
+    Optional<Order> findByUserIdWithOrderItemsAndMenu(@Param("userId") Long userId);
+
 }

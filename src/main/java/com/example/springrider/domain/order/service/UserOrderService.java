@@ -81,6 +81,17 @@ public class UserOrderService {
 
     }
 
+    /**
+     * 주문 목록 조회 서비스
+     *
+     * @param userId 유저 식별자
+     * @return 주문 목록 정보가 담긴 {@link OrderResponseDto}
+     */
+    public OrderResponseDto findAll(Long userId) {
+        return OrderResponseDto.of(orderRepository.findByUserIdWithOrderItemsAndMenu(userId)
+            .orElseThrow(() -> new InvalidRequestException(ExceptionCode.ORDER_NOT_FOUND)));
+    }
+
     public Long findStoreIdFromOrder(Long orderId) {
         return orderRepository.findById(orderId)
             .map(order -> order.getStore().getId())
