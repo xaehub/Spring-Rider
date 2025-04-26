@@ -1,6 +1,6 @@
 package com.example.springrider.aop;
 
-import com.example.springrider.domain.order.dto.CreateOrderResponseDto;
+import com.example.springrider.domain.order.dto.OrderResponseDto;
 import com.example.springrider.domain.order.service.UserOrderService;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class OrderEventLogAspect {
         LocalDateTime requestTime = LocalDateTime.now();
         Object result = joinPoint.proceed();
 
-        if (result instanceof CreateOrderResponseDto responseDto) {
+        if (result instanceof OrderResponseDto responseDto) {
             Long orderId = responseDto.getOrderId();
             Long storeId = userOrderService.findStoreIdFromOrder(orderId);
 

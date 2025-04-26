@@ -6,7 +6,7 @@ import com.example.springrider.domain.cart.repository.CartRepository;
 import com.example.springrider.domain.common.exception.ExceptionCode;
 import com.example.springrider.domain.common.exception.InvalidRequestException;
 import com.example.springrider.domain.order.dto.CreateOrderRequestDto;
-import com.example.springrider.domain.order.dto.CreateOrderResponseDto;
+import com.example.springrider.domain.order.dto.OrderResponseDto;
 import com.example.springrider.domain.order.entity.Order;
 import com.example.springrider.domain.order.entity.OrderItem;
 import com.example.springrider.domain.order.enums.OrderStatus;
@@ -32,10 +32,10 @@ public class UserOrderService {
      *
      * @param requestDto 배달 주소 정보가 담긴 {@link CreateOrderRequestDto}
      * @param userId     유저 식별자
-     * @return 생성된 주문 정보가 담긴 {@link CreateOrderResponseDto}
+     * @return 생성된 주문 정보가 담긴 {@link OrderResponseDto}
      */
     @OrderEventLog
-    public CreateOrderResponseDto create(CreateOrderRequestDto requestDto, Long userId) {
+    public OrderResponseDto create(CreateOrderRequestDto requestDto, Long userId) {
         // 1. 장바구니 메뉴 조회
         List<CartItem> cartItems = cartRepository.findAllByUserIdAndModifiedAtAfterWithMenuAndStore(
             userId, LocalDateTime.now().minusDays(1)
@@ -77,8 +77,21 @@ public class UserOrderService {
         Order orderWithItems = orderRepository.findByIdWithOrderItemsAndMenu(savedOrder.getId())
             .orElseThrow(() -> new InvalidRequestException(ExceptionCode.ORDER_NOT_FOUND));
 
-        return CreateOrderResponseDto.of(orderWithItems);
+        return OrderResponseDto.of(orderWithItems);
 
+    }
+
+    /**
+     * 주문 목록 조회 서비스
+     *
+     * @param userId 유저 식별자
+     * @return 주문 목록 정보가 담긴 {@link OrderResponseDto}
+     */
+    public List<OrderResponseDto> findAll(Long userId) {
+        List<Order> orders = orderRepository.findAllByUserIdWithOrderItemsAndMenuAndStore(userId);
+        return orders.stream()
+            .map(OrderResponseDto::of)
+            .toList();
     }
 
     public Long findStoreIdFromOrder(Long orderId) {
