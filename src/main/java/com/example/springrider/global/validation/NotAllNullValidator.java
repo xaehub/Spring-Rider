@@ -1,4 +1,4 @@
-package com.example.springrider.domain.common.customannotation;
+package com.example.springrider.global.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

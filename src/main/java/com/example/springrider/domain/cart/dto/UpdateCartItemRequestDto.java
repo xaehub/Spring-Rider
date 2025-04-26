@@ -1,6 +1,6 @@
 package com.example.springrider.domain.cart.dto;
 
-import com.example.springrider.domain.common.customannotation.NotAllNull;
+import com.example.springrider.global.validation.NotAllNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
