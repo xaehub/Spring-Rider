@@ -121,8 +121,16 @@ public class CartService {
 
         List<FindCartItemResponseDto> responseDtos = cartItems.stream()
             .map(FindCartItemResponseDto::new).toList();
+        int sumTotalprice = sumTotalprice(responseDtos);
 
-        return new FindCartItemBulkResponseDto(responseDtos, cartItems.get(0).getStoreId());
+        return FindCartItemBulkResponseDto.toDto(responseDtos, cartItems.get(0).getStoreId(),
+            sumTotalprice);
+    }
+
+    public int sumTotalprice(List<FindCartItemResponseDto> responseDtos) {
+        int sum = responseDtos.stream().mapToInt(d -> d.getPrice() * d.getQuantity()
+        ).sum();
+        return sum;
     }
 
     @Transactional
@@ -134,16 +142,25 @@ public class CartService {
         if (!cartItem.getUser().getId().equals(userId)) {
             throw new InvalidRequestException(ExceptionCode.AUTH_EXCEPTION);
         }
-        if (requestDto.isValidQuantity() && !requestDto.hasStatus()) {
+        if (isValidQuantity(requestDto) && !hasStatus(requestDto)) {
             cartItem.updateQuantity(requestDto.getQuantity());
         }
-        if (!requestDto.isValidQuantity() && requestDto.hasStatus()) {
+        if (isValidQuantity(requestDto) && hasStatus(requestDto)) {
             cartItem.changeStatus(requestDto.getStatus());
         }
-        if (requestDto.isValidQuantity() && requestDto.hasStatus()) {
+        if (isValidQuantity(requestDto) && hasStatus(requestDto)) {
             cartItem.updateQuantity(requestDto.getQuantity());
             cartItem.changeStatus(requestDto.getStatus());
         }
         return UpdateCartItemResponseDto.toDto(cartItem);
+    }
+
+    public boolean isValidQuantity(UpdateCartItemRequestDto requestDto) {
+        Integer quantity = requestDto.getQuantity();
+        return quantity != null && quantity > 0;
+    }
+
+    public boolean hasStatus(UpdateCartItemRequestDto requestDto) {
+        return requestDto.getStatus() != null;
     }
 }
