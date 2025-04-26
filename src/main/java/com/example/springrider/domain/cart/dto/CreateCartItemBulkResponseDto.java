@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class CreationCartItemBulkResponseDto {
+public class CreateCartItemBulkResponseDto {
 
     private final List<SuccessItemDto> successItemDtos;
 

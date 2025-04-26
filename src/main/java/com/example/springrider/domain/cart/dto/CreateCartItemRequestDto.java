@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class CreationCartItemRequestDto {
+public class CreateCartItemRequestDto {
 
 
     @NotNull
