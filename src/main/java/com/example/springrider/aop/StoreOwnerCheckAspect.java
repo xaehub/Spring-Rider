@@ -3,7 +3,7 @@ package com.example.springrider.aop;
 import com.example.springrider.domain.common.exception.AuthException;
 import com.example.springrider.domain.common.exception.ExceptionCode;
 import com.example.springrider.domain.store.entity.Store;
-import com.example.springrider.domain.store.repository.StoreRepository;
+import com.example.springrider.domain.store.service.StoreService;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class StoreOwnerCheckAspect {
 
-    private final StoreRepository storeRepository;
+    private final StoreService storeService;
 
     @Before("@annotation(storeOwnerCheck)")
     public void checkStoreOwner(JoinPoint joinPoint, StoreOwnerCheck storeOwnerCheck) {
@@ -41,7 +41,7 @@ public class StoreOwnerCheckAspect {
             throw new IllegalArgumentException("userId 나 storeId를 찾을 수 없습니다.");
         }
 
-        Store store = storeRepository.findByIdOrElseThrow(storeId);
+        Store store = storeService.findEntity(storeId);
         if (!Objects.equals(store.getUser().getId(), userId)) {
             throw new AuthException(ExceptionCode.STORE_ACCESS_DENIED);
         }
