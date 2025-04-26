@@ -63,4 +63,9 @@ public class Order extends BaseEntity {
         }
         this.totalPrice = total;
     }
+
+    //상태 수정을 위한 클래스 내부 메서드
+    public void changeStatus(OrderStatus status) {
+        this.status = status;
+    }
 }
