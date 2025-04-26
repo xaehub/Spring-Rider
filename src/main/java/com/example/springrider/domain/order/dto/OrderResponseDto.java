@@ -7,14 +7,14 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class CreateOrderResponseDto {
+public class OrderResponseDto {
 
     private final Long orderId;
     private final String storeName;
     private final List<OrderItemDto> item;
 
-    public static CreateOrderResponseDto of(Order order) {
-        return new CreateOrderResponseDto(
+    public static OrderResponseDto of(Order order) {
+        return new OrderResponseDto(
             order.getId(),
             order.getStore().getName(),
             order.getOrderItems().stream()

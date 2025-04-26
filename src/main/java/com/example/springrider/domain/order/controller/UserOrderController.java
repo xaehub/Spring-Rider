@@ -2,7 +2,7 @@ package com.example.springrider.domain.order.controller;
 
 import com.example.springrider.domain.common.response.ApiResponse;
 import com.example.springrider.domain.order.dto.CreateOrderRequestDto;
-import com.example.springrider.domain.order.dto.CreateOrderResponseDto;
+import com.example.springrider.domain.order.dto.OrderResponseDto;
 import com.example.springrider.domain.order.service.UserOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,10 +22,10 @@ public class UserOrderController {
      * 주문 생성 요청 컨트롤러
      *
      * @param requestDto 주문 정보가 담긴 {@link CreateOrderRequestDto}
-     * @return 생성된 주문 정보가 담긴 {@link CreateOrderResponseDto}
+     * @return 생성된 주문 정보가 담긴 {@link OrderResponseDto}
      */
     @PostMapping
-    public ApiResponse<CreateOrderResponseDto> create(
+    public ApiResponse<OrderResponseDto> create(
         @RequestBody CreateOrderRequestDto requestDto,
         @SessionAttribute(name = "userId") Long userId
     ) {
