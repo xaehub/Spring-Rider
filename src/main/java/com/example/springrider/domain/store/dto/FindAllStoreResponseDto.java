@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class FindStoresResponseDto {
+public class FindAllStoreResponseDto {
 
     private Long id;
     private String name;
@@ -17,7 +17,7 @@ public class FindStoresResponseDto {
     private LocalTime openTime;
     private LocalTime closeTime;
 
-    public FindStoresResponseDto(Store store) {
+    public FindAllStoreResponseDto(Store store) {
         this.id = store.getId();
         this.name = store.getName();
         this.address = store.getAddress();

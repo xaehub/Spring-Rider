@@ -10,8 +10,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.example.springrider.domain.common.exception.InvalidRequestException;
+import com.example.springrider.domain.store.dto.FindAllStoreResponseDto;
 import com.example.springrider.domain.store.dto.FindStoreResponseDto;
-import com.example.springrider.domain.store.dto.FindStoresResponseDto;
 import com.example.springrider.domain.store.dto.StoreRequestDto;
 import com.example.springrider.domain.store.dto.StoreResponseDto;
 import com.example.springrider.domain.store.dto.UpdateStoreRequestDto;
@@ -44,7 +44,10 @@ class StoreServiceTest {
     private StoreRepository storeRepository;
 
     @InjectMocks
-    private StoreService storeService;
+    private OwnerStoreService ownerStoreService;
+
+    @InjectMocks
+    private UserStoreService userStoreService;
 
     private User mockUser;
     private StoreRequestDto storeRequestDto;
@@ -98,7 +101,7 @@ class StoreServiceTest {
         when(storeRepository.save(any(Store.class))).thenReturn(savedStore);
 
         // when
-        StoreResponseDto responseDto = storeService.create(storeRequestDto, 1L);
+        StoreResponseDto responseDto = ownerStoreService.create(storeRequestDto, 1L);
 
         // then
         assertNotNull(responseDto);
@@ -123,7 +126,7 @@ class StoreServiceTest {
 
         //  when(storeService.create을 실행헀을 때) then*( 에러가 발생)
         assertThrows(InvalidRequestException.class, () -> {
-            storeService.create(requestDto, 1L);
+            ownerStoreService.create(requestDto, 1L);
         });
     }
 
@@ -147,7 +150,7 @@ class StoreServiceTest {
         when(storeRepository.findByIdOrElseThrow(anyLong())).thenReturn(store);
 
         // when
-        StoreResponseDto result = storeService.update(1L, dto, 1L);
+        StoreResponseDto result = ownerStoreService.update(1L, dto, 1L);
 
         // then
         assertEquals("레전드 맛집", result.getName());
@@ -184,9 +187,34 @@ class StoreServiceTest {
 
         // when(storeService.update를 실행할 때) then(예외 처리)
         assertThrows(InvalidRequestException.class, () -> {
-            storeService.update(1L, dto, 2L);
+            ownerStoreService.update(1L, dto, 2L);
         });
     }
+
+    @Test
+    void update_store_가게_수정_시_오픈_시간이_마감_시간보다_늦을_때_예외_처리() {
+        // given 업데이트할 store의 request 준비
+        UpdateStoreRequestDto updateDto = new UpdateStoreRequestDto(
+            "리뉴얼한 레전드 맛집", "서울", "한식",
+            // 오픈 시간이 오후 11시
+            LocalTime.of(23, 0),
+            // 마감 시간이 오후 10시일 때
+            LocalTime.of(22, 0),
+            10000, StoreStatus.ACTIVE
+        );
+
+        Store store = new Store("리뉴얼 아직 안 한 레전드 맛집", "서울", "한식", LocalTime.of(9, 0),
+            LocalTime.of(22, 0), 10000,
+            StoreStatus.ACTIVE, mockUser);
+
+        when(storeRepository.findByIdOrElseThrow(1L)).thenReturn(store);
+        when(userRepository.findByIdOrElseThrow(1L)).thenReturn(mockUser);
+
+        // when(가게 수정 리퀘스트에 오픈 시간보다 마감 시간이 더 빠른 상태에서 storeService.update를 실행할 때) then (InvalidRequestException 발생)
+        assertThrows(InvalidRequestException.class,
+            () -> ownerStoreService.update(1L, updateDto, 1L));
+    }
+
 
     @Test
     void finds_전체_가게_조회에_성공한다() {
@@ -204,7 +232,7 @@ class StoreServiceTest {
         when(storeRepository.findAllByStatusNot(StoreStatus.CLOSED)).thenReturn(dummyStores);
 
         // when finds 메소드 호출
-        List<FindStoresResponseDto> stores = storeService.finds();
+        List<FindAllStoreResponseDto> stores = userStoreService.finds();
 
         // then 그럼 stores리스트 크기가 6인지 홧ㄱ인
         assertEquals(6, stores.size());
@@ -222,7 +250,7 @@ class StoreServiceTest {
         when(storeRepository.findByIdOrElseThrow(1L)).thenReturn(store);
 
         //wheen storeService를 실행하면
-        FindStoreResponseDto result = storeService.find(1L);
+        FindStoreResponseDto result = userStoreService.find(1L);
 
         // then 가게 이름이 레전드 맛집이면 됨
         assertEquals("레전드 맛집", result.getName());
@@ -238,7 +266,7 @@ class StoreServiceTest {
 
         // when(storeService.find를 실행하면) then(InvalidRequestException 예외를 던진다)
         assertThrows(InvalidRequestException.class, () -> {
-            storeService.find(1L);
+            userStoreService.find(1L);
         });
     }
 }

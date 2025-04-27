@@ -7,7 +7,7 @@ import static org.mockito.BDDMockito.given;
 import com.example.springrider.domain.store.dto.StoreRequestDto;
 import com.example.springrider.domain.store.dto.StoreResponseDto;
 import com.example.springrider.domain.store.enums.StoreStatus;
-import com.example.springrider.domain.store.service.StoreService;
+import com.example.springrider.domain.store.service.OwnerStoreService;
 import java.time.LocalTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,11 +16,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(StoreController.class)
+@WebMvcTest(OwnerStoreController.class)
 class StoreControllerTest {
 
     @MockitoBean
-    StoreService storeService;
+    OwnerStoreService ownerStoreService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -47,7 +47,7 @@ class StoreControllerTest {
             1L, name, address, category, openTime, closeTime, minOrderPrice, storeStatus, "김태정"
         );
 
-        given(storeService.create(any(StoreRequestDto.class), anyLong()))
+        given(ownerStoreService.create(any(StoreRequestDto.class), anyLong()))
             .willReturn(storeResponseDto);
 
         // when: 가게를 생성하는 컨트롤러 호출 <- 여기부터 막힘...
