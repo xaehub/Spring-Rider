@@ -1,16 +1,16 @@
-package com.example.springrider.domain.store.dto;
+package com.example.springrider.domain.store.dto.response;
 
+import com.example.springrider.domain.menu.dto.response.MenuResponseDto;
 import com.example.springrider.domain.store.entity.Store;
-import com.example.springrider.domain.store.enums.StoreStatus;
 import java.time.LocalTime;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
-public class StoreResponseDto {
+public class FindStoreResponseDto {
 
     private Long id;
     private String name;
@@ -19,11 +19,14 @@ public class StoreResponseDto {
     private LocalTime openTime;
     private LocalTime closeTime;
     private Integer minOrderPrice;
-    private StoreStatus status;
-    private String ownerName;
+    private List<MenuResponseDto> menus;
 
-    public static StoreResponseDto fromEntity(Store store) {
-        return new StoreResponseDto(
+    public static FindStoreResponseDto from(Store store) {
+        List<MenuResponseDto> menuDtos = store.getMenus().stream()
+            .map(MenuResponseDto::toDto)
+            .collect(Collectors.toList());
+
+        return new FindStoreResponseDto(
             store.getId(),
             store.getName(),
             store.getAddress(),
@@ -31,8 +34,7 @@ public class StoreResponseDto {
             store.getOpenTime(),
             store.getCloseTime(),
             store.getMinOrderPrice(),
-            store.getStatus(),
-            store.getUser().getName()  // 여기서 바로 유저 이름 꺼내옴
+            menuDtos
         );
     }
 }

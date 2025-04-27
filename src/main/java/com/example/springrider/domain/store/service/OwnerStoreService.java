@@ -5,15 +5,15 @@ import static com.example.springrider.global.exception.ExceptionCode.STORE_INVAL
 import static com.example.springrider.global.exception.ExceptionCode.STORE_LIMIT_EXCEEDED;
 import static com.example.springrider.global.exception.ExceptionCode.STORE_USER_MISMATCH;
 
-import com.example.springrider.global.exception.InvalidRequestException;
-import com.example.springrider.domain.store.dto.StoreRequestDto;
-import com.example.springrider.domain.store.dto.StoreResponseDto;
-import com.example.springrider.domain.store.dto.UpdateStoreRequestDto;
+import com.example.springrider.domain.store.dto.request.StoreRequestDto;
+import com.example.springrider.domain.store.dto.request.UpdateStoreRequestDto;
+import com.example.springrider.domain.store.dto.response.StoreResponseDto;
 import com.example.springrider.domain.store.entity.Store;
 import com.example.springrider.domain.store.enums.StoreStatus;
 import com.example.springrider.domain.store.repository.StoreRepository;
 import com.example.springrider.domain.user.entity.User;
 import com.example.springrider.domain.user.repository.UserRepository;
+import com.example.springrider.global.exception.InvalidRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

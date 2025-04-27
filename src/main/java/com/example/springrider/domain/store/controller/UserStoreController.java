@@ -1,10 +1,10 @@
 package com.example.springrider.domain.store.controller;
 
 
-import com.example.springrider.global.response.ApiResponse;
-import com.example.springrider.domain.store.dto.FindAllStoreResponseDto;
-import com.example.springrider.domain.store.dto.FindStoreResponseDto;
+import com.example.springrider.domain.store.dto.response.FindAllStoreResponseDto;
+import com.example.springrider.domain.store.dto.response.FindStoreResponseDto;
 import com.example.springrider.domain.store.service.UserStoreService;
+import com.example.springrider.global.response.ApiResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

@@ -2,13 +2,13 @@ package com.example.springrider.domain.store.service;
 
 import static com.example.springrider.global.exception.ExceptionCode.STORE_ALREADY_CLOSED;
 
-import com.example.springrider.global.exception.InvalidRequestException;
-import com.example.springrider.domain.store.dto.FindAllStoreResponseDto;
-import com.example.springrider.domain.store.dto.FindStoreResponseDto;
+import com.example.springrider.domain.store.dto.response.FindAllStoreResponseDto;
+import com.example.springrider.domain.store.dto.response.FindStoreResponseDto;
 import com.example.springrider.domain.store.entity.Store;
 import com.example.springrider.domain.store.enums.StoreStatus;
 import com.example.springrider.domain.store.repository.StoreRepository;
 import com.example.springrider.domain.user.repository.UserRepository;
+import com.example.springrider.global.exception.InvalidRequestException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

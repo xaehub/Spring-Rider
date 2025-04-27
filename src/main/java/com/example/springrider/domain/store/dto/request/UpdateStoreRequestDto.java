@@ -1,4 +1,4 @@
-package com.example.springrider.domain.store.dto;
+package com.example.springrider.domain.store.dto.request;
 
 import com.example.springrider.domain.store.enums.StoreStatus;
 import jakarta.validation.constraints.NotBlank;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
-public class StoreRequestDto {
+public class UpdateStoreRequestDto {
 
     @NotBlank(message = "가게 이름은 필수입니다.")
     private String name;
@@ -32,8 +32,6 @@ public class StoreRequestDto {
     @Positive(message = "최소 주문 금액은 1원 이상이어야 합니다.")
     private Integer minOrderPrice;
 
-    private StoreStatus status = StoreStatus.ACTIVE;
-
-    private Long userId;
+    private StoreStatus status;
 
 }
