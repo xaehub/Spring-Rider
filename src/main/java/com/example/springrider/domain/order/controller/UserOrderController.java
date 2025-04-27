@@ -1,8 +1,8 @@
 package com.example.springrider.domain.order.controller;
 
 import com.example.springrider.domain.common.response.ApiResponse;
-import com.example.springrider.domain.order.dto.CreateOrderRequestDto;
-import com.example.springrider.domain.order.dto.OrderResponseDto;
+import com.example.springrider.domain.order.dto.request.CreateOrderRequestDto;
+import com.example.springrider.domain.order.dto.response.OrderResponseDto;
 import com.example.springrider.domain.order.service.UserOrderService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
