@@ -1,6 +1,6 @@
 package com.example.springrider.aop;
 
-import com.example.springrider.domain.order.dto.OrderResponseDto;
+import com.example.springrider.domain.order.dto.response.OrderResponseDto;
 import com.example.springrider.domain.order.service.UserOrderService;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;

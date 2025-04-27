@@ -33,4 +33,13 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         """)
     List<Order> findAllByUserIdWithOrderItemsAndMenuAndStore(@Param("userId") Long userId);
 
+
+    @Query("""
+        SELECT DISTINCT o FROM Order o
+        JOIN FETCH o.orderItems oi
+        JOIN FETCH oi.menu m
+        WHERE o.store.id = :storeId
+        """)
+    List<Order> findAllByStoreIdWithOrderItemsAndMenu(@Param("storeId") Long storeId);
+
 }
