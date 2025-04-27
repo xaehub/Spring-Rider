@@ -1,4 +1,4 @@
-package com.example.springrider.domain.review.dto;
+package com.example.springrider.domain.review.dto.response;
 
 import com.example.springrider.domain.review.entity.Review;
 import com.example.springrider.domain.review.enums.Rating;
@@ -15,7 +15,7 @@ public class ReviewResponseDto {
 
     private final Rating rating;
 
-    public static ReviewResponseDto toDto(Review review) {
+    public static ReviewResponseDto of(Review review) {
         return new ReviewResponseDto(
             review.getOrder().getId(), review.getContents(), review.getRating()
         );

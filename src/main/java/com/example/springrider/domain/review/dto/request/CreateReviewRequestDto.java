@@ -1,4 +1,4 @@
-package com.example.springrider.domain.review.dto;
+package com.example.springrider.domain.review.dto.request;
 
 import com.example.springrider.domain.review.enums.Rating;
 import com.example.springrider.global.validation.EnumValid;
