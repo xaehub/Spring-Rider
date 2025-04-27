@@ -189,6 +189,30 @@ class StoreServiceTest {
     }
 
     @Test
+    void update_store_가게_수정_시_오픈_시간이_마감_시간보다_늦을_때_예외_처리() {
+        // given 업데이트할 store의 request 준비
+        UpdateStoreRequestDto updateDto = new UpdateStoreRequestDto(
+            "리뉴얼한 레전드 맛집", "서울", "한식",
+            // 오픈 시간이 오후 11시
+            LocalTime.of(23, 0),
+            // 마감 시간이 오후 10시일 때
+            LocalTime.of(22, 0),
+            10000, StoreStatus.ACTIVE
+        );
+
+        Store store = new Store("리뉴얼 아직 안 한 레전드 맛집", "서울", "한식", LocalTime.of(9, 0),
+            LocalTime.of(22, 0), 10000,
+            StoreStatus.ACTIVE, mockUser);
+
+        when(storeRepository.findByIdOrElseThrow(1L)).thenReturn(store);
+        when(userRepository.findByIdOrElseThrow(1L)).thenReturn(mockUser);
+
+        // when(가게 수정 리퀘스트에 오픈 시간보다 마감 시간이 더 빠른 상태에서 storeService.update를 실행할 때) then (InvalidRequestException 발생)
+        assertThrows(InvalidRequestException.class, () -> storeService.update(1L, updateDto, 1L));
+    }
+
+
+    @Test
     void finds_전체_가게_조회에_성공한다() {
         // given 가게 6개를 만들고 반환할 준비
         // 가게0, 가게1, 가게2, 가게3 ...
