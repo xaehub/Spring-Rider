@@ -1,8 +1,8 @@
 package com.example.springrider.domain.store.service;
 
-import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_ALREADY_CLOSED;
+import static com.example.springrider.global.exception.ExceptionCode.STORE_ALREADY_CLOSED;
 
-import com.example.springrider.domain.common.exception.InvalidRequestException;
+import com.example.springrider.global.exception.InvalidRequestException;
 import com.example.springrider.domain.store.dto.FindAllStoreResponseDto;
 import com.example.springrider.domain.store.dto.FindStoreResponseDto;
 import com.example.springrider.domain.store.entity.Store;

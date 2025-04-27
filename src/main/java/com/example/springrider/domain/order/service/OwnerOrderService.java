@@ -1,8 +1,8 @@
 package com.example.springrider.domain.order.service;
 
 import com.example.springrider.aop.StoreOwnerCheck;
-import com.example.springrider.domain.common.exception.ExceptionCode;
-import com.example.springrider.domain.common.exception.InvalidRequestException;
+import com.example.springrider.global.exception.ExceptionCode;
+import com.example.springrider.global.exception.InvalidRequestException;
 import com.example.springrider.domain.order.dto.request.CancelOrderRequestDto;
 import com.example.springrider.domain.order.dto.request.UpdateOrderStatusRequestDto;
 import com.example.springrider.domain.order.dto.response.CancelOrderResponseDto;

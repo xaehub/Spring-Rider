@@ -1,8 +1,5 @@
 package com.example.springrider.domain.user.controller;
 
-import com.example.springrider.domain.common.exception.AuthException;
-import com.example.springrider.domain.common.exception.ExceptionCode;
-import com.example.springrider.domain.common.response.ApiResponse;
 import com.example.springrider.domain.user.dto.request.DeleteUserRequestDto;
 import com.example.springrider.domain.user.dto.request.LoginRequestDto;
 import com.example.springrider.domain.user.dto.request.PasswordModifyRequestDto;
@@ -11,6 +8,9 @@ import com.example.springrider.domain.user.dto.request.SignupRequestDto;
 import com.example.springrider.domain.user.dto.response.LoginResponseDto;
 import com.example.springrider.domain.user.dto.response.SignupResponseDto;
 import com.example.springrider.domain.user.service.UserService;
+import com.example.springrider.global.exception.AuthException;
+import com.example.springrider.global.exception.ExceptionCode;
+import com.example.springrider.global.response.ApiResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

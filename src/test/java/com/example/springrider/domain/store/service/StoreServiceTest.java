@@ -9,7 +9,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.example.springrider.domain.common.exception.InvalidRequestException;
+import com.example.springrider.global.exception.InvalidRequestException;
 import com.example.springrider.domain.store.dto.FindAllStoreResponseDto;
 import com.example.springrider.domain.store.dto.FindStoreResponseDto;
 import com.example.springrider.domain.store.dto.StoreRequestDto;

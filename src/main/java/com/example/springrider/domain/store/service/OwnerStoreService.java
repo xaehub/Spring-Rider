@@ -1,11 +1,11 @@
 package com.example.springrider.domain.store.service;
 
-import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_INVALID_STATUS_CHANGE;
-import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_INVALID_TIME;
-import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_LIMIT_EXCEEDED;
-import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_USER_MISMATCH;
+import static com.example.springrider.global.exception.ExceptionCode.STORE_INVALID_STATUS_CHANGE;
+import static com.example.springrider.global.exception.ExceptionCode.STORE_INVALID_TIME;
+import static com.example.springrider.global.exception.ExceptionCode.STORE_LIMIT_EXCEEDED;
+import static com.example.springrider.global.exception.ExceptionCode.STORE_USER_MISMATCH;
 
-import com.example.springrider.domain.common.exception.InvalidRequestException;
+import com.example.springrider.global.exception.InvalidRequestException;
 import com.example.springrider.domain.store.dto.StoreRequestDto;
 import com.example.springrider.domain.store.dto.StoreResponseDto;
 import com.example.springrider.domain.store.dto.UpdateStoreRequestDto;

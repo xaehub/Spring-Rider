@@ -1,6 +1,6 @@
-package com.example.springrider.domain.common.response;
+package com.example.springrider.global.response;
 
-import com.example.springrider.domain.common.exception.ExceptionCode;
+import com.example.springrider.global.exception.ExceptionCode;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

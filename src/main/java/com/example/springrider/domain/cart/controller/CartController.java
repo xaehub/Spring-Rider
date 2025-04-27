@@ -6,7 +6,7 @@ import com.example.springrider.domain.cart.dto.FindCartItemBulkResponseDto;
 import com.example.springrider.domain.cart.dto.UpdateCartItemRequestDto;
 import com.example.springrider.domain.cart.dto.UpdateCartItemResponseDto;
 import com.example.springrider.domain.cart.service.CartService;
-import com.example.springrider.domain.common.response.ApiResponse;
+import com.example.springrider.global.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;

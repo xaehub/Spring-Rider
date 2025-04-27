@@ -1,7 +1,7 @@
 package com.example.springrider.config.interceptor;
 
-import com.example.springrider.domain.common.exception.AuthException;
-import com.example.springrider.domain.common.exception.ExceptionCode;
+import com.example.springrider.global.exception.AuthException;
+import com.example.springrider.global.exception.ExceptionCode;
 import com.example.springrider.domain.store.entity.Store;
 import com.example.springrider.domain.store.repository.StoreRepository;
 import com.example.springrider.domain.user.entity.User;

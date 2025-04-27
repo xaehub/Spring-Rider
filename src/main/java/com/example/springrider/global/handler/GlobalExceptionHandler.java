@@ -1,11 +1,11 @@
-package com.example.springrider.domain.common.handler;
+package com.example.springrider.global.handler;
 
-import com.example.springrider.domain.common.exception.BaseException;
-import com.example.springrider.domain.common.exception.ExceptionCode;
-import com.example.springrider.domain.common.exception.ServerException;
-import com.example.springrider.domain.common.response.ApiResponse;
-import com.example.springrider.domain.common.response.ErrorResponse;
-import com.example.springrider.domain.common.response.ErrorResponse.FieldErrorDetail;
+import com.example.springrider.global.exception.BaseException;
+import com.example.springrider.global.exception.ExceptionCode;
+import com.example.springrider.global.exception.ServerException;
+import com.example.springrider.global.response.ApiResponse;
+import com.example.springrider.global.response.ErrorResponse;
+import com.example.springrider.global.response.ErrorResponse.FieldErrorDetail;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.MethodArgumentNotValidException;

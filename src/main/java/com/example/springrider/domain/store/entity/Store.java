@@ -1,9 +1,9 @@
 package com.example.springrider.domain.store.entity;
 
-import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_INVALID_STATUS_CHANGE;
+import static com.example.springrider.global.exception.ExceptionCode.STORE_INVALID_STATUS_CHANGE;
 
 import com.example.springrider.domain.common.entity.BaseEntity;
-import com.example.springrider.domain.common.exception.InvalidRequestException;
+import com.example.springrider.global.exception.InvalidRequestException;
 import com.example.springrider.domain.menu.entity.Menu;
 import com.example.springrider.domain.store.dto.StoreRequestDto;
 import com.example.springrider.domain.store.dto.UpdateStoreRequestDto;

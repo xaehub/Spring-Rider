@@ -1,4 +1,4 @@
-package com.example.springrider.domain.common.response;
+package com.example.springrider.global.response;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;

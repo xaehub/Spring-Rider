@@ -1,8 +1,8 @@
-package com.example.springrider.domain.common.response;
+package com.example.springrider.global.response;
 
-import com.example.springrider.domain.common.exception.BaseException;
-import com.example.springrider.domain.common.exception.ExceptionCode;
-import com.example.springrider.domain.common.response.ErrorResponse.FieldErrorDetail;
+import com.example.springrider.global.exception.BaseException;
+import com.example.springrider.global.exception.ExceptionCode;
+import com.example.springrider.global.response.ErrorResponse.FieldErrorDetail;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Getter;

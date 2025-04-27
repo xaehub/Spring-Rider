@@ -1,4 +1,4 @@
-package com.example.springrider.domain.common.exception;
+package com.example.springrider.global.exception;
 
 import org.springframework.http.HttpStatus;
 

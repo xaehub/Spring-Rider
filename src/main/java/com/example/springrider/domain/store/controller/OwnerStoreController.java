@@ -1,6 +1,6 @@
 package com.example.springrider.domain.store.controller;
 
-import com.example.springrider.domain.common.response.ApiResponse;
+import com.example.springrider.global.response.ApiResponse;
 import com.example.springrider.domain.store.dto.StoreRequestDto;
 import com.example.springrider.domain.store.dto.StoreResponseDto;
 import com.example.springrider.domain.store.dto.UpdateStoreRequestDto;

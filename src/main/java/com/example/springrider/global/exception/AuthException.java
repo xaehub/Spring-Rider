@@ -1,4 +1,4 @@
-package com.example.springrider.domain.common.exception;
+package com.example.springrider.global.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public class ServerException extends BaseException {
+public class AuthException extends BaseException {
 
     private final ExceptionCode exceptionCode;
 
@@ -17,7 +17,7 @@ public class ServerException extends BaseException {
 
     @Override
     public HttpStatus getStatus() {
-        return HttpStatus.INTERNAL_SERVER_ERROR;
+        return HttpStatus.UNAUTHORIZED;
     }
 
 }

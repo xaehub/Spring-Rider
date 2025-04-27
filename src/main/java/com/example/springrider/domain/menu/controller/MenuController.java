@@ -1,6 +1,6 @@
 package com.example.springrider.domain.menu.controller;
 
-import com.example.springrider.domain.common.response.ApiResponse;
+import com.example.springrider.global.response.ApiResponse;
 import com.example.springrider.domain.menu.dto.MenuRequestDto;
 import com.example.springrider.domain.menu.dto.MenuResponseDto;
 import com.example.springrider.domain.menu.service.MenuService;

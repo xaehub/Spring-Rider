@@ -1,7 +1,7 @@
 package com.example.springrider.domain.store.controller;
 
 
-import com.example.springrider.domain.common.response.ApiResponse;
+import com.example.springrider.global.response.ApiResponse;
 import com.example.springrider.domain.store.dto.FindAllStoreResponseDto;
 import com.example.springrider.domain.store.dto.FindStoreResponseDto;
 import com.example.springrider.domain.store.service.UserStoreService;
