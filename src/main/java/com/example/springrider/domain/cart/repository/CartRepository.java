@@ -1,6 +1,7 @@
 package com.example.springrider.domain.cart.repository;
 
 import com.example.springrider.domain.cart.entity.CartItem;
+import com.example.springrider.domain.cart.enums.CartItemStatus;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -37,8 +38,8 @@ public interface CartRepository extends JpaRepository<CartItem, Long> {
     Optional<CartItem> findByIdWithUser(
         @Param("id") Long cartItemId);
 
-    List<CartItem> findByUserIdAndModifiedAtAfterAndStatusSelect(
-        Long userId, LocalDateTime limit);
+    List<CartItem> findByUserIdAndModifiedAtAfterAndStatus(
+        Long userId, LocalDateTime limit, CartItemStatus status);
 
     @Query("SELECT DISTINCT ci FROM CartItem ci " +
         "JOIN FETCH ci.menu m " +

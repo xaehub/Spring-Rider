@@ -37,6 +37,7 @@ public enum ExceptionCode {
 
     // 주문
     ORDER_NOT_FOUND("주문 정보가 없습니다."),
+    INVALID_ORDER_STATUS("올바르지 않은 주문 상태 코드입니다."),
 
     // 장바구니
     CART_EXCEPTION("장바구니 예외 메세지"),
@@ -45,7 +46,7 @@ public enum ExceptionCode {
     CART_DUPLICATE_ITEM("메뉴를 중복하지 마시고 수량을 변경해주세요."),
     EMPTY_CART("장바구니가 존재하지 않습니다."),
     CARTITEM_NOT_FOUND("해당 장바구니 품목이 존재하지 않습니다."),
-    INVALID_CARTITEM_STATUS("올바른 장바구니 상태 코드가 아닙니다."),
+    INVALID_CARTITEM_STATUS("올바르지 않은 장바구니 상태 코드입니다."),
     CARTITEM_DELETE_FAIL("장바구니 항목 삭제에 실패했습니다."),
 
     // 리뷰

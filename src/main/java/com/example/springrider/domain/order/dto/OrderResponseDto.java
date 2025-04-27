@@ -22,5 +22,4 @@ public class OrderResponseDto {
                 .toList()
         );
     }
-
 }

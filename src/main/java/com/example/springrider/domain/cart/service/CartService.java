@@ -10,6 +10,7 @@ import com.example.springrider.domain.cart.dto.FindCartItemResponseDto;
 import com.example.springrider.domain.cart.dto.UpdateCartItemRequestDto;
 import com.example.springrider.domain.cart.dto.UpdateCartItemResponseDto;
 import com.example.springrider.domain.cart.entity.CartItem;
+import com.example.springrider.domain.cart.enums.CartItemStatus;
 import com.example.springrider.domain.cart.repository.CartRepository;
 import com.example.springrider.domain.common.exception.ExceptionCode;
 import com.example.springrider.domain.common.exception.InvalidRequestException;
@@ -170,8 +171,9 @@ public class CartService {
     @Transactional
     public void delete(Long userId) {
         LocalDateTime limit = LocalDateTime.now().minusDays(1);
-        List<CartItem> cartItems = cartRepository.findByUserIdAndModifiedAtAfterAndStatusSelect(
-            userId, limit);
+
+        List<CartItem> cartItems = cartRepository.findByUserIdAndModifiedAtAfterAndStatus(
+            userId, limit, CartItemStatus.SELECT);
         if (cartItems.isEmpty()) {
             throw new InvalidRequestException(ExceptionCode.EMPTY_CART);
         }
