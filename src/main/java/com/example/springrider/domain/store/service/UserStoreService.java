@@ -33,7 +33,7 @@ public class UserStoreService {
 
         // 리스트에 담은 stores를 리스트에 담긴 store simple response dto형태로 변환
         return stores.stream()
-            .map(FindAllStoreResponseDto::new)
+            .map(FindAllStoreResponseDto::of)
             .toList();
     }
 
@@ -52,7 +52,7 @@ public class UserStoreService {
         }
 
         // 가게의 정보와 메뉴도 보이게 가게 상세 dto 형태 반환
-        return FindStoreResponseDto.from(store);
+        return FindStoreResponseDto.of(store);
     }
 
     /**

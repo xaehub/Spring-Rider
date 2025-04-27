@@ -2,29 +2,31 @@ package com.example.springrider.domain.store.dto.response;
 
 import com.example.springrider.domain.store.entity.Store;
 import java.time.LocalTime;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class FindAllStoreResponseDto {
 
-    private Long id;
-    private String name;
-    private String address;
-    private String category;
-    private Integer minOrderPrice;
-    private LocalTime openTime;
-    private LocalTime closeTime;
+    private final Long id;
+    private final String name;
+    private final String address;
+    private final String category;
+    private final Integer minOrderPrice;
+    private final LocalTime openTime;
+    private final LocalTime closeTime;
 
-    public FindAllStoreResponseDto(Store store) {
-        this.id = store.getId();
-        this.name = store.getName();
-        this.address = store.getAddress();
-        this.category = store.getCategory();
-        this.minOrderPrice = store.getMinOrderPrice();
-        this.openTime = store.getOpenTime();
-        this.closeTime = store.getCloseTime();
+    public static FindAllStoreResponseDto of(Store store) {
+        return new FindAllStoreResponseDto(
+            store.getId(),
+            store.getName(),
+            store.getAddress(),
+            store.getCategory(),
+            store.getMinOrderPrice(),
+            store.getOpenTime(),
+            store.getCloseTime()
+        );
     }
 }
 

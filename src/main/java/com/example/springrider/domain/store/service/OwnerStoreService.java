@@ -50,7 +50,7 @@ public class OwnerStoreService {
         // 저장
         Store savedStore = storeRepository.save(store);
 
-        return StoreResponseDto.fromEntity(savedStore);
+        return StoreResponseDto.of(savedStore);
     }
 
     /**
@@ -105,7 +105,7 @@ public class OwnerStoreService {
         // 가게 정보 수정
         store.update(requestDto);
 
-        return StoreResponseDto.fromEntity(store);
+        return StoreResponseDto.of(store);
     }
 
     /**
