@@ -1,4 +1,4 @@
-package com.example.springrider.domain.cart.dto;
+package com.example.springrider.domain.cart.dto.request;
 
 import com.example.springrider.domain.cart.enums.CartItemStatus;
 import com.example.springrider.global.validation.EnumValid;

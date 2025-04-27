@@ -1,4 +1,4 @@
-package com.example.springrider.domain.cart.dto;
+package com.example.springrider.domain.cart.dto.response;
 
 import com.example.springrider.domain.cart.entity.CartItem;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.example.springrider.domain.cart.dto;
+package com.example.springrider.domain.cart.dto.response;
 
 import java.util.List;
 import lombok.Getter;
