@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.example.springrider.domain.common.exception.InvalidRequestException;
+import com.example.springrider.domain.store.dto.FindStoresResponseDto;
 import com.example.springrider.domain.store.dto.StoreRequestDto;
 import com.example.springrider.domain.store.dto.StoreResponseDto;
 import com.example.springrider.domain.store.dto.UpdateStoreRequestDto;
@@ -21,6 +22,9 @@ import com.example.springrider.domain.user.enums.UserRole;
 import com.example.springrider.domain.user.repository.UserRepository;
 import java.lang.reflect.Field;
 import java.time.LocalTime;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -181,5 +185,27 @@ class StoreServiceTest {
         assertThrows(InvalidRequestException.class, () -> {
             storeService.update(1L, dto, 2L);
         });
+    }
+
+    @Test
+    void finds_전체_가게_조회에_성공한다() {
+        // given 가게 6개를 만들고 반환할 준비
+        // 가게0, 가게1, 가게2, 가게3 ...
+        List<Store> dummyStores = IntStream.range(0, 6)
+            .mapToObj(i -> Store.StoreInfo(
+                new StoreRequestDto("가게" + i, "서울", "한식",
+                    LocalTime.of(9, 0), LocalTime.of(22, 0), 10000,
+                    StoreStatus.ACTIVE, 1L
+                ), mockUser))
+            .collect(Collectors.toList());
+
+        // store 레포지토리가 findAllByStatusNot(StoreStatus.CLOSED)를 호출하면 위에서 만든 가게 6개를 반환
+        when(storeRepository.findAllByStatusNot(StoreStatus.CLOSED)).thenReturn(dummyStores);
+
+        // when finds 메소드 호출
+        List<FindStoresResponseDto> stores = storeService.finds();
+
+        // then 그럼 stores리스트 크기가 6인지 홧ㄱ인
+        assertEquals(6, stores.size());
     }
 }
