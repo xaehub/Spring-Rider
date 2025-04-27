@@ -12,6 +12,7 @@ public enum ExceptionCode {
     PASSWORD_NOT_MATCH("비밀번호가 일치하지 않습니다."),
     ALREADY_LOGGED_IN("이미 로그인된 상태입니다."),
     UNAUTHORIZED("로그인 후 이용 가능합니다."),
+    FORBIDDEN_REQUEST("권한이 없는 요청입니다."),
 
     // 회원
     USER_EXCEPTION("회원 예외 메세지"),
@@ -53,6 +54,7 @@ public enum ExceptionCode {
 
     // 리뷰
     REVIEW_EXCEPTION("리뷰 예외 메세지"),
+    INVALID_RATING("올바르지 않은 등급 코드입니다."),
 
     // 공통
     NOT_VALID_EXCEPTION("validation 예외 발생"),
