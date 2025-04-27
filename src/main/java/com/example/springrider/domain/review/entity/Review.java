@@ -2,7 +2,7 @@ package com.example.springrider.domain.review.entity;
 
 import com.example.springrider.domain.common.entity.BaseEntity;
 import com.example.springrider.domain.order.entity.Order;
-import com.example.springrider.domain.review.dto.CreateReviewRequestDto;
+import com.example.springrider.domain.review.dto.request.CreateReviewRequestDto;
 import com.example.springrider.domain.review.enums.Rating;
 import com.example.springrider.domain.user.entity.User;
 import jakarta.persistence.Column;
