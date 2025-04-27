@@ -42,4 +42,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         """)
     List<Order> findAllByStoreIdWithOrderItemsAndMenu(@Param("storeId") Long storeId);
 
+    @Query("""
+        SELECT o FROM Order o
+        JOIN FETCH o.user
+        WHERE o.id = :orderId
+        """)
+    Optional<Order> findByIdWithUser(@Param("orderId") Long orderId);
 }
