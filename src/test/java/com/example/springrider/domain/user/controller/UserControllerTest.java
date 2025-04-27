@@ -1,4 +1,4 @@
-package com.example.springrider.user.controller.controller;
+package com.example.springrider.domain.user.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -7,7 +7,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.springrider.domain.store.repository.StoreRepository;
-import com.example.springrider.domain.user.controller.UserController;
 import com.example.springrider.domain.user.dto.request.LoginRequestDto;
 import com.example.springrider.domain.user.dto.request.SignupRequestDto;
 import com.example.springrider.domain.user.dto.response.LoginResponseDto;

@@ -1,4 +1,4 @@
-package com.example.springrider.user.controller.service;
+package com.example.springrider.domain.user.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.any;
@@ -14,7 +14,6 @@ import com.example.springrider.domain.user.dto.response.SignupResponseDto;
 import com.example.springrider.domain.user.entity.User;
 import com.example.springrider.domain.user.enums.UserRole;
 import com.example.springrider.domain.user.repository.UserRepository;
-import com.example.springrider.domain.user.service.UserService;
 import com.example.springrider.global.security.DefaultPasswordEncoder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
