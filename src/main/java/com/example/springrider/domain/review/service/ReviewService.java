@@ -3,6 +3,7 @@ package com.example.springrider.domain.review.service;
 import com.example.springrider.domain.common.exception.ExceptionCode;
 import com.example.springrider.domain.common.exception.InvalidRequestException;
 import com.example.springrider.domain.order.entity.Order;
+import com.example.springrider.domain.order.enums.OrderStatus;
 import com.example.springrider.domain.order.repository.OrderRepository;
 import com.example.springrider.domain.review.dto.CreateReviewRequestDto;
 import com.example.springrider.domain.review.dto.ReviewResponseDto;
@@ -28,6 +29,10 @@ public class ReviewService {
         User findedUser = order.getUser();
         if (!findedUser.getId().equals(userId)) {
             throw new InvalidRequestException(ExceptionCode.FORBIDDEN_REQUEST);
+        }
+
+        if (OrderStatus.DELIVERED != order.getStatus()) {
+            throw new InvalidRequestException(ExceptionCode.REVIEW_NOT_AVAILABLE_YET);
         }
         Review review = Review.of(requestDto, findedUser, order);
         reviewRepository.save(review);
