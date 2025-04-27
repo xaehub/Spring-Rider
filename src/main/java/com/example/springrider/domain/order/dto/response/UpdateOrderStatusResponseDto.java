@@ -1,4 +1,4 @@
-package com.example.springrider.domain.order.dto.request;
+package com.example.springrider.domain.order.dto.response;
 
 import com.example.springrider.domain.order.entity.Order;
 import com.example.springrider.domain.order.enums.OrderStatus;

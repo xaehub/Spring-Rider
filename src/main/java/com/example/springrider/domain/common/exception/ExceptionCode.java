@@ -38,6 +38,8 @@ public enum ExceptionCode {
     // 주문
     ORDER_NOT_FOUND("주문 정보가 없습니다."),
     INVALID_ORDER_STATUS("올바르지 않은 주문 상태 코드입니다."),
+    INVALID_ORDER_CANCEL_REASON("올바르지 않은 주문 취소 코드입니다."),
+    REQUIRED_ORDER_CANCEL_MESSAGE_FOR_OTHER("취소 사유가 '기타(OTHER)'인 경우, 취소 메세지를 입력해야 합니다."),
 
     // 장바구니
     CART_EXCEPTION("장바구니 예외 메세지"),
