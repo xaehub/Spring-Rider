@@ -1,4 +1,4 @@
-package com.example.springrider.domain.order.dto;
+package com.example.springrider.domain.order.dto.request;
 
 import com.example.springrider.domain.order.enums.OrderStatus;
 import com.example.springrider.global.validation.EnumValid;
