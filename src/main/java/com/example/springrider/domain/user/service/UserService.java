@@ -1,6 +1,6 @@
 package com.example.springrider.domain.user.service;
 
-import com.example.springrider.config.PasswordEncoder;
+import com.example.springrider.global.security.PasswordEncoder;
 import com.example.springrider.domain.common.exception.AuthException;
 import com.example.springrider.domain.common.exception.ExceptionCode;
 import com.example.springrider.domain.common.exception.InvalidRequestException;

@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
-import com.example.springrider.config.PasswordEncoder;
 import com.example.springrider.domain.user.dto.request.DeleteUserRequestDto;
 import com.example.springrider.domain.user.dto.request.LoginRequestDto;
 import com.example.springrider.domain.user.dto.request.PasswordModifyRequestDto;
@@ -16,6 +15,7 @@ import com.example.springrider.domain.user.entity.User;
 import com.example.springrider.domain.user.enums.UserRole;
 import com.example.springrider.domain.user.repository.UserRepository;
 import com.example.springrider.domain.user.service.UserService;
+import com.example.springrider.global.security.PasswordEncoder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,4 +1,4 @@
-package com.example.springrider.config;
+package com.example.springrider.global.security;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
