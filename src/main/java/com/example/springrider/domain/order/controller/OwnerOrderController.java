@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 @RestController
 @RequestMapping("/api/owners/stores")
@@ -22,8 +23,9 @@ public class OwnerOrderController {
     @PatchMapping("/{storeId}/orders/{orderId}")
     public ApiResponse<UpdateOrderStatusResponseDto> update(
         @PathVariable Long storeId, @PathVariable Long orderId,
-        @Valid @RequestBody UpdateOrderStatusRequestDto requestDto
+        @Valid @RequestBody UpdateOrderStatusRequestDto requestDto,
+        @SessionAttribute(name = "userId") Long userId
     ) {
-        return ApiResponse.ok(ownerOrderService.update(orderId, requestDto));
+        return ApiResponse.ok(ownerOrderService.update(orderId, storeId, userId, requestDto));
     }
 }

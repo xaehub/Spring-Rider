@@ -1,5 +1,6 @@
 package com.example.springrider.domain.order.service;
 
+import com.example.springrider.aop.StoreOwnerCheck;
 import com.example.springrider.domain.order.dto.UpdateOrderStatusRequestDto;
 import com.example.springrider.domain.order.dto.UpdateOrderStatusResponseDto;
 import com.example.springrider.domain.order.entity.Order;
@@ -17,8 +18,11 @@ public class OwnerOrderService {
     private final OrderRepository orderRepository;
 
     @Transactional
-    public UpdateOrderStatusResponseDto update(Long orderId,
-        @Valid UpdateOrderStatusRequestDto requestDto) {
+    @StoreOwnerCheck(userIdParam = "userId", storeIdParam = "storeId")
+    public UpdateOrderStatusResponseDto update(
+        Long orderId, Long storeId, Long userId,
+        @Valid UpdateOrderStatusRequestDto requestDto
+    ) {
         Order order = orderRepository.findById(orderId).orElseThrow();
         order.changeStatus(OrderStatus.from(requestDto.getStatus()));
         return UpdateOrderStatusResponseDto.toDto(order);
