@@ -1,7 +1,6 @@
 package com.example.springrider.domain.order.service;
 
 import com.example.springrider.aop.StoreOwnerCheck;
-import com.example.springrider.global.security.PasswordEncoder;
 import com.example.springrider.domain.common.exception.ExceptionCode;
 import com.example.springrider.domain.common.exception.InvalidRequestException;
 import com.example.springrider.domain.order.dto.request.CancelOrderRequestDto;
@@ -17,6 +16,7 @@ import com.example.springrider.domain.store.entity.Store;
 import com.example.springrider.domain.store.repository.StoreRepository;
 import com.example.springrider.domain.user.entity.User;
 import com.example.springrider.domain.user.repository.UserRepository;
+import com.example.springrider.global.security.DefaultPasswordEncoder;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Locale;
@@ -30,7 +30,7 @@ public class OwnerOrderService {
 
     private final OrderRepository orderRepository;
     private final StoreRepository storeRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final DefaultPasswordEncoder defaultPasswordEncoder;
     private final UserRepository userRepository;
 
     @Transactional
@@ -59,7 +59,7 @@ public class OwnerOrderService {
         Long userId, @Valid CancelOrderRequestDto requestDto) {
         //비밀번호 일치 여부 검증
         User user = userRepository.findById(userId).orElseThrow();
-        if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
+        if (!defaultPasswordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new InvalidRequestException(ExceptionCode.PASSWORD_NOT_MATCH);
         }
         //취소 사유가 other(기타)일 경우에는 취소 메세지는 필수 값 -> 이를 검증
