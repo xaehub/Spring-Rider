@@ -62,11 +62,21 @@ class MenuServiceTest {
         assertEquals(menuRequestDto.getContents(), result.getContents());
         assertEquals(menuRequestDto.getCategory(), result.getCategory());
         assertEquals(false, result.getIsDeleted());
-        // createdAt, modifiedAt은 비교 안 함
     }
 
     @Test
-    void update() {
+    void menu_update_메뉴를_성공적으로_수정했다() {
+        // given
+        given(menuRepository.findByIdOrElseThrow(1L)).willReturn(menu);
+
+        // when
+        MenuResponseDto result = menuService.update(1L, 1L, 1L, menuRequestDto);
+
+        // then
+        assertEquals(menuRequestDto.getName(), result.getName());
+        assertEquals(menuRequestDto.getPrice(), result.getPrice());
+        assertEquals(menuRequestDto.getContents(), result.getContents());
+        assertEquals(menuRequestDto.getCategory(), result.getCategory());
     }
 
     @Test
