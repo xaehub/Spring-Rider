@@ -25,7 +25,8 @@ public class ReviewService {
     @Transactional
     public ReviewResponseDto create(Long orderId, Long userId,
         @Valid CreateReviewRequestDto requestDto) {
-        Order order = orderRepository.findByIdWithUser(orderId).orElseThrow();
+        Order order = orderRepository.findByIdWithUser(orderId)
+            .orElseThrow(() -> new InvalidRequestException(ExceptionCode.ORDER_NOT_FOUND));
         User findedUser = order.getUser();
         //타인의 주문에 대한 리뷰 생성을 요청한 경우
         if (!findedUser.getId().equals(userId)) {
