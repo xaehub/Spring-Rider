@@ -1,5 +1,6 @@
-package com.example.springrider.domain.order.dto;
+package com.example.springrider.domain.order.dto.response;
 
+import com.example.springrider.domain.order.dto.OrderItemDto;
 import com.example.springrider.domain.order.entity.Order;
 import java.util.List;
 import lombok.Getter;

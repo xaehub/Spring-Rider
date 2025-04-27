@@ -1,11 +1,14 @@
 package com.example.springrider.domain.order.controller;
 
 import com.example.springrider.domain.common.response.ApiResponse;
-import com.example.springrider.domain.order.dto.UpdateOrderStatusRequestDto;
-import com.example.springrider.domain.order.dto.UpdateOrderStatusResponseDto;
+import com.example.springrider.domain.order.dto.request.UpdateOrderStatusRequestDto;
+import com.example.springrider.domain.order.dto.request.UpdateOrderStatusResponseDto;
+import com.example.springrider.domain.order.dto.response.OwnerOrderResponseDto;
 import com.example.springrider.domain.order.service.OwnerOrderService;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,5 +30,13 @@ public class OwnerOrderController {
         @SessionAttribute(name = "userId") Long userId
     ) {
         return ApiResponse.ok(ownerOrderService.update(orderId, storeId, userId, requestDto));
+    }
+
+    @GetMapping("/{storeId}/orders")
+    public ApiResponse<List<OwnerOrderResponseDto>> findAll(
+        @PathVariable Long storeId,
+        @SessionAttribute(name = "userId") Long userId
+    ) {
+        return ApiResponse.ok(ownerOrderService.findAll(storeId, userId));
     }
 }
