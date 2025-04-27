@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.example.springrider.domain.common.exception.InvalidRequestException;
+import com.example.springrider.domain.store.dto.FindStoreResponseDto;
 import com.example.springrider.domain.store.dto.FindStoresResponseDto;
 import com.example.springrider.domain.store.dto.StoreRequestDto;
 import com.example.springrider.domain.store.dto.StoreResponseDto;
@@ -207,5 +208,23 @@ class StoreServiceTest {
 
         // then 그럼 stores리스트 크기가 6인지 홧ㄱ인
         assertEquals(6, stores.size());
+    }
+
+    @Test
+    void find_store_가게_단건_조회에_성공한다() {
+        // given 가짜 레전드 맛집 가게 생성
+        Store store = Store.StoreInfo(new StoreRequestDto(
+            "레전드 맛집", "서울", "한식",
+            LocalTime.of(9, 0), LocalTime.of(22, 0),
+            10000, StoreStatus.ACTIVE, 1L
+        ), mockUser);
+
+        when(storeRepository.findByIdOrElseThrow(1L)).thenReturn(store);
+
+        //wheen storeService를 실행하면
+        FindStoreResponseDto result = storeService.find(1L);
+
+        // then 가게 이름이 레전드 맛집이면 됨
+        assertEquals("레전드 맛집", result.getName());
     }
 }
