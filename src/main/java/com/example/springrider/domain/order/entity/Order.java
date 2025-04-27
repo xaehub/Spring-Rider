@@ -7,6 +7,8 @@ import com.example.springrider.domain.user.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
@@ -36,6 +38,7 @@ public class Order extends BaseEntity {
     private String deliveryAddress;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     @Setter
     private OrderStatus status;
 
