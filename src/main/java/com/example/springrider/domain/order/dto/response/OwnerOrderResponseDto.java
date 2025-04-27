@@ -19,7 +19,7 @@ public class OwnerOrderResponseDto {
             store.getId(),
             store.getName(),
             orders.stream()
-                .map(OrderResponseDto::of)
+                .map(OrderResponseDto::ofOwner)
                 .toList()
         );
     }

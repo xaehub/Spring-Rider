@@ -19,6 +19,19 @@ public class OrderResponseDto {
     private final LocalDateTime createdAt;
     private final List<OrderItemDto> orderItems;
 
+    // storeName을 제외하기 위한 private 생성자
+    private OrderResponseDto(
+        Long orderId,
+        String deliveryAddress,
+        Integer totalPrice,
+        String status,
+        LocalDateTime createdAt,
+        List<OrderItemDto> orderItems
+    ) {
+        this(orderId, null, deliveryAddress, totalPrice, status, createdAt, orderItems);
+    }
+
+
     public static OrderResponseDto of(Order order) {
         return new OrderResponseDto(
             order.getId(),
@@ -32,4 +45,18 @@ public class OrderResponseDto {
                 .toList()
         );
     }
+
+    public static OrderResponseDto ofOwner(Order order) {
+        return new OrderResponseDto(
+            order.getId(),
+            order.getDeliveryAddress(),
+            order.getTotalPrice(),
+            order.getStatus().name(),
+            order.getCreatedAt(),
+            order.getOrderItems().stream()
+                .map(OrderItemDto::of)
+                .toList()
+        );
+    }
+
 }
