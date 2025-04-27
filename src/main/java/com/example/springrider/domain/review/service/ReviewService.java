@@ -1,7 +1,5 @@
 package com.example.springrider.domain.review.service;
 
-import com.example.springrider.domain.common.exception.ExceptionCode;
-import com.example.springrider.domain.common.exception.InvalidRequestException;
 import com.example.springrider.domain.order.entity.Order;
 import com.example.springrider.domain.order.enums.OrderStatus;
 import com.example.springrider.domain.order.repository.OrderRepository;
@@ -10,6 +8,8 @@ import com.example.springrider.domain.review.dto.ReviewResponseDto;
 import com.example.springrider.domain.review.entity.Review;
 import com.example.springrider.domain.review.repository.ReviewRepository;
 import com.example.springrider.domain.user.entity.User;
+import com.example.springrider.global.exception.ExceptionCode;
+import com.example.springrider.global.exception.InvalidRequestException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,6 +39,7 @@ public class ReviewService {
         if (reviewRepository.existsByOrderId(order.getId())) {
             throw new InvalidRequestException(ExceptionCode.REVIEW_ALREADY_EXISTS);
         }
+        order.changeStatus(OrderStatus.REVIEWED);
         Review review = Review.of(requestDto, findedUser, order);
         reviewRepository.save(review);
         return ReviewResponseDto.toDto(review);

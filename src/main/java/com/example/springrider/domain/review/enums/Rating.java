@@ -1,7 +1,7 @@
 package com.example.springrider.domain.review.enums;
 
-import com.example.springrider.domain.common.exception.ExceptionCode;
-import com.example.springrider.domain.common.exception.InvalidRequestException;
+import com.example.springrider.global.exception.ExceptionCode;
+import com.example.springrider.global.exception.InvalidRequestException;
 import java.util.Arrays;
 
 public enum Rating {
