@@ -1,4 +1,4 @@
-package com.example.springrider.domain.order.dto.response;
+package com.example.springrider.domain.order.dto;
 
 import com.example.springrider.domain.order.entity.OrderItem;
 import lombok.Getter;

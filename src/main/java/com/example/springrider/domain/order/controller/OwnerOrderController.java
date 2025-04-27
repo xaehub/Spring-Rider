@@ -5,9 +5,14 @@ import com.example.springrider.domain.order.dto.request.CancelOrderRequestDto;
 import com.example.springrider.domain.order.dto.request.UpdateOrderStatusRequestDto;
 import com.example.springrider.domain.order.dto.response.CancelOrderResponseDto;
 import com.example.springrider.domain.order.dto.response.UpdateOrderStatusResponseDto;
+import com.example.springrider.domain.order.dto.request.UpdateOrderStatusRequestDto;
+import com.example.springrider.domain.order.dto.response.OwnerOrderResponseDto;
+import com.example.springrider.domain.order.dto.response.UpdateOrderStatusResponseDto;
 import com.example.springrider.domain.order.service.OwnerOrderService;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,9 +31,18 @@ public class OwnerOrderController {
     @PatchMapping("/{storeId}/orders/{orderId}")
     public ApiResponse<UpdateOrderStatusResponseDto> update(
         @PathVariable Long storeId, @PathVariable Long orderId,
-        @Valid @RequestBody UpdateOrderStatusRequestDto requestDto
+        @Valid @RequestBody UpdateOrderStatusRequestDto requestDto,
+        @SessionAttribute(name = "userId") Long userId
     ) {
-        return ApiResponse.ok(ownerOrderService.update(orderId, requestDto));
+        return ApiResponse.ok(ownerOrderService.update(orderId, storeId, userId, requestDto));
+    }
+
+    @GetMapping("/{storeId}/orders")
+    public ApiResponse<List<OwnerOrderResponseDto>> findAll(
+        @PathVariable Long storeId,
+        @SessionAttribute(name = "userId") Long userId
+    ) {
+        return ApiResponse.ok(ownerOrderService.findAll(storeId, userId));
     }
 
     @DeleteMapping("/{storeId}/orders/{orderId}")
