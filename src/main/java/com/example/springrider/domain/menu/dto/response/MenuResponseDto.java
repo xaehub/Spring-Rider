@@ -18,7 +18,7 @@ public class MenuResponseDto {
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
 
-    public static MenuResponseDto toDto(Menu menu) {
+    public static MenuResponseDto of(Menu menu) {
         return new MenuResponseDto(
             menu.getId(),
             menu.getName(),

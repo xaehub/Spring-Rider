@@ -23,7 +23,7 @@ public class FindStoreResponseDto {
 
     public static FindStoreResponseDto from(Store store) {
         List<MenuResponseDto> menuDtos = store.getMenus().stream()
-            .map(MenuResponseDto::toDto)
+            .map(MenuResponseDto::of)
             .collect(Collectors.toList());
 
         return new FindStoreResponseDto(
