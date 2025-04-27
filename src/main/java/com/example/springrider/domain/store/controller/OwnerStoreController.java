@@ -1,10 +1,10 @@
 package com.example.springrider.domain.store.controller;
 
-import com.example.springrider.domain.common.response.ApiResponse;
-import com.example.springrider.domain.store.dto.StoreRequestDto;
-import com.example.springrider.domain.store.dto.StoreResponseDto;
-import com.example.springrider.domain.store.dto.UpdateStoreRequestDto;
+import com.example.springrider.domain.store.dto.request.StoreRequestDto;
+import com.example.springrider.domain.store.dto.request.UpdateStoreRequestDto;
+import com.example.springrider.domain.store.dto.response.StoreResponseDto;
 import com.example.springrider.domain.store.service.OwnerStoreService;
+import com.example.springrider.global.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;

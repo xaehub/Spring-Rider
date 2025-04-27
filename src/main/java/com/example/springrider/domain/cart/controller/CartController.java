@@ -1,12 +1,12 @@
 package com.example.springrider.domain.cart.controller;
 
-import com.example.springrider.domain.cart.dto.CreateCartItemBulkRequestDto;
-import com.example.springrider.domain.cart.dto.CreateCartItemBulkResponseDto;
-import com.example.springrider.domain.cart.dto.FindCartItemBulkResponseDto;
-import com.example.springrider.domain.cart.dto.UpdateCartItemRequestDto;
-import com.example.springrider.domain.cart.dto.UpdateCartItemResponseDto;
+import com.example.springrider.domain.cart.dto.request.CreateCartItemBulkRequestDto;
+import com.example.springrider.domain.cart.dto.response.CreateCartItemBulkResponseDto;
+import com.example.springrider.domain.cart.dto.response.FindCartItemBulkResponseDto;
+import com.example.springrider.domain.cart.dto.request.UpdateCartItemRequestDto;
+import com.example.springrider.domain.cart.dto.response.UpdateCartItemResponseDto;
 import com.example.springrider.domain.cart.service.CartService;
-import com.example.springrider.domain.common.response.ApiResponse;
+import com.example.springrider.global.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;

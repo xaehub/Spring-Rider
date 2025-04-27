@@ -1,7 +1,7 @@
 package com.example.springrider.domain.menu.entity;
 
 import com.example.springrider.domain.common.entity.BaseEntity;
-import com.example.springrider.domain.menu.dto.MenuRequestDto;
+import com.example.springrider.domain.menu.dto.request.MenuRequestDto;
 import com.example.springrider.domain.store.entity.Store;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

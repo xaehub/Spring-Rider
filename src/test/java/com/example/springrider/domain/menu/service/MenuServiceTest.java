@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
-import com.example.springrider.domain.menu.dto.MenuRequestDto;
-import com.example.springrider.domain.menu.dto.MenuResponseDto;
+import com.example.springrider.domain.menu.dto.request.MenuRequestDto;
+import com.example.springrider.domain.menu.dto.response.MenuResponseDto;
 import com.example.springrider.domain.menu.entity.Menu;
 import com.example.springrider.domain.menu.repository.MenuRepository;
 import com.example.springrider.domain.store.entity.Store;

@@ -1,9 +1,9 @@
 package com.example.springrider.domain.menu.controller;
 
-import com.example.springrider.domain.common.response.ApiResponse;
-import com.example.springrider.domain.menu.dto.MenuRequestDto;
-import com.example.springrider.domain.menu.dto.MenuResponseDto;
+import com.example.springrider.domain.menu.dto.request.MenuRequestDto;
+import com.example.springrider.domain.menu.dto.response.MenuResponseDto;
 import com.example.springrider.domain.menu.service.MenuService;
+import com.example.springrider.global.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
