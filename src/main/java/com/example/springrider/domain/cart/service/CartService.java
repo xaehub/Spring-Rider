@@ -1,23 +1,23 @@
 package com.example.springrider.domain.cart.service;
 
-import com.example.springrider.domain.cart.dto.CreateCartItemBulkRequestDto;
-import com.example.springrider.domain.cart.dto.CreateCartItemBulkResponseDto;
-import com.example.springrider.domain.cart.dto.CreateCartItemRequestDto;
 import com.example.springrider.domain.cart.dto.CreateFailedDto;
 import com.example.springrider.domain.cart.dto.CreateSuccessDto;
-import com.example.springrider.domain.cart.dto.FindCartItemBulkResponseDto;
-import com.example.springrider.domain.cart.dto.FindCartItemResponseDto;
-import com.example.springrider.domain.cart.dto.UpdateCartItemRequestDto;
-import com.example.springrider.domain.cart.dto.UpdateCartItemResponseDto;
+import com.example.springrider.domain.cart.dto.request.CreateCartItemBulkRequestDto;
+import com.example.springrider.domain.cart.dto.request.CreateCartItemRequestDto;
+import com.example.springrider.domain.cart.dto.request.UpdateCartItemRequestDto;
+import com.example.springrider.domain.cart.dto.response.CreateCartItemBulkResponseDto;
+import com.example.springrider.domain.cart.dto.response.FindCartItemBulkResponseDto;
+import com.example.springrider.domain.cart.dto.response.FindCartItemResponseDto;
+import com.example.springrider.domain.cart.dto.response.UpdateCartItemResponseDto;
 import com.example.springrider.domain.cart.entity.CartItem;
 import com.example.springrider.domain.cart.enums.CartItemStatus;
 import com.example.springrider.domain.cart.repository.CartRepository;
-import com.example.springrider.domain.common.exception.ExceptionCode;
-import com.example.springrider.domain.common.exception.InvalidRequestException;
 import com.example.springrider.domain.menu.entity.Menu;
 import com.example.springrider.domain.menu.repository.MenuRepository;
 import com.example.springrider.domain.user.entity.User;
 import com.example.springrider.domain.user.repository.UserRepository;
+import com.example.springrider.global.exception.ExceptionCode;
+import com.example.springrider.global.exception.InvalidRequestException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -124,17 +124,19 @@ public class CartService {
         }
 
         List<FindCartItemResponseDto> responseDtos = cartItems.stream()
-            .map(FindCartItemResponseDto::new).toList();
-        int sumTotalprice = sumTotalprice(responseDtos);
+            .map(FindCartItemResponseDto::of)
+            .toList();
 
-        return FindCartItemBulkResponseDto.toDto(responseDtos, cartItems.get(0).getStoreId(),
-            sumTotalprice);
+        int sumTotalPrice = sumTotalPrice(responseDtos);
+
+        return FindCartItemBulkResponseDto.of(responseDtos, cartItems.get(0).getStoreId(),
+            sumTotalPrice);
     }
 
-    public int sumTotalprice(List<FindCartItemResponseDto> responseDtos) {
-        int sum = responseDtos.stream().mapToInt(d -> d.getPrice() * d.getQuantity()
-        ).sum();
-        return sum;
+    public int sumTotalPrice(List<FindCartItemResponseDto> responseDtos) {
+        return responseDtos.stream()
+            .mapToInt(d -> d.getPrice() * d.getQuantity())
+            .sum();
     }
 
     @Transactional
@@ -156,7 +158,7 @@ public class CartService {
             cartItem.updateQuantity(requestDto.getQuantity());
             cartItem.changeStatus(requestDto.getStatus());
         }
-        return UpdateCartItemResponseDto.toDto(cartItem);
+        return UpdateCartItemResponseDto.of(cartItem);
     }
 
     public boolean isValidQuantity(UpdateCartItemRequestDto requestDto) {

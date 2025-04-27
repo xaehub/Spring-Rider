@@ -1,9 +1,8 @@
 package com.example.springrider.domain.user.service;
 
-import com.example.springrider.config.PasswordEncoder;
-import com.example.springrider.domain.common.exception.AuthException;
-import com.example.springrider.domain.common.exception.ExceptionCode;
-import com.example.springrider.domain.common.exception.InvalidRequestException;
+import com.example.springrider.global.exception.AuthException;
+import com.example.springrider.global.exception.ExceptionCode;
+import com.example.springrider.global.exception.InvalidRequestException;
 import com.example.springrider.domain.user.dto.request.DeleteUserRequestDto;
 import com.example.springrider.domain.user.dto.request.LoginRequestDto;
 import com.example.springrider.domain.user.dto.request.PasswordModifyRequestDto;
@@ -13,6 +12,7 @@ import com.example.springrider.domain.user.dto.response.LoginResponseDto;
 import com.example.springrider.domain.user.dto.response.SignupResponseDto;
 import com.example.springrider.domain.user.entity.User;
 import com.example.springrider.domain.user.repository.UserRepository;
+import com.example.springrider.global.security.DefaultPasswordEncoder;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final DefaultPasswordEncoder defaultPasswordEncoder;
 
     /**
      * 회원가입 요청 서비스
@@ -35,7 +35,7 @@ public class UserService {
             throw new InvalidRequestException(ExceptionCode.EMAIL_ALREADY_USED);
         }
 
-        String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
+        String encodedPassword = defaultPasswordEncoder.encode(requestDto.getPassword());
         User user = User.of(requestDto, encodedPassword, false, 0);
 
         User savedUser = userRepository.save(user);
@@ -61,7 +61,7 @@ public class UserService {
             throw new AuthException(ExceptionCode.ALREADY_DELETED_USER);
         }
 
-        if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
+        if (!defaultPasswordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new AuthException(ExceptionCode.PASSWORD_NOT_MATCH);
         }
 
@@ -94,7 +94,7 @@ public class UserService {
         }
 
         // 비밀번호 일치 체크
-        if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
+        if (!defaultPasswordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new AuthException(ExceptionCode.PASSWORD_NOT_MATCH);
         }
 
@@ -116,11 +116,11 @@ public class UserService {
 
         User user = userRepository.findByIdOrElseThrow(userId);
 
-        if (!passwordEncoder.matches(requestDto.getOldPassword(), user.getPassword())) {
+        if (!defaultPasswordEncoder.matches(requestDto.getOldPassword(), user.getPassword())) {
             throw new AuthException(ExceptionCode.PASSWORD_NOT_MATCH); // 401
         }
 
-        String newEncodedPassword = passwordEncoder.encode(requestDto.getNewPassword());
+        String newEncodedPassword = defaultPasswordEncoder.encode(requestDto.getNewPassword());
         user.updatePassword(newEncodedPassword);
         userRepository.save(user);
         session.invalidate(); // 자동 로그아웃
@@ -143,7 +143,7 @@ public class UserService {
         User user = userRepository.findByIdOrElseThrow(userId);
 
         // 비밀번호 검증
-        if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
+        if (!defaultPasswordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new AuthException(ExceptionCode.PASSWORD_NOT_MATCH);
         }
 

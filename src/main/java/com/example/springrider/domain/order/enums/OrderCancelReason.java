@@ -1,8 +1,8 @@
 package com.example.springrider.domain.order.enums;
 
-import static com.example.springrider.domain.common.exception.ExceptionCode.INVALID_ORDER_CANCEL_REASON;
+import static com.example.springrider.global.exception.ExceptionCode.INVALID_ORDER_CANCEL_REASON;
 
-import com.example.springrider.domain.common.exception.InvalidRequestException;
+import com.example.springrider.global.exception.InvalidRequestException;
 import java.util.Arrays;
 
 public enum OrderCancelReason {

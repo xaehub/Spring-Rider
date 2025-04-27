@@ -1,7 +1,7 @@
 package com.example.springrider.config.filter;
 
-import com.example.springrider.domain.common.exception.AuthException;
-import com.example.springrider.domain.common.exception.ExceptionCode;
+import com.example.springrider.global.exception.AuthException;
+import com.example.springrider.global.exception.ExceptionCode;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

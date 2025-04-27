@@ -1,8 +1,8 @@
 package com.example.springrider.domain.menu.service;
 
 import com.example.springrider.aop.StoreOwnerCheck;
-import com.example.springrider.domain.menu.dto.MenuRequestDto;
-import com.example.springrider.domain.menu.dto.MenuResponseDto;
+import com.example.springrider.domain.menu.dto.request.MenuRequestDto;
+import com.example.springrider.domain.menu.dto.response.MenuResponseDto;
 import com.example.springrider.domain.menu.entity.Menu;
 import com.example.springrider.domain.menu.repository.MenuRepository;
 import com.example.springrider.domain.store.entity.Store;
@@ -33,7 +33,7 @@ public class MenuService {
         // 메뉴 저장
         menuRepository.save(menu);
 
-        return MenuResponseDto.toDto(menu);
+        return MenuResponseDto.of(menu);
     }
 
     /**
@@ -53,7 +53,7 @@ public class MenuService {
         Menu findMenu = menuRepository.findByIdOrElseThrow(menuId);
         findMenu.updateMenu(requestDto);
 
-        return MenuResponseDto.toDto(findMenu);
+        return MenuResponseDto.of(findMenu);
     }
 
     /**
@@ -69,7 +69,7 @@ public class MenuService {
         Menu findMenu = menuRepository.findByIdOrElseThrow(menuId);
         findMenu.deleteMenu();
 
-        return MenuResponseDto.toDto(findMenu);
+        return MenuResponseDto.of(findMenu);
     }
 
 }

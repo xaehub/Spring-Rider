@@ -1,9 +1,9 @@
 package com.example.springrider.aop;
 
-import com.example.springrider.domain.common.exception.AuthException;
-import com.example.springrider.domain.common.exception.ExceptionCode;
 import com.example.springrider.domain.store.entity.Store;
 import com.example.springrider.domain.store.service.OwnerStoreService;
+import com.example.springrider.global.exception.AuthException;
+import com.example.springrider.global.exception.ExceptionCode;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;

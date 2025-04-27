@@ -1,9 +1,6 @@
 package com.example.springrider.domain.order.service;
 
 import com.example.springrider.aop.StoreOwnerCheck;
-import com.example.springrider.config.PasswordEncoder;
-import com.example.springrider.domain.common.exception.ExceptionCode;
-import com.example.springrider.domain.common.exception.InvalidRequestException;
 import com.example.springrider.domain.order.dto.request.CancelOrderRequestDto;
 import com.example.springrider.domain.order.dto.request.UpdateOrderStatusRequestDto;
 import com.example.springrider.domain.order.dto.response.CancelOrderResponseDto;
@@ -17,6 +14,9 @@ import com.example.springrider.domain.store.entity.Store;
 import com.example.springrider.domain.store.repository.StoreRepository;
 import com.example.springrider.domain.user.entity.User;
 import com.example.springrider.domain.user.repository.UserRepository;
+import com.example.springrider.global.exception.ExceptionCode;
+import com.example.springrider.global.exception.InvalidRequestException;
+import com.example.springrider.global.security.DefaultPasswordEncoder;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Locale;
@@ -30,7 +30,7 @@ public class OwnerOrderService {
 
     private final OrderRepository orderRepository;
     private final StoreRepository storeRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final DefaultPasswordEncoder defaultPasswordEncoder;
     private final UserRepository userRepository;
 
     @Transactional
@@ -41,7 +41,7 @@ public class OwnerOrderService {
     ) {
         Order order = orderRepository.findByIdOrElseThrow(orderId);
         order.changeStatus(OrderStatus.from(requestDto.getStatus()));
-        return UpdateOrderStatusResponseDto.toDto(order);
+        return UpdateOrderStatusResponseDto.of(order);
     }
 
     @Transactional(readOnly = true)
@@ -59,7 +59,7 @@ public class OwnerOrderService {
         Long userId, @Valid CancelOrderRequestDto requestDto) {
         //비밀번호 일치 여부 검증
         User user = userRepository.findById(userId).orElseThrow();
-        if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
+        if (!defaultPasswordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new InvalidRequestException(ExceptionCode.PASSWORD_NOT_MATCH);
         }
         //취소 사유가 other(기타)일 경우에는 취소 메세지는 필수 값 -> 이를 검증
@@ -79,7 +79,7 @@ public class OwnerOrderService {
         order.setOrderCancelReason(OrderCancelReason.from(cancelReason));
         order.setCancelMessage(cancelMessage);
         //dto 반환
-        return CancelOrderResponseDto.toDto(order);
+        return CancelOrderResponseDto.of(order);
     }
 
     //메세지 null 여부 검증 메서드

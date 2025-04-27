@@ -4,8 +4,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 
-import com.example.springrider.domain.store.dto.StoreRequestDto;
-import com.example.springrider.domain.store.dto.StoreResponseDto;
+import com.example.springrider.domain.store.dto.request.StoreRequestDto;
+import com.example.springrider.domain.store.dto.response.StoreResponseDto;
 import com.example.springrider.domain.store.enums.StoreStatus;
 import com.example.springrider.domain.store.service.OwnerStoreService;
 import java.time.LocalTime;

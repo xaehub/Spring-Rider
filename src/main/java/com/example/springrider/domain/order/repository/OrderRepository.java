@@ -1,7 +1,7 @@
 package com.example.springrider.domain.order.repository;
 
-import com.example.springrider.domain.common.exception.ExceptionCode;
-import com.example.springrider.domain.common.exception.InvalidRequestException;
+import com.example.springrider.global.exception.ExceptionCode;
+import com.example.springrider.global.exception.InvalidRequestException;
 import com.example.springrider.domain.order.entity.Order;
 import java.util.List;
 import java.util.Optional;
