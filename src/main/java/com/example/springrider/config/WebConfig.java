@@ -1,7 +1,7 @@
 package com.example.springrider.config;
 
 import com.example.springrider.config.filter.SessionLoginCheckFilter;
-import com.example.springrider.config.filter.StoreOwnerInterceptor;
+import com.example.springrider.config.interceptor.StoreOwnerInterceptor;
 import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;

@@ -1,4 +1,4 @@
-package com.example.springrider.config.filter;
+package com.example.springrider.config.interceptor;
 
 import com.example.springrider.domain.common.exception.AuthException;
 import com.example.springrider.domain.common.exception.ExceptionCode;
