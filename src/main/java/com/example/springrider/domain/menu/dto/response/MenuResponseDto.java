@@ -1,4 +1,4 @@
-package com.example.springrider.domain.menu.dto;
+package com.example.springrider.domain.menu.dto.response;
 
 import com.example.springrider.domain.menu.entity.Menu;
 import java.time.LocalDateTime;

@@ -1,8 +1,8 @@
 package com.example.springrider.domain.menu.service;
 
 import com.example.springrider.aop.StoreOwnerCheck;
-import com.example.springrider.domain.menu.dto.MenuRequestDto;
-import com.example.springrider.domain.menu.dto.MenuResponseDto;
+import com.example.springrider.domain.menu.dto.request.MenuRequestDto;
+import com.example.springrider.domain.menu.dto.response.MenuResponseDto;
 import com.example.springrider.domain.menu.entity.Menu;
 import com.example.springrider.domain.menu.repository.MenuRepository;
 import com.example.springrider.domain.store.entity.Store;

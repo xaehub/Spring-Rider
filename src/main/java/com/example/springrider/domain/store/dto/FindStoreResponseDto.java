@@ -1,6 +1,6 @@
 package com.example.springrider.domain.store.dto;
 
-import com.example.springrider.domain.menu.dto.MenuResponseDto;
+import com.example.springrider.domain.menu.dto.response.MenuResponseDto;
 import com.example.springrider.domain.store.entity.Store;
 import java.time.LocalTime;
 import java.util.List;

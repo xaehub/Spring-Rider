@@ -1,4 +1,4 @@
-package com.example.springrider.domain.menu.dto;
+package com.example.springrider.domain.menu.dto.request;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
