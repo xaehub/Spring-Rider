@@ -2,8 +2,8 @@ package com.example.springrider.domain.order.service;
 
 import com.example.springrider.aop.StoreOwnerCheck;
 import com.example.springrider.domain.order.dto.request.UpdateOrderStatusRequestDto;
-import com.example.springrider.domain.order.dto.request.UpdateOrderStatusResponseDto;
 import com.example.springrider.domain.order.dto.response.OwnerOrderResponseDto;
+import com.example.springrider.domain.order.dto.response.UpdateOrderStatusResponseDto;
 import com.example.springrider.domain.order.entity.Order;
 import com.example.springrider.domain.order.enums.OrderStatus;
 import com.example.springrider.domain.order.repository.OrderRepository;

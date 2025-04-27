@@ -2,8 +2,8 @@ package com.example.springrider.domain.order.controller;
 
 import com.example.springrider.domain.common.response.ApiResponse;
 import com.example.springrider.domain.order.dto.request.UpdateOrderStatusRequestDto;
-import com.example.springrider.domain.order.dto.request.UpdateOrderStatusResponseDto;
 import com.example.springrider.domain.order.dto.response.OwnerOrderResponseDto;
+import com.example.springrider.domain.order.dto.response.UpdateOrderStatusResponseDto;
 import com.example.springrider.domain.order.service.OwnerOrderService;
 import jakarta.validation.Valid;
 import java.util.List;
