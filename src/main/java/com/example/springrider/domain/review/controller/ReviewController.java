@@ -1,8 +1,8 @@
 package com.example.springrider.domain.review.controller;
 
 
-import com.example.springrider.domain.review.dto.CreateReviewRequestDto;
-import com.example.springrider.domain.review.dto.ReviewResponseDto;
+import com.example.springrider.domain.review.dto.request.CreateReviewRequestDto;
+import com.example.springrider.domain.review.dto.response.ReviewResponseDto;
 import com.example.springrider.domain.review.service.ReviewService;
 import com.example.springrider.global.response.ApiResponse;
 import jakarta.validation.Valid;
