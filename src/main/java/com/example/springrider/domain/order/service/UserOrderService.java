@@ -3,8 +3,7 @@ package com.example.springrider.domain.order.service;
 import com.example.springrider.aop.OrderEventLog;
 import com.example.springrider.domain.cart.entity.CartItem;
 import com.example.springrider.domain.cart.repository.CartRepository;
-import com.example.springrider.global.exception.ExceptionCode;
-import com.example.springrider.global.exception.InvalidRequestException;
+import com.example.springrider.domain.cart.service.CartService;
 import com.example.springrider.domain.order.dto.request.CreateOrderRequestDto;
 import com.example.springrider.domain.order.dto.response.OrderResponseDto;
 import com.example.springrider.domain.order.entity.Order;
@@ -14,10 +13,13 @@ import com.example.springrider.domain.order.repository.OrderRepository;
 import com.example.springrider.domain.store.entity.Store;
 import com.example.springrider.domain.user.entity.User;
 import com.example.springrider.domain.user.repository.UserRepository;
+import com.example.springrider.global.exception.ExceptionCode;
+import com.example.springrider.global.exception.InvalidRequestException;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +28,7 @@ public class UserOrderService {
     private final OrderRepository orderRepository;
     private final CartRepository cartRepository;
     private final UserRepository userRepository;
+    private final CartService cartService;
 
     /**
      * 주문 요청 서비스
@@ -35,6 +38,7 @@ public class UserOrderService {
      * @return 생성된 주문 정보가 담긴 {@link OrderResponseDto}
      */
     @OrderEventLog
+    @Transactional
     public OrderResponseDto create(CreateOrderRequestDto requestDto, Long userId) {
         // 1. 장바구니 메뉴 조회
         List<CartItem> cartItems = cartRepository.findAllByUserIdAndModifiedAtAfterWithMenuAndStore(
@@ -77,8 +81,9 @@ public class UserOrderService {
         Order orderWithItems = orderRepository.findByIdWithOrderItemsAndMenu(savedOrder.getId())
             .orElseThrow(() -> new InvalidRequestException(ExceptionCode.ORDER_NOT_FOUND));
 
+        // 6. 장바구니 초기화
+        cartService.processDelete(cartItems, userId);
         return OrderResponseDto.of(orderWithItems);
-
     }
 
     /**
