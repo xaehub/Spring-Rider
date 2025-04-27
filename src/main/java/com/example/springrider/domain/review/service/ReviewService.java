@@ -27,12 +27,17 @@ public class ReviewService {
         @Valid CreateReviewRequestDto requestDto) {
         Order order = orderRepository.findByIdWithUser(orderId).orElseThrow();
         User findedUser = order.getUser();
+        //타인의 주문에 대한 리뷰 생성을 요청한 경우
         if (!findedUser.getId().equals(userId)) {
             throw new InvalidRequestException(ExceptionCode.FORBIDDEN_REQUEST);
         }
-
+        //주문 상태가 배달완료가 아닌 경우
         if (OrderStatus.DELIVERED != order.getStatus()) {
             throw new InvalidRequestException(ExceptionCode.REVIEW_NOT_AVAILABLE_YET);
+        }
+        //이미 이 주문에 대한 리뷰가 작성된 경우
+        if (reviewRepository.existsByOrderId(order.getId())) {
+            throw new InvalidRequestException(ExceptionCode.REVIEW_ALREADY_EXISTS);
         }
         Review review = Review.of(requestDto, findedUser, order);
         reviewRepository.save(review);
