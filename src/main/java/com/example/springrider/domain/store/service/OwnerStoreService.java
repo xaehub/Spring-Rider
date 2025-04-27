@@ -1,14 +1,11 @@
 package com.example.springrider.domain.store.service;
 
-import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_ALREADY_CLOSED;
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_INVALID_STATUS_CHANGE;
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_INVALID_TIME;
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_LIMIT_EXCEEDED;
 import static com.example.springrider.domain.common.exception.ExceptionCode.STORE_USER_MISMATCH;
 
 import com.example.springrider.domain.common.exception.InvalidRequestException;
-import com.example.springrider.domain.store.dto.FindStoreResponseDto;
-import com.example.springrider.domain.store.dto.FindStoresResponseDto;
 import com.example.springrider.domain.store.dto.StoreRequestDto;
 import com.example.springrider.domain.store.dto.StoreResponseDto;
 import com.example.springrider.domain.store.dto.UpdateStoreRequestDto;
@@ -17,14 +14,13 @@ import com.example.springrider.domain.store.enums.StoreStatus;
 import com.example.springrider.domain.store.repository.StoreRepository;
 import com.example.springrider.domain.user.entity.User;
 import com.example.springrider.domain.user.repository.UserRepository;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class StoreService {
+public class OwnerStoreService {
 
     private final StoreRepository storeRepository;
     private final UserRepository userRepository;
@@ -110,40 +106,6 @@ public class StoreService {
         store.update(requestDto);
 
         return StoreResponseDto.fromEntity(store);
-    }
-
-    /**
-     * 전체 가게 목록 조회 ACTIVE 상태인 가게만 노출
-     *
-     * @return 간단한 가게 정보 리스트
-     */
-    @Transactional(readOnly = true)
-    public List<FindStoresResponseDto> finds() {
-        // 영업 중인 가게만 조회 (상태가 CLOSED가 아닌 가게만 조회)
-        List<Store> stores = storeRepository.findAllByStatusNot(StoreStatus.CLOSED);
-
-        // 리스트에 담은 stores를 리스트에 담긴 store simple response dto형태로 변환
-        return stores.stream()
-            .map(FindStoresResponseDto::new)
-            .toList();
-    }
-
-    /**
-     * 가게 상세 조회
-     *
-     * @param storeId 가게 고유 식별자
-     * @return 가게 상세 정보를 담은 dto
-     */
-    public FindStoreResponseDto find(Long storeId) {
-
-        Store store = storeRepository.findByIdOrElseThrow(storeId);
-        // CLOSED된 가게인 경우 예외 처리
-        if (store.getStatus() == StoreStatus.CLOSED) {
-            throw new InvalidRequestException(STORE_ALREADY_CLOSED);
-        }
-
-        // 가게의 정보와 메뉴도 보이게 가게 상세 dto 형태 반환
-        return FindStoreResponseDto.from(store);
     }
 
     /**
