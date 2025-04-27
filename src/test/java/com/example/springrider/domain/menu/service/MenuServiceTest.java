@@ -80,6 +80,14 @@ class MenuServiceTest {
     }
 
     @Test
-    void delete() {
+    void menu_delete_메뉴를_성공적으로_삭제했다() {
+        // given
+        given(menuRepository.findByIdOrElseThrow(1L)).willReturn(menu);
+
+        // when
+        MenuResponseDto result = menuService.delete(1L, 1L, 1L);
+
+        // then
+        assertEquals(true, result.getIsDeleted());
     }
 }
