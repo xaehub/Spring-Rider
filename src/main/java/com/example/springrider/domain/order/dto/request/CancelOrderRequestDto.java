@@ -23,5 +23,5 @@ public class CancelOrderRequestDto {
     private final String password;
 
     @Size(max = 20, message = "메세지 최대 글자수는 20자 입니다.")
-    private final String Message;
+    private final String cancelMessage;
 }
