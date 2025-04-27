@@ -227,4 +227,18 @@ class StoreServiceTest {
         // then 가게 이름이 레전드 맛집이면 됨
         assertEquals("레전드 맛집", result.getName());
     }
+
+    @Test
+    void find_store_가게_상태가_폐업일_때_예외를_던진다() {
+        // given 상태가 closed인 가게를 만든다
+        Store store = new Store();
+        store.setStatus(StoreStatus.CLOSED);
+
+        when(storeRepository.findByIdOrElseThrow(1L)).thenReturn(store);
+
+        // when(storeService.find를 실행하면) then(InvalidRequestException 예외를 던진다)
+        assertThrows(InvalidRequestException.class, () -> {
+            storeService.find(1L);
+        });
+    }
 }
