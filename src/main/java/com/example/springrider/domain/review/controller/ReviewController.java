@@ -1,0 +1,29 @@
+package com.example.springrider.domain.review.controller;
+
+import com.example.springrider.domain.common.response.ApiResponse;
+import com.example.springrider.domain.review.dto.CreateReviewRequestDto;
+import com.example.springrider.domain.review.dto.ReviewResponseDto;
+import com.example.springrider.domain.review.service.ReviewService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttribute;
+
+@RestController
+@RequestMapping("/api/customers/orders")
+@RequiredArgsConstructor
+public class ReviewController {
+
+    private final ReviewService reviewService;
+
+    @PostMapping("/{orderId}/reviews")
+    public ApiResponse<ReviewResponseDto> create(
+        @PathVariable Long orderId, @Valid @RequestBody CreateReviewRequestDto requestDto,
+        @SessionAttribute(name = "userId") Long userId) {
+        return ApiResponse.ok(reviewService.create(orderId, userId, requestDto));
+    }
+}
