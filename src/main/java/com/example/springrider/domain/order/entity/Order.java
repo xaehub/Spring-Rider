@@ -1,6 +1,7 @@
 package com.example.springrider.domain.order.entity;
 
 import com.example.springrider.domain.common.entity.BaseEntity;
+import com.example.springrider.domain.order.enums.OrderCancelReason;
 import com.example.springrider.domain.order.enums.OrderStatus;
 import com.example.springrider.domain.store.entity.Store;
 import com.example.springrider.domain.user.entity.User;
@@ -52,6 +53,12 @@ public class Order extends BaseEntity {
     @Setter
     private User user;
 
+    @Enumerated(EnumType.STRING)
+    private OrderCancelReason cancelReason;
+
+    @Column(length = 20)
+    private String cancelMessage;
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
@@ -70,5 +77,13 @@ public class Order extends BaseEntity {
     //상태 수정을 위한 클래스 내부 메서드
     public void changeStatus(OrderStatus status) {
         this.status = status;
+    }
+
+    public void setOrderCancelReason(OrderCancelReason cancelReason) {
+        this.cancelReason = cancelReason;
+    }
+
+    public void setCancelMessage(String message) {
+        this.cancelMessage = message;
     }
 }
