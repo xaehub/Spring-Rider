@@ -3,8 +3,8 @@ package com.example.springrider.domain.review.service;
 import com.example.springrider.domain.order.entity.Order;
 import com.example.springrider.domain.order.enums.OrderStatus;
 import com.example.springrider.domain.order.repository.OrderRepository;
-import com.example.springrider.domain.review.dto.CreateReviewRequestDto;
-import com.example.springrider.domain.review.dto.ReviewResponseDto;
+import com.example.springrider.domain.review.dto.request.CreateReviewRequestDto;
+import com.example.springrider.domain.review.dto.response.ReviewResponseDto;
 import com.example.springrider.domain.review.entity.Review;
 import com.example.springrider.domain.review.repository.ReviewRepository;
 import com.example.springrider.domain.user.entity.User;
@@ -43,6 +43,6 @@ public class ReviewService {
         order.changeStatus(OrderStatus.REVIEWED);
         Review review = Review.of(requestDto, findedUser, order);
         reviewRepository.save(review);
-        return ReviewResponseDto.toDto(review);
+        return ReviewResponseDto.of(review);
     }
 }
