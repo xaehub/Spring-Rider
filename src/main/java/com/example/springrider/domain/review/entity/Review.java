@@ -25,6 +25,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Review extends BaseEntity {
 
+    @Column(length = 50)
     private String contents;
 
     @Column(nullable = false)
@@ -36,7 +37,7 @@ public class Review extends BaseEntity {
     private User user;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", unique = true)
     private Order order;
 
     public static Review of(CreateReviewRequestDto requestDto, User user, Order order) {
