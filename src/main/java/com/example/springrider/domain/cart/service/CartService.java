@@ -124,17 +124,19 @@ public class CartService {
         }
 
         List<FindCartItemResponseDto> responseDtos = cartItems.stream()
-            .map(FindCartItemResponseDto::new).toList();
-        int sumTotalprice = sumTotalprice(responseDtos);
+            .map(FindCartItemResponseDto::of)
+            .toList();
 
-        return FindCartItemBulkResponseDto.toDto(responseDtos, cartItems.get(0).getStoreId(),
-            sumTotalprice);
+        int sumTotalPrice = sumTotalPrice(responseDtos);
+
+        return FindCartItemBulkResponseDto.of(responseDtos, cartItems.get(0).getStoreId(),
+            sumTotalPrice);
     }
 
-    public int sumTotalprice(List<FindCartItemResponseDto> responseDtos) {
-        int sum = responseDtos.stream().mapToInt(d -> d.getPrice() * d.getQuantity()
-        ).sum();
-        return sum;
+    public int sumTotalPrice(List<FindCartItemResponseDto> responseDtos) {
+        return responseDtos.stream()
+            .mapToInt(d -> d.getPrice() * d.getQuantity())
+            .sum();
     }
 
     @Transactional
@@ -156,7 +158,7 @@ public class CartService {
             cartItem.updateQuantity(requestDto.getQuantity());
             cartItem.changeStatus(requestDto.getStatus());
         }
-        return UpdateCartItemResponseDto.toDto(cartItem);
+        return UpdateCartItemResponseDto.of(cartItem);
     }
 
     public boolean isValidQuantity(UpdateCartItemRequestDto requestDto) {

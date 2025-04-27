@@ -14,10 +14,10 @@ public class FindCartItemBulkResponseDto {
 
     private final int totalPrice;
 
-    public static FindCartItemBulkResponseDto toDto(
+    public static FindCartItemBulkResponseDto of(
         List<FindCartItemResponseDto> responseDtos,
-        Long storeId,
-        int sumTotalprice) {
+        Long storeId, int sumTotalprice
+    ) {
         return new FindCartItemBulkResponseDto(
             responseDtos, storeId, sumTotalprice
         );
