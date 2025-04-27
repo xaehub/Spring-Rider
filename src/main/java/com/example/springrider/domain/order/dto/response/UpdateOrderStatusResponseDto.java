@@ -13,7 +13,7 @@ public class UpdateOrderStatusResponseDto {
 
     private final OrderStatus orderStatus;
 
-    public static UpdateOrderStatusResponseDto toDto(Order order) {
+    public static UpdateOrderStatusResponseDto of(Order order) {
         return new UpdateOrderStatusResponseDto(
             order.getId(), order.getStatus()
         );

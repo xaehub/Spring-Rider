@@ -18,7 +18,7 @@ public class CancelOrderResponseDto {
 
     private final String cancelMessage;
 
-    public static CancelOrderResponseDto toDto(Order order) {
+    public static CancelOrderResponseDto of(Order order) {
         return new CancelOrderResponseDto(
             order.getId(), order.getStatus(), order.getCancelReason(),
             order.getCancelMessage()

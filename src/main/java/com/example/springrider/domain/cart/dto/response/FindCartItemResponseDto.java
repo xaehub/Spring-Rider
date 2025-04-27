@@ -4,8 +4,8 @@ import com.example.springrider.domain.cart.entity.CartItem;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 @Getter
+@RequiredArgsConstructor
 public class FindCartItemResponseDto {
 
     private final Long cartItemId;
@@ -16,10 +16,12 @@ public class FindCartItemResponseDto {
 
     private final Integer quantity;
 
-    public FindCartItemResponseDto(CartItem cartItem) {
-        this.cartItemId = cartItem.getId();
-        this.MenuName = cartItem.getMenu().getName();
-        this.price = cartItem.getMenu().getPrice();
-        this.quantity = cartItem.getQuantity();
+    public static FindCartItemResponseDto of(CartItem cartItem) {
+        return new FindCartItemResponseDto(
+            cartItem.getId(),
+            cartItem.getMenu().getName(),
+            cartItem.getMenu().getPrice(),
+            cartItem.getQuantity()
+        );
     }
 }

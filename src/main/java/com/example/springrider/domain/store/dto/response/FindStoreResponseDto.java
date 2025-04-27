@@ -5,25 +5,25 @@ import com.example.springrider.domain.store.entity.Store;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class FindStoreResponseDto {
 
-    private Long id;
-    private String name;
-    private String address;
-    private String category;
-    private LocalTime openTime;
-    private LocalTime closeTime;
-    private Integer minOrderPrice;
-    private List<MenuResponseDto> menus;
+    private final Long id;
+    private final String name;
+    private final String address;
+    private final String category;
+    private final LocalTime openTime;
+    private final LocalTime closeTime;
+    private final Integer minOrderPrice;
+    private final List<MenuResponseDto> menus;
 
-    public static FindStoreResponseDto from(Store store) {
+    public static FindStoreResponseDto of(Store store) {
         List<MenuResponseDto> menuDtos = store.getMenus().stream()
-            .map(MenuResponseDto::toDto)
+            .map(MenuResponseDto::of)
             .collect(Collectors.toList());
 
         return new FindStoreResponseDto(

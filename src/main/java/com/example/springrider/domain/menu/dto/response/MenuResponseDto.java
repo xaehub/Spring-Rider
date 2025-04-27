@@ -2,11 +2,11 @@ package com.example.springrider.domain.menu.dto.response;
 
 import com.example.springrider.domain.menu.entity.Menu;
 import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MenuResponseDto {
 
     private final Long id;
@@ -18,7 +18,7 @@ public class MenuResponseDto {
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
 
-    public static MenuResponseDto toDto(Menu menu) {
+    public static MenuResponseDto of(Menu menu) {
         return new MenuResponseDto(
             menu.getId(),
             menu.getName(),

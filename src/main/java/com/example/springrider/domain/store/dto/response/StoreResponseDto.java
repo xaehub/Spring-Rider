@@ -3,26 +3,24 @@ package com.example.springrider.domain.store.dto.response;
 import com.example.springrider.domain.store.entity.Store;
 import com.example.springrider.domain.store.enums.StoreStatus;
 import java.time.LocalTime;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class StoreResponseDto {
 
-    private Long id;
-    private String name;
-    private String address;
-    private String category;
-    private LocalTime openTime;
-    private LocalTime closeTime;
-    private Integer minOrderPrice;
-    private StoreStatus status;
-    private String ownerName;
+    private final Long id;
+    private final String name;
+    private final String address;
+    private final String category;
+    private final LocalTime openTime;
+    private final LocalTime closeTime;
+    private final Integer minOrderPrice;
+    private final StoreStatus status;
+    private final String ownerName;
 
-    public static StoreResponseDto fromEntity(Store store) {
+    public static StoreResponseDto of(Store store) {
         return new StoreResponseDto(
             store.getId(),
             store.getName(),

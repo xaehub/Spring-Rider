@@ -12,7 +12,7 @@ public class UpdateCartItemResponseDto {
 
     private final Integer quantity;
 
-    public static UpdateCartItemResponseDto toDto(CartItem cartItem) {
+    public static UpdateCartItemResponseDto of(CartItem cartItem) {
         return new UpdateCartItemResponseDto(
             cartItem.getStatus().toString(),
             cartItem.getQuantity()
