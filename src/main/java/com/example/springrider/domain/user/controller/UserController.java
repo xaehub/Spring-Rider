@@ -85,7 +85,7 @@ public class UserController {
      * @return 200 ok
      */
     @PutMapping("/password") // 비밀번호 수정
-    public ApiResponse<Void> modifyPassword(
+    public ApiResponse<String> modifyPassword(
         @Valid @RequestBody PasswordModifyRequestDto requestDto,
         @SessionAttribute(name = "userId", required = false) Long userId,
         HttpSession session
@@ -93,7 +93,7 @@ public class UserController {
         validateSession(userId);
         userService.modifyPassword(requestDto, userId);
         session.invalidate();
-        return ApiResponse.ok(null);
+        return ApiResponse.ok("비밀번호가 성공적으로 변경되었습니다. 로그아웃 처리되었습니다.");
     }
 
     /**
