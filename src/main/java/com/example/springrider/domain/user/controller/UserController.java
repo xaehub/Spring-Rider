@@ -13,6 +13,7 @@ import com.example.springrider.domain.user.service.UserService;
 import com.example.springrider.global.exception.AuthException;
 import com.example.springrider.global.exception.ExceptionCode;
 import com.example.springrider.global.response.ApiResponse;
+import com.example.springrider.global.response.ResponseMessage;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -67,7 +68,7 @@ public class UserController {
      * @return 200 ok
      */
     @DeleteMapping("/withdraw") // 회원탈퇴
-    public ApiResponse<Void> delete(
+    public ApiResponse<String> delete(
         @Valid @RequestBody DeleteUserRequestDto requestDto,
         @SessionAttribute(name = Const.SESSION_USER_ID, required = false) Long userId,
         HttpSession session
@@ -75,7 +76,7 @@ public class UserController {
         validateSession(userId);
         userService.delete(requestDto, userId);
         session.invalidate();
-        return ApiResponse.ok(null);
+        return ApiResponse.ok(ResponseMessage.USER_DELETED.getMessage());
     }
 
     /**
@@ -86,7 +87,7 @@ public class UserController {
      * @return 200 ok
      */
     @PutMapping("/password") // 비밀번호 수정
-    public ApiResponse<Void> modifyPassword(
+    public ApiResponse<String> modifyPassword(
         @Valid @RequestBody PasswordModifyRequestDto requestDto,
         @SessionAttribute(name = Const.SESSION_USER_ID, required = false) Long userId,
         HttpSession session
@@ -94,7 +95,7 @@ public class UserController {
         validateSession(userId);
         userService.modifyPassword(requestDto, userId);
         session.invalidate();
-        return ApiResponse.ok(null);
+        return ApiResponse.ok(ResponseMessage.PASSWORD_MODIFY_SUCCESS.getMessage());
     }
 
     /**
@@ -108,11 +109,11 @@ public class UserController {
         @SessionAttribute(name = "userId", required = false) Long userId, HttpSession session) {
         validateSession(userId);
         session.invalidate();
-        return ApiResponse.ok("로그아웃 완료");
+        return ApiResponse.ok(ResponseMessage.LOGOUT_SUCCESS.getMessage());
     }
 
     @PatchMapping("/profile")
-    public ApiResponse<User> updateProfile(
+    public ApiResponse<String> updateProfile(
         @Valid @RequestBody ProfileModifyRequestDto requestDto,
         @SessionAttribute(name = Const.SESSION_USER_ID, required = false) Long userId
     ) {
@@ -122,7 +123,7 @@ public class UserController {
         userService.updateProfile(requestDto, userId);
 
         User updatedUser = userService.findById(userId);
-        return ApiResponse.ok(updatedUser);
+        return ApiResponse.ok(ResponseMessage.PROFILE_UPDATE_SUCCESS.getMessage());
 
     }
 
