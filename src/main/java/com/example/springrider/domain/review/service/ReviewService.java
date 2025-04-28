@@ -15,6 +15,9 @@ import com.example.springrider.global.exception.InvalidRequestException;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,17 +54,32 @@ public class ReviewService {
     }
 
     @Transactional(readOnly = true)
-    public FindAllReviewResponseDto findAll(Long storeId) {
+    public FindAllReviewResponseDto findAll(Long storeId, int pageNumber, int size) {
+        //PageNUmber가 음수 일때에 대한 방어 코드
+        if (pageNumber < 1) {
+            pageNumber = 1;
+        }
+        // PageRequest는 0부터 시작하므로 pageNumber에서 1을 뺀다
+        Pageable pageable = PageRequest.of(pageNumber - 1, size);
+
         if (!storeRepository.existsById(storeId)) {
             throw new InvalidRequestException(ExceptionCode.STORE_NOT_FOUND);
         }
-        List<Review> reviews = reviewRepository.findAllByStoreId(storeId);
+
+        Page<Review> reviewPage = reviewRepository.findAllByStoreId(storeId, pageable);
+        List<Review> reviews = reviewPage.getContent();
+
         if (reviews.isEmpty()) {
             throw new InvalidRequestException(ExceptionCode.REVIEW_NOT_FOUND);
         }
+
         List<ReviewResponseDto> reviewResponseDtos = reviews.stream()
-            .map(d -> ReviewResponseDto.of(d)).toList();
-        return FindAllReviewResponseDto.of(reviews.get(0).getOrder().getStore().getName(),
-            reviewResponseDtos);
+            .map(ReviewResponseDto::of)
+            .toList();
+
+        return FindAllReviewResponseDto.of(
+            reviews.get(0).getOrder().getStore().getName(),
+            reviewResponseDtos
+        );
     }
 }
