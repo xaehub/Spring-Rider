@@ -104,11 +104,11 @@ public class UserController {
      * @return 200 ok
      */
     @DeleteMapping("/logout") // 로그아웃
-    public ApiResponse<Void> logout(
+    public ApiResponse<String> logout(
         @SessionAttribute(name = "userId", required = false) Long userId, HttpSession session) {
         validateSession(userId);
         session.invalidate();
-        return ApiResponse.ok(null);
+        return ApiResponse.ok("로그아웃 완료");
     }
 
     @PatchMapping("/profile")
