@@ -24,6 +24,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final DefaultPasswordEncoder defaultPasswordEncoder;
 
+
+    public User findById(Long userId) {
+        return userRepository.findById(userId)
+            .orElseThrow(() -> new AuthException(ExceptionCode.USER_NOT_FOUND));
+    }
+
+
     /**
      * 회원가입 요청 서비스
      *

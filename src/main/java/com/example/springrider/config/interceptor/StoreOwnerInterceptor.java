@@ -1,12 +1,12 @@
 package com.example.springrider.config.interceptor;
 
-import com.example.springrider.global.exception.AuthException;
-import com.example.springrider.global.exception.ExceptionCode;
 import com.example.springrider.domain.store.entity.Store;
-import com.example.springrider.domain.store.repository.StoreRepository;
+import com.example.springrider.domain.store.service.OwnerStoreService;
 import com.example.springrider.domain.user.entity.User;
 import com.example.springrider.domain.user.enums.UserRole;
-import com.example.springrider.domain.user.repository.UserRepository;
+import com.example.springrider.domain.user.service.UserService;
+import com.example.springrider.global.exception.AuthException;
+import com.example.springrider.global.exception.ExceptionCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +17,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @RequiredArgsConstructor
 public class StoreOwnerInterceptor implements HandlerInterceptor {
 
-    private final StoreRepository storeRepository;
-    private final UserRepository userRepository;
+    private final OwnerStoreService ownerStoreService;
+    private final UserService userService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
@@ -26,39 +26,38 @@ public class StoreOwnerInterceptor implements HandlerInterceptor {
 
         Long userId = (Long) request.getAttribute("userId");
 
-        // userId가 null일 경우
+        // 로그인 여부 확인
         if (userId == null) {
             throw new AuthException(ExceptionCode.STORE_ACCESS_DENIED);
         }
 
-        // 실제 유저를 조회
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new AuthException(ExceptionCode.USER_NOT_FOUND));
-
-        // 사장 권한 확인
+        // 사장 권한 확인 및 유저 확인
+        User user = userService.findById(userId);
         if (user.getRole() != UserRole.OWNER) {
             throw new AuthException(ExceptionCode.STORE_OWNER_ONLY);
         }
 
-        // storeId 추출
-        String[] parts = request.getRequestURI().split("/");
-        if (parts.length >= 4 && "stores".equals(parts[2])) {
-            try {
-                Long storeId = Long.parseLong(parts[3]);
-
-                Store store = storeRepository.findById(storeId)
-                    .orElseThrow(
-                        () -> new AuthException(ExceptionCode.STORE_NOT_FOUND));
-
-                if (!store.getUser().getId().equals(user.getId())) {
-                    throw new AuthException(ExceptionCode.STORE_USER_MISMATCH);
-                }
-
-            } catch (NumberFormatException e) {
-                throw new AuthException(ExceptionCode.STORE_NOT_FOUND);
+        // storeId 가 가게소유자인지 확인 아니면 예외
+        Long storeId = extractStoreId(request);
+        if (storeId != null) {
+            Store store = ownerStoreService.findEntity(storeId); // 가게를 조회
+            if (!store.getUser().getId().equals(user.getId())) {
+                throw new AuthException(ExceptionCode.STORE_USER_MISMATCH);
             }
         }
 
         return true;
+    }
+
+    private Long extractStoreId(HttpServletRequest request) {
+        String[] parts = request.getRequestURI().split("/");
+        if (parts.length >= 4 && "stores".equals(parts[2])) { // storedId 추출
+            try {
+                return Long.parseLong(parts[3]); // storeId를 숫자로 변환
+            } catch (NumberFormatException e) {
+                throw new AuthException(ExceptionCode.STORE_NOT_FOUND);
+            }
+        }
+        return null;
     }
 }
