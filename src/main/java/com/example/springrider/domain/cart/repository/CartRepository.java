@@ -34,9 +34,14 @@ public interface CartRepository extends JpaRepository<CartItem, Long> {
 
     @Query("SELECT ci FROM CartItem ci " +
         "JOIN FETCH ci.user " +
-        "WHERE ci.id = :id")
-    Optional<CartItem> findByIdWithUser(
-        @Param("id") Long cartItemId);
+        "WHERE ci.id = :id AND ci.modifiedAt > :limit")
+    Optional<CartItem> findByIdAndModifiedAtAfterWithUser(
+        @Param("id") Long cartItemId,
+        @Param("limit") LocalDateTime limit);
+
+    @Query("SELECT ci FROM CartItem ci " +
+        "WHERE ci.modifiedAt < :limit")
+    List<CartItem> findByModifiedAtBefore(@Param("limit") LocalDateTime limit);
 
     List<CartItem> findByUserIdAndModifiedAtAfterAndStatus(
         Long userId, LocalDateTime limit, CartItemStatus status);
@@ -45,7 +50,9 @@ public interface CartRepository extends JpaRepository<CartItem, Long> {
         "JOIN FETCH ci.menu m " +
         "JOIN FETCH m.store " +
         "WHERE ci.user.id = :userId AND ci.modifiedAt > :limit AND ci.status = 'SELECT'")
-    List<CartItem> findSelectedCartItemsWithMenuAndStore(
+    List<CartItem> findSelectedCartItemsWithMenuAndStoreAndUser(
         @Param("userId") Long userId,
         @Param("limit") LocalDateTime limit);
+
+
 }
