@@ -41,13 +41,13 @@ public class SessionLoginCheckFilter extends OncePerRequestFilter {
             setErrorResponse(response, ex);
         }
     }
-
     private boolean isLoginRequired(HttpServletRequest request) {
         // 로그인 체크가 필요한 URL을 필터링 (예: 정적 자원 제외, 특정 경로 등)
         String uri = request.getRequestURI();
         return uri.startsWith("/api/") && !uri.equals(Const.LOGIN_URI) && !uri.equals(
             Const.SIGNUP_URI);
     }
+
 
     private void checkSession(HttpServletRequest request) {
         if (request.getSession(false) == null

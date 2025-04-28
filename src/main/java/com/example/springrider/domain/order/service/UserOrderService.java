@@ -16,11 +16,14 @@ import com.example.springrider.domain.user.repository.UserRepository;
 import com.example.springrider.global.exception.ExceptionCode;
 import com.example.springrider.global.exception.InvalidRequestException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserOrderService {
@@ -82,7 +85,13 @@ public class UserOrderService {
             .orElseThrow(() -> new InvalidRequestException(ExceptionCode.ORDER_NOT_FOUND));
 
         // 6. 장바구니 초기화
-        cartService.processDelete(cartItems, userId);
+        String startTimeStamp = LocalDateTime.now()
+            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        log.info("[주문/장바구니 초기화] userId : {} | 시작 : {}", userId, startTimeStamp);
+        cartService.processDelete(cartItems);
+        String endTimeStamp = LocalDateTime.now()
+            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        log.info("[주문/장바구니 초기화] userId : {} | 정상 종료 : {}", userId, endTimeStamp);
         return OrderResponseDto.of(orderWithItems);
     }
 

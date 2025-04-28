@@ -21,10 +21,12 @@ import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@BatchSize(size = 100)
 @Table(name = "orders", indexes = {
     @Index(name = "idx_order_user", columnList = "user_id"),
     @Index(name = "idx_order_store", columnList = "store_id")

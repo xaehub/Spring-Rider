@@ -1,9 +1,10 @@
 package com.example.springrider.domain.order.controller;
 
-import com.example.springrider.global.response.ApiResponse;
+import com.example.springrider.config.Const;
 import com.example.springrider.domain.order.dto.request.CreateOrderRequestDto;
 import com.example.springrider.domain.order.dto.response.OrderResponseDto;
 import com.example.springrider.domain.order.service.UserOrderService;
+import com.example.springrider.global.response.ApiResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +30,7 @@ public class UserOrderController {
     @PostMapping
     public ApiResponse<OrderResponseDto> create(
         @RequestBody CreateOrderRequestDto requestDto,
-        @SessionAttribute(name = "userId") Long userId
+        @SessionAttribute(name = Const.SESSION_USER_ID) Long userId
     ) {
         return ApiResponse.created(userOrderService.create(requestDto, userId));
     }
@@ -42,7 +43,7 @@ public class UserOrderController {
      */
     @GetMapping
     public ApiResponse<List<OrderResponseDto>> findAll(
-        @SessionAttribute(name = "userId") Long userId) {
+        @SessionAttribute(name = Const.SESSION_USER_ID) Long userId) {
         return ApiResponse.ok(userOrderService.findAll(userId));
     }
 }
