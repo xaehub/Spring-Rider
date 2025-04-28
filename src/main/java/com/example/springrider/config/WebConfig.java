@@ -29,6 +29,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(storeOwnerInterceptor)
-            .addPathPatterns("/api/stores/**"); // 사장 인증 경로
+            .addPathPatterns("/api/owners/**"); // 사장 인증 경로
     }
 }
