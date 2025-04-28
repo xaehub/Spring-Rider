@@ -1,6 +1,7 @@
 package com.example.springrider.domain.review.controller;
 
 
+import com.example.springrider.config.Const;
 import com.example.springrider.domain.review.dto.request.CreateReviewRequestDto;
 import com.example.springrider.domain.review.dto.response.FindAllReviewResponseDto;
 import com.example.springrider.domain.review.dto.response.ReviewResponseDto;
@@ -26,9 +27,11 @@ public class ReviewController {
 
     @PostMapping("/customers/orders/{orderId}/reviews")
     public ApiResponse<ReviewResponseDto> create(
-        @PathVariable Long orderId, @Valid @RequestBody CreateReviewRequestDto requestDto,
-        @SessionAttribute(name = "userId") Long userId) {
-        return ApiResponse.ok(reviewService.create(orderId, userId, requestDto));
+        @PathVariable Long orderId,
+        @Valid @RequestBody CreateReviewRequestDto requestDto,
+        @SessionAttribute(name = Const.SESSION_USER_ID) Long userId
+    ) {
+        return ApiResponse.created(reviewService.create(orderId, userId, requestDto));
     }
 
     @GetMapping("/customers/stores/{storeId}/reviews/page/{pageNumber}")

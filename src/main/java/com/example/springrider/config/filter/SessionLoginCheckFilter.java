@@ -42,12 +42,12 @@ public class SessionLoginCheckFilter implements Filter {
         }
 
         // 로그인 상태 확인
-        if (session == null || session.getAttribute("userId") == null) {
+        if (session == null || session.getAttribute(Const.SESSION_USER_ID) == null) {
             throw new AuthException(ExceptionCode.STORE_ACCESS_DENIED);
         }
 
         // 요청에 사용자 정보 저장
-        req.setAttribute("userId", session.getAttribute("userId"));
+        req.setAttribute(Const.SESSION_USER_ID, session.getAttribute(Const.SESSION_USER_ID));
 
         chain.doFilter(request, response);
 

@@ -1,5 +1,6 @@
 package com.example.springrider.domain.store.controller;
 
+import com.example.springrider.config.Const;
 import com.example.springrider.domain.store.dto.request.StoreRequestDto;
 import com.example.springrider.domain.store.dto.request.UpdateStoreRequestDto;
 import com.example.springrider.domain.store.dto.response.StoreResponseDto;
@@ -32,7 +33,7 @@ public class OwnerStoreController {
     @PostMapping("/owners/stores")
     public ApiResponse<StoreResponseDto> create(
         @Valid @RequestBody StoreRequestDto storeRequestDto,
-        @SessionAttribute(name = "userId") Long userId
+        @SessionAttribute(name = Const.SESSION_USER_ID) Long userId
     ) {
         return ApiResponse.created(ownerStoreService.create(storeRequestDto, userId));
     }
@@ -49,9 +50,8 @@ public class OwnerStoreController {
     public ApiResponse<StoreResponseDto> update(
         @Valid @RequestBody UpdateStoreRequestDto requestDto,
         @PathVariable Long storeId,
-        @SessionAttribute(name = "userId", required = false) Long userId
+        @SessionAttribute(name = Const.SESSION_USER_ID, required = false) Long userId
     ) {
-        StoreResponseDto responseDto = ownerStoreService.update(storeId, requestDto, userId);
-        return ApiResponse.ok(responseDto);
+        return ApiResponse.ok(ownerStoreService.update(storeId, requestDto, userId));
     }
 }

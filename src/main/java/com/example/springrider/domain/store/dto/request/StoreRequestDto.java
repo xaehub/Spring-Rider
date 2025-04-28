@@ -30,6 +30,7 @@ public class StoreRequestDto {
     private LocalTime closeTime;
 
     @Positive(message = "최소 주문 금액은 1원 이상이어야 합니다.")
+    @NotNull(message = "최소 주문 금액은 필수입니다.")
     private Integer minOrderPrice;
 
     private StoreStatus status = StoreStatus.ACTIVE;
