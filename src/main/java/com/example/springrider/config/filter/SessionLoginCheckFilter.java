@@ -33,6 +33,9 @@ public class SessionLoginCheckFilter extends OncePerRequestFilter {
         try {
             if (isLoginRequired(request)) {
                 checkSession(request); // 세션 확인
+
+                request.setAttribute(Const.SESSION_USER_ID,
+                    request.getSession(false).getAttribute(Const.SESSION_USER_ID));
             }
 
             filterChain.doFilter(request, response); // 필터 체인 계속 진행
@@ -41,6 +44,7 @@ public class SessionLoginCheckFilter extends OncePerRequestFilter {
             setErrorResponse(response, ex);
         }
     }
+
     private boolean isLoginRequired(HttpServletRequest request) {
         // 로그인 체크가 필요한 URL을 필터링 (예: 정적 자원 제외, 특정 경로 등)
         String uri = request.getRequestURI();
