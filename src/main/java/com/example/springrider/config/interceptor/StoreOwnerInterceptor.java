@@ -1,12 +1,13 @@
 package com.example.springrider.config.interceptor;
 
-import com.example.springrider.global.exception.AuthException;
-import com.example.springrider.global.exception.ExceptionCode;
+import com.example.springrider.config.Const;
 import com.example.springrider.domain.store.entity.Store;
 import com.example.springrider.domain.store.repository.StoreRepository;
 import com.example.springrider.domain.user.entity.User;
 import com.example.springrider.domain.user.enums.UserRole;
 import com.example.springrider.domain.user.repository.UserRepository;
+import com.example.springrider.global.exception.AuthException;
+import com.example.springrider.global.exception.ExceptionCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +22,11 @@ public class StoreOwnerInterceptor implements HandlerInterceptor {
     private final UserRepository userRepository;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
-        Object handler) throws Exception {
+    public boolean preHandle(
+        HttpServletRequest request, HttpServletResponse response, Object handler
+    ) throws Exception {
 
-        Long userId = (Long) request.getAttribute("userId");
+        Long userId = (Long) request.getAttribute(Const.SESSION_USER_ID);
 
         // userId가 null일 경우
         if (userId == null) {
