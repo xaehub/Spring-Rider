@@ -170,6 +170,7 @@ public class CartService {
         return requestDto.getStatus() != null;
     }
 
+    //장바구니 삭제 api 전용 메서드
     @Transactional
     public void delete(Long userId) {
         LocalDateTime limit = LocalDateTime.now().minusDays(1);
@@ -179,6 +180,11 @@ public class CartService {
         if (cartItems.isEmpty()) {
             throw new InvalidRequestException(ExceptionCode.EMPTY_CART);
         }
+        processDelete(cartItems, userId);
+    }
+
+    //실제 repository와 연동하는 장바구니 삭제 메서드
+    public void processDelete(List<CartItem> cartItems, Long userId) {
         int errorCount = 0;
         for (CartItem item : cartItems) {
             try {

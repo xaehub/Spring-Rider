@@ -2,9 +2,13 @@ package com.example.springrider.domain.review.entity;
 
 import com.example.springrider.domain.common.entity.BaseEntity;
 import com.example.springrider.domain.order.entity.Order;
+import com.example.springrider.domain.review.dto.request.CreateReviewRequestDto;
+import com.example.springrider.domain.review.enums.Rating;
 import com.example.springrider.domain.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -21,18 +25,24 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Review extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(length = 50)
     private String contents;
 
     @Column(nullable = false)
-    private Integer rate;
+    @Enumerated(EnumType.STRING)
+    private Rating rating;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id", unique = true)
     private Order order;
 
+    public static Review of(CreateReviewRequestDto requestDto, User user, Order order) {
+        return new Review(
+            requestDto.getContents(), Rating.from(requestDto.getRating()), user, order
+        );
+    }
 }

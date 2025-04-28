@@ -12,6 +12,7 @@ public enum ExceptionCode {
     PASSWORD_NOT_MATCH("비밀번호가 일치하지 않습니다."),
     ALREADY_LOGGED_IN("이미 로그인된 상태입니다."),
     UNAUTHORIZED("로그인 후 이용 가능합니다."),
+    FORBIDDEN_REQUEST("권한이 없는 요청입니다."),
 
     // 회원
     USER_EXCEPTION("회원 예외 메세지"),
@@ -40,6 +41,7 @@ public enum ExceptionCode {
     INVALID_ORDER_STATUS("올바르지 않은 주문 상태 코드입니다."),
     INVALID_ORDER_CANCEL_REASON("올바르지 않은 주문 취소 코드입니다."),
     REQUIRED_ORDER_CANCEL_MESSAGE_FOR_OTHER("취소 사유가 '기타(OTHER)'인 경우, 취소 메세지를 입력해야 합니다."),
+    REVIEW_NOT_AVAILABLE_YET("배달이 완료 되면 리뷰를 작성할 수 있습니다."),
 
     // 장바구니
     CART_EXCEPTION("장바구니 예외 메세지"),
@@ -53,6 +55,8 @@ public enum ExceptionCode {
 
     // 리뷰
     REVIEW_EXCEPTION("리뷰 예외 메세지"),
+    INVALID_RATING("올바르지 않은 등급 코드입니다."),
+    REVIEW_ALREADY_EXISTS("이미 이 주문에 대한 리뷰가 존재합니다."),
 
     // 공통
     NOT_VALID_EXCEPTION("validation 예외 발생"),
