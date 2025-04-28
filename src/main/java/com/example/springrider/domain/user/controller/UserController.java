@@ -7,6 +7,7 @@ import com.example.springrider.domain.user.dto.request.ProfileModifyRequestDto;
 import com.example.springrider.domain.user.dto.request.SignupRequestDto;
 import com.example.springrider.domain.user.dto.response.LoginResponseDto;
 import com.example.springrider.domain.user.dto.response.SignupResponseDto;
+import com.example.springrider.domain.user.entity.User;
 import com.example.springrider.domain.user.service.UserService;
 import com.example.springrider.global.exception.AuthException;
 import com.example.springrider.global.exception.ExceptionCode;
@@ -110,7 +111,7 @@ public class UserController {
     }
 
     @PatchMapping("/profile")
-    public ApiResponse<Void> updateProfile(
+    public ApiResponse<User> updateProfile(
         @Valid @RequestBody ProfileModifyRequestDto requestDto,
         @SessionAttribute(name = "userId", required = false) Long userId
     ) {
@@ -119,7 +120,8 @@ public class UserController {
 
         userService.updateProfile(requestDto, userId);
 
-        return ApiResponse.ok(null);
+        User updatedUser = userService.findById(userId);
+        return ApiResponse.ok(updatedUser);
 
     }
 
