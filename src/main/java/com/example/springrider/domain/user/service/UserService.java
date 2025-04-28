@@ -88,7 +88,7 @@ public class UserService {
 
         // 이메일 일치 체크
         if (!user.getEmail().equals(requestDto.getEmail())) {
-            throw new AuthException(ExceptionCode.EMAIL_NOT_FOUND);
+            throw new AuthException(ExceptionCode.ACCESS_DENIED);
         }
 
         // 비밀번호 일치 체크
