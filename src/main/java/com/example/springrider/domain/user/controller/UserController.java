@@ -1,5 +1,6 @@
 package com.example.springrider.domain.user.controller;
 
+import com.example.springrider.config.Const;
 import com.example.springrider.domain.user.dto.request.DeleteUserRequestDto;
 import com.example.springrider.domain.user.dto.request.LoginRequestDto;
 import com.example.springrider.domain.user.dto.request.PasswordModifyRequestDto;
@@ -68,7 +69,7 @@ public class UserController {
     @DeleteMapping("/withdraw") // 회원탈퇴
     public ApiResponse<Void> delete(
         @Valid @RequestBody DeleteUserRequestDto requestDto,
-        @SessionAttribute(name = "userId", required = false) Long userId,
+        @SessionAttribute(name = Const.SESSION_USER_ID, required = false) Long userId,
         HttpSession session
     ) {
         validateSession(userId);
@@ -87,7 +88,7 @@ public class UserController {
     @PutMapping("/password") // 비밀번호 수정
     public ApiResponse<Void> modifyPassword(
         @Valid @RequestBody PasswordModifyRequestDto requestDto,
-        @SessionAttribute(name = "userId", required = false) Long userId,
+        @SessionAttribute(name = Const.SESSION_USER_ID, required = false) Long userId,
         HttpSession session
     ) {
         validateSession(userId);
@@ -113,7 +114,7 @@ public class UserController {
     @PatchMapping("/profile")
     public ApiResponse<User> updateProfile(
         @Valid @RequestBody ProfileModifyRequestDto requestDto,
-        @SessionAttribute(name = "userId", required = false) Long userId
+        @SessionAttribute(name = Const.SESSION_USER_ID, required = false) Long userId
     ) {
         // 로그인 여부 확인
         validateSession(userId);
@@ -128,7 +129,6 @@ public class UserController {
     private void validateSession(Long userId) {
         if (userId == null) {
             throw new AuthException(ExceptionCode.UNAUTHORIZED);
-
         }
     }
 }

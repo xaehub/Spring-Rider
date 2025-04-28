@@ -1,5 +1,6 @@
 package com.example.springrider.config.interceptor;
 
+import com.example.springrider.config.Const;
 import com.example.springrider.domain.store.entity.Store;
 import com.example.springrider.domain.store.service.OwnerStoreService;
 import com.example.springrider.domain.user.entity.User;
@@ -21,10 +22,11 @@ public class StoreOwnerInterceptor implements HandlerInterceptor {
     private final UserService userService;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
-        Object handler) throws Exception {
+    public boolean preHandle(
+        HttpServletRequest request, HttpServletResponse response, Object handler
+    ) throws Exception {
 
-        Long userId = (Long) request.getAttribute("userId");
+        Long userId = (Long) request.getAttribute(Const.SESSION_USER_ID);
 
         // 로그인 여부 확인
         if (userId == null) {
