@@ -50,9 +50,10 @@ public class UserController {
      */
     @PostMapping("/login")
     public ApiResponse<LoginResponseDto> login(
-        @Valid @RequestBody LoginRequestDto requestDto, HttpSession session
-    ) {
-        return ApiResponse.ok(userService.login(requestDto, session));
+        @Valid @RequestBody LoginRequestDto requestDto, HttpSession session) {
+        LoginResponseDto responseDto = userService.login(requestDto);
+        session.setAttribute("userId", responseDto.getUserId());
+        return ApiResponse.ok(responseDto);
     }
 
     /**
@@ -69,10 +70,9 @@ public class UserController {
         @SessionAttribute(name = "userId", required = false) Long userId,
         HttpSession session
     ) {
-        if (userId == null) {
-            throw new AuthException(ExceptionCode.UNAUTHORIZED);
-        }
-        userService.delete(requestDto, userId, session);
+        validateSession(userId);
+        userService.delete(requestDto, userId);
+        session.invalidate();
         return ApiResponse.ok(null);
     }
 
@@ -89,10 +89,9 @@ public class UserController {
         @SessionAttribute(name = "userId", required = false) Long userId,
         HttpSession session
     ) {
-        if (userId == null) {
-            throw new AuthException(ExceptionCode.UNAUTHORIZED);
-        }
-        userService.modifyPassword(requestDto, userId, session);
+        validateSession(userId);
+        userService.modifyPassword(requestDto, userId);
+        session.invalidate();
         return ApiResponse.ok(null);
     }
 
@@ -103,8 +102,10 @@ public class UserController {
      * @return 200 ok
      */
     @DeleteMapping("/logout") // 로그아웃
-    public ApiResponse<Void> logout(HttpSession session) {
-        userService.logout(session);
+    public ApiResponse<Void> logout(
+        @SessionAttribute(name = "userId", required = false) Long userId, HttpSession session) {
+        validateSession(userId);
+        session.invalidate();
         return ApiResponse.ok(null);
     }
 
@@ -114,13 +115,18 @@ public class UserController {
         @SessionAttribute(name = "userId", required = false) Long userId
     ) {
         // 로그인 여부 확인
-        if (userId == null) {
-            throw new AuthException(ExceptionCode.UNAUTHORIZED);
-        }
+        validateSession(userId);
 
         userService.updateProfile(requestDto, userId);
 
         return ApiResponse.ok(null);
 
+    }
+
+    private void validateSession(Long userId) {
+        if (userId == null) {
+            throw new AuthException(ExceptionCode.UNAUTHORIZED);
+
+        }
     }
 }
