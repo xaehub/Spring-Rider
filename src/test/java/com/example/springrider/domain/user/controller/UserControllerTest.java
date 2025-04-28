@@ -6,13 +6,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.example.springrider.domain.store.repository.StoreRepository;
+import com.example.springrider.config.interceptor.StoreOwnerInterceptor;
 import com.example.springrider.domain.user.dto.request.LoginRequestDto;
 import com.example.springrider.domain.user.dto.request.SignupRequestDto;
 import com.example.springrider.domain.user.dto.response.LoginResponseDto;
 import com.example.springrider.domain.user.dto.response.SignupResponseDto;
 import com.example.springrider.domain.user.enums.UserRole;
-import com.example.springrider.domain.user.repository.UserRepository;
 import com.example.springrider.domain.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
@@ -29,6 +28,7 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(UserController.class)
+@MockBean(JpaMetamodelMappingContext.class)
 class UserControllerTest {
 
     @Autowired
@@ -38,16 +38,11 @@ class UserControllerTest {
     ObjectMapper objectMapper;
 
     @MockBean
-    UserService userService;
+    private StoreOwnerInterceptor storeOwnerInterceptor;
 
     @MockBean
-    UserRepository userRepository;
+    private UserService userService;
 
-    @MockBean
-    StoreRepository storeRepository;
-
-    @MockBean
-    JpaMetamodelMappingContext jpaMetamodelMappingContext;
 
     @Test
     @DisplayName("회원가입 성공")
