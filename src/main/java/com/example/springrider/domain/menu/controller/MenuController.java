@@ -1,5 +1,6 @@
 package com.example.springrider.domain.menu.controller;
 
+import com.example.springrider.config.Const;
 import com.example.springrider.domain.menu.dto.request.MenuRequestDto;
 import com.example.springrider.domain.menu.dto.response.MenuResponseDto;
 import com.example.springrider.domain.menu.service.MenuService;
@@ -32,7 +33,7 @@ public class MenuController {
     public ApiResponse<MenuResponseDto> create(
         @PathVariable Long storeId,
         @Valid @RequestBody MenuRequestDto requestDto,
-        @SessionAttribute(name = "userId") Long userId
+        @SessionAttribute(name = Const.SESSION_USER_ID) Long userId
     ) {
         return ApiResponse.created(menuService.create(userId, storeId, requestDto));
     }
@@ -50,7 +51,7 @@ public class MenuController {
     public ApiResponse<MenuResponseDto> update(
         @PathVariable Long storeId, @PathVariable Long menuId,
         @Valid @RequestBody MenuRequestDto requestDto,
-        @SessionAttribute(name = "userId") Long userId
+        @SessionAttribute(name = Const.SESSION_USER_ID) Long userId
     ) {
         return ApiResponse.ok(menuService.update(storeId, menuId, userId, requestDto));
     }
@@ -66,7 +67,7 @@ public class MenuController {
     @DeleteMapping("/{storeId}/menus/{menuId}")
     public ApiResponse<MenuResponseDto> delete(
         @PathVariable Long storeId, @PathVariable Long menuId,
-        @SessionAttribute(name = "userId") Long userId
+        @SessionAttribute(name = Const.SESSION_USER_ID) Long userId
     ) {
         return ApiResponse.ok(menuService.delete(storeId, menuId, userId));
     }
