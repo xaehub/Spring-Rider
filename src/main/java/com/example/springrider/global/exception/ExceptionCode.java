@@ -57,6 +57,7 @@ public enum ExceptionCode {
     REVIEW_EXCEPTION("리뷰 예외 메세지"),
     INVALID_RATING("올바르지 않은 등급 코드입니다."),
     REVIEW_ALREADY_EXISTS("이미 이 주문에 대한 리뷰가 존재합니다."),
+    REVIEW_NOT_FOUND("리뷰가 존재하지 않습니다."),
 
     // 공통
     NOT_VALID_EXCEPTION("validation 예외 발생"),
