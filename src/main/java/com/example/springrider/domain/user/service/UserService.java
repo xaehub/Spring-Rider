@@ -1,8 +1,5 @@
 package com.example.springrider.domain.user.service;
 
-import com.example.springrider.global.exception.AuthException;
-import com.example.springrider.global.exception.ExceptionCode;
-import com.example.springrider.global.exception.InvalidRequestException;
 import com.example.springrider.domain.user.dto.request.DeleteUserRequestDto;
 import com.example.springrider.domain.user.dto.request.LoginRequestDto;
 import com.example.springrider.domain.user.dto.request.PasswordModifyRequestDto;
@@ -12,6 +9,9 @@ import com.example.springrider.domain.user.dto.response.LoginResponseDto;
 import com.example.springrider.domain.user.dto.response.SignupResponseDto;
 import com.example.springrider.domain.user.entity.User;
 import com.example.springrider.domain.user.repository.UserRepository;
+import com.example.springrider.global.exception.AuthException;
+import com.example.springrider.global.exception.ExceptionCode;
+import com.example.springrider.global.exception.InvalidRequestException;
 import com.example.springrider.global.security.DefaultPasswordEncoder;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +39,6 @@ public class UserService {
         User user = User.of(requestDto, encodedPassword, false, 0);
 
         User savedUser = userRepository.save(user);
-
         return SignupResponseDto.of(savedUser);
     }
 
@@ -47,14 +46,9 @@ public class UserService {
      * 로그인 요청 서비스
      *
      * @param requestDto 로그인 정보가 담긴 {@link LoginRequestDto}
-     * @param session    세션 정보
      * @return 로그인 유저 정보가 담긴 {@link LoginResponseDto}
      */
-    public LoginResponseDto login(LoginRequestDto requestDto, HttpSession session) {
-        if (session.getAttribute("userId") != null) {
-            throw new AuthException(ExceptionCode.ALREADY_LOGGED_IN);
-        }
-
+    public LoginResponseDto login(LoginRequestDto requestDto) {
         User user = userRepository.findByEmailOrElseThrow(requestDto.getEmail());
 
         if (user.getIsWithdraw()) {
@@ -65,8 +59,6 @@ public class UserService {
             throw new AuthException(ExceptionCode.PASSWORD_NOT_MATCH);
         }
 
-        session.setAttribute("userId", user.getId());
-
         return LoginResponseDto.of(user);
     }
 
@@ -75,9 +67,8 @@ public class UserService {
      *
      * @param requestDto 회원 정보가 담긴 {@link DeleteUserRequestDto}
      * @param userId     유저 식별자
-     * @param session    세션 정보
      */
-    public void delete(DeleteUserRequestDto requestDto, Long userId, HttpSession session) {
+    public void delete(DeleteUserRequestDto requestDto, Long userId) {
         if (userId == null) {
             throw new AuthException(ExceptionCode.UNAUTHORIZED);
         }
@@ -99,10 +90,8 @@ public class UserService {
         }
 
         user.withdraw(); // 소프트 딜리트
-
         userRepository.save(user);
 
-        session.invalidate();
     }
 
     /**
@@ -111,19 +100,17 @@ public class UserService {
      * @param requestDto 비밀번호 정보가 담긴 {@link PasswordModifyRequestDto}
      * @param userId     유저 식별자
      */
-    public void modifyPassword(
-        PasswordModifyRequestDto requestDto, Long userId, HttpSession session) {
-
+    public void modifyPassword(PasswordModifyRequestDto requestDto, Long userId) {
         User user = userRepository.findByIdOrElseThrow(userId);
 
         if (!defaultPasswordEncoder.matches(requestDto.getOldPassword(), user.getPassword())) {
-            throw new AuthException(ExceptionCode.PASSWORD_NOT_MATCH); // 401
+            throw new AuthException(ExceptionCode.PASSWORD_NOT_MATCH);
         }
 
         String newEncodedPassword = defaultPasswordEncoder.encode(requestDto.getNewPassword());
+
         user.updatePassword(newEncodedPassword);
         userRepository.save(user);
-        session.invalidate(); // 자동 로그아웃
     }
 
     /**

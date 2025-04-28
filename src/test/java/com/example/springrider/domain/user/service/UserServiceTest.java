@@ -76,7 +76,7 @@ class UserServiceTest {
         when(defaultPasswordEncoder.matches("pass123!", "encodedPwd")).thenReturn(true);
 
         // When
-        LoginResponseDto response = userService.login(request, session);
+        LoginResponseDto response = userService.login(request);
 
         // Then
         assertThat(response.getNickname()).isEqualTo("hong");
@@ -97,7 +97,7 @@ class UserServiceTest {
         session.setAttribute("userId", 1L);
 
         // When
-        userService.delete(request, 1L, session);
+        userService.delete(request, 1L);
 
         // Then
         assertThat(user.getIsWithdraw()).isTrue();
@@ -117,7 +117,7 @@ class UserServiceTest {
         when(defaultPasswordEncoder.encode("newPwd!")).thenReturn("encodedNew");
 
         // When
-        userService.modifyPassword(request, 1L, session);
+        userService.modifyPassword(request, 1L);
 
         // Then
         assertThat(user.getPassword()).isEqualTo("encodedNew");

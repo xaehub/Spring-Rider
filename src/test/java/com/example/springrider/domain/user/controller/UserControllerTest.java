@@ -14,7 +14,6 @@ import com.example.springrider.domain.user.dto.response.SignupResponseDto;
 import com.example.springrider.domain.user.enums.UserRole;
 import com.example.springrider.domain.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -85,7 +84,7 @@ class UserControllerTest {
             UserRole.USER
         );
 
-        Mockito.when(userService.login(any(), any(HttpSession.class))).thenReturn(responseDto);
+        Mockito.when(userService.login(any(LoginRequestDto.class))).thenReturn(responseDto);
 
         // When & Then
         mockMvc.perform(post("/api/users/login")
