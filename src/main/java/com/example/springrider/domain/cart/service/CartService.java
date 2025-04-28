@@ -25,6 +25,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -142,11 +143,12 @@ public class CartService {
     @Transactional
     public UpdateCartItemResponseDto update(
         Long cartItemId, UpdateCartItemRequestDto requestDto, Long userId) {
-        CartItem cartItem = cartRepository.findByIdWithUser(cartItemId)
+        LocalDateTime limit = LocalDateTime.now().minusDays(1);
+        CartItem cartItem = cartRepository.findByIdAndModifiedAtAfterWithUser(cartItemId, limit)
             .orElseThrow(() -> new InvalidRequestException(
                 ExceptionCode.CARTITEM_NOT_FOUND));
         if (!cartItem.getUser().getId().equals(userId)) {
-            throw new InvalidRequestException(ExceptionCode.AUTH_EXCEPTION);
+            throw new InvalidRequestException(ExceptionCode.FORBIDDEN_REQUEST);
         }
         if (isValidQuantity(requestDto) && !hasStatus(requestDto)) {
             cartItem.updateQuantity(requestDto.getQuantity());
@@ -180,11 +182,33 @@ public class CartService {
         if (cartItems.isEmpty()) {
             throw new InvalidRequestException(ExceptionCode.EMPTY_CART);
         }
-        processDelete(cartItems, userId);
+        String startTimeStamp = LocalDateTime.now()
+            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        log.info("[사용자 임의 장바구니 삭제] userId : {} | 시작 : {}", userId, startTimeStamp);
+        processDelete(cartItems);
+        String endTimeStamp = LocalDateTime.now()
+            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        log.info("[사용자 임의 장바구니 삭제] userId : {} | 정상 종료 : {}", userId, endTimeStamp);
+    }
+
+    @Scheduled(cron = "0 0 * * * *")
+    public void deleteOldCartItem() {
+        String startTimeStamp = LocalDateTime.now()
+            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        log.info("[장바구니 정기 초기화] | 시작 : {}", startTimeStamp);
+        LocalDateTime limit = LocalDateTime.now().minusDays(1);
+        List<CartItem> cartItems = cartRepository.findByModifiedAtBefore(limit);
+        if (cartItems.isEmpty()) {
+            return;
+        }
+        processDelete(cartItems);
+        String endTimeStamp = LocalDateTime.now()
+            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        log.info("[장바구니 정기 초기화] | 정상 종료 : {}", endTimeStamp);
     }
 
     //실제 repository와 연동하는 장바구니 삭제 메서드
-    public void processDelete(List<CartItem> cartItems, Long userId) {
+    public void processDelete(List<CartItem> cartItems) {
         int errorCount = 0;
         for (CartItem item : cartItems) {
             try {
@@ -192,8 +216,8 @@ public class CartService {
             } catch (Exception e) {
                 String timeStamp = LocalDateTime.now()
                     .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-                log.warn("[Fail] | userId : {} cartItemId : {} message : {} timestamp : {}", userId,
-                    item.getId(), e.getMessage(), timeStamp);
+                log.warn("[Fail] | userId : {} cartItemId : {} message : {} timestamp : {}",
+                    item.getUser().getId(), item.getId(), e.getMessage(), timeStamp);
                 errorCount++;
             }
         }
