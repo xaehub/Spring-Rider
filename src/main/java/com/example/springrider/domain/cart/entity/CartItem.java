@@ -73,11 +73,6 @@ public class CartItem extends BaseEntity {
         this.quantity = quantity;
     }
 
-    //상태 수정을 위한 클래스 내부 메서드 - Enum 내부 메서드 사용
-    public void changeStatus(String status) {
-        this.status = CartItemStatus.from(status);
-    }
-
     //상태 수정을 위한 클래스 내부 메서드
     public void changeStatus(CartItemStatus status) {
         this.status = status;

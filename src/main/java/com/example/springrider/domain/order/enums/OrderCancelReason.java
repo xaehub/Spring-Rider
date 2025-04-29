@@ -1,10 +1,5 @@
 package com.example.springrider.domain.order.enums;
 
-import static com.example.springrider.global.exception.ExceptionCode.INVALID_ORDER_CANCEL_REASON;
-
-import com.example.springrider.global.exception.InvalidRequestException;
-import java.util.Arrays;
-
 public enum OrderCancelReason {
     CUSTOMER_REQUEST,     //고객 요청
     OUT_OF_STOCK,         //재고 부족
@@ -12,12 +7,5 @@ public enum OrderCancelReason {
     DELIVERY_UNAVAILABLE, //배달 불가 지역
     ORDER_ERROR,          //주문 내용 오류
     PAYMENT_FAILURE,      //결제 실패
-    OTHER;                 //기타
-
-    public static OrderCancelReason from(String value) {
-        return Arrays.stream(values())
-            .filter(status -> status.name().equalsIgnoreCase(value))
-            .findFirst()
-            .orElseThrow(() -> new InvalidRequestException(INVALID_ORDER_CANCEL_REASON));
-    }
+    OTHER                 //기타
 }

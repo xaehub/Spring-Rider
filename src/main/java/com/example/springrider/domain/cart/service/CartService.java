@@ -150,15 +150,16 @@ public class CartService {
         if (!cartItem.getUser().getId().equals(userId)) {
             throw new InvalidRequestException(ExceptionCode.FORBIDDEN_REQUEST);
         }
+        CartItemStatus cartItemStatus = CartItemStatus.valueOf(requestDto.getStatus());
         if (isValidQuantity(requestDto) && !hasStatus(requestDto)) {
             cartItem.updateQuantity(requestDto.getQuantity());
         }
         if (isValidQuantity(requestDto) && hasStatus(requestDto)) {
-            cartItem.changeStatus(requestDto.getStatus());
+            cartItem.changeStatus(cartItemStatus);
         }
         if (isValidQuantity(requestDto) && hasStatus(requestDto)) {
             cartItem.updateQuantity(requestDto.getQuantity());
-            cartItem.changeStatus(requestDto.getStatus());
+            cartItem.changeStatus(cartItemStatus);
         }
         return UpdateCartItemResponseDto.of(cartItem);
     }

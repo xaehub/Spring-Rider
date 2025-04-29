@@ -40,7 +40,7 @@ public class OwnerOrderService {
         @Valid UpdateOrderStatusRequestDto requestDto
     ) {
         Order order = orderRepository.findByIdOrElseThrow(orderId);
-        order.changeStatus(OrderStatus.from(requestDto.getStatus()));
+        order.changeStatus(OrderStatus.valueOf(requestDto.getStatus()));
         return UpdateOrderStatusResponseDto.of(order);
     }
 
@@ -76,7 +76,7 @@ public class OwnerOrderService {
         }
         //update dirty checking
         order.changeStatus(OrderStatus.CANCELED);
-        order.setOrderCancelReason(OrderCancelReason.from(cancelReason));
+        order.setOrderCancelReason(OrderCancelReason.valueOf(cancelReason));
         order.setCancelMessage(cancelMessage);
         //dto 반환
         return CancelOrderResponseDto.of(order);
