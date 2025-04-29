@@ -46,7 +46,7 @@ public class CartController {
     @PatchMapping("/cart-items/{cartItemId}")
     public ApiResponse<UpdateCartItemResponseDto> update(
         @PathVariable Long cartItemId,
-        @RequestBody UpdateCartItemRequestDto requestDto,
+        @Valid @RequestBody UpdateCartItemRequestDto requestDto,
         @SessionAttribute(name = Const.SESSION_USER_ID, required = false) Long userId
     ) {
         return ApiResponse.ok(cartService.update(cartItemId, requestDto, userId));

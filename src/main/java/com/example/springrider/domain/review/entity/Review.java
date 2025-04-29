@@ -42,7 +42,7 @@ public class Review extends BaseEntity {
 
     public static Review of(CreateReviewRequestDto requestDto, User user, Order order) {
         return new Review(
-            requestDto.getContents(), Rating.from(requestDto.getRating()), user, order
+            requestDto.getContents(), Rating.valueOf(requestDto.getRating()), user, order
         );
     }
 }

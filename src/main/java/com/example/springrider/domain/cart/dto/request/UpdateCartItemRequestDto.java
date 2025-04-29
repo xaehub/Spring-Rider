@@ -7,8 +7,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
-@NotAllNull
 @RequiredArgsConstructor
+@NotAllNull
 public class UpdateCartItemRequestDto {
 
     @EnumValid(enumClass = CartItemStatus.class, message = "올바르지 않은 장바구니 상태 코드입니다.")
